@@ -22,6 +22,7 @@ createModule({
     console.log("🐝 Worker: Module loaded", module);
     module.ready.then(() => {
         module._hello();
+        module._load();
     });
 });
 
