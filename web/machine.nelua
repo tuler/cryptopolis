@@ -1,0 +1,4 @@
+## cflags '-sEXPORTED_FUNCTIONS=_hello -sENVIRONMENT=worker -sMODULARIZE=1 -sEXPORT_NAME=createModule'
+local function hello(): void <cexport'hello'>
+  print("Hello")
+end
