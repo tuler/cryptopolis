@@ -1,5 +1,5 @@
 "use client";
-import { Map } from "@/components/Map";
+import { GameStage } from "@/components/GameStage";
 import { ToolBox } from "@/components/ToolBox";
 import { AppShell, Burger, Group, ScrollArea, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -69,7 +69,7 @@ const Home: FC = () => {
                 </AppShell.Section>
             </AppShell.Navbar>
             <AppShell.Main>
-                <Map value={map} />
+                <GameStage map={map} />
             </AppShell.Main>
         </AppShell>
     );

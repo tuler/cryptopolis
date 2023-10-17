@@ -1,3 +1,7 @@
 .body {
   align-items: center;
 }
+
+.labelWrapper {
+  width: 100%
+}

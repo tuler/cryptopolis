@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
 import { Stage, Sprite } from "@pixi/react";
-import { Spritesheet, Texture } from "pixi.js";
+import { Sprite as PSprite, Spritesheet, Texture } from "pixi.js";
 
 export type MapProps = {
     value: Hex;
@@ -66,6 +66,11 @@ export const Map: FC<MapProps> = ({ value }) => {
     // Convert each pair to a decimal number and create a Uint16Array
     const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
 
+    const convertCoord = (sprite: PSprite) => ({
+        x: Math.floor(sprite.x / sprite.width),
+        y: Math.floor(sprite.y / sprite.height),
+    });
+
     const TileImage = (x: number, y: number) => {
         const t = map[x * 100 + y];
         const tile = decodeTile(t);
@@ -73,7 +78,11 @@ export const Map: FC<MapProps> = ({ value }) => {
         return spritesheet ? (
             <Sprite
                 key={coord}
+                eventMode="static"
                 texture={spritesheet.textures[tile.type]}
+                onclick={(event) =>
+                    console.log(convertCoord(event.target as PSprite))
+                }
                 width={16}
                 height={16}
                 data-t={t}
@@ -85,10 +94,10 @@ export const Map: FC<MapProps> = ({ value }) => {
         );
     };
     return (
-        <Stage width={width * 16} height={height * 16}>
+        <>
             {rows.map((y) => (
                 <>{cols.map((x) => TileImage(x, y))}</>
             ))}
-        </Stage>
+        </>
     );
 };

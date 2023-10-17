@@ -1,6 +1,15 @@
-import { Group, Radio, RadioGroup, Stack, Text, Title } from "@mantine/core";
+import {
+    Badge,
+    Group,
+    Radio,
+    RadioGroup,
+    Stack,
+    Text,
+    Title,
+} from "@mantine/core";
 import { FC } from "react";
 import radio from "./ToolBox.module.css";
+import { tools } from "../models/Tool";
 
 export type ToolBoxProps = {
     value: number;
@@ -8,28 +17,11 @@ export type ToolBoxProps = {
 };
 
 export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
-    const tools = [
-        { label: "Residential", emoji: "🏚️" },
-        { label: "Commercial", emoji: "🏢" },
-        { label: "Industrial", emoji: "🏭" },
-        { label: "Fire Station", emoji: "🚒" },
-        { label: "Police Station", emoji: "🚓" },
-        { label: "Inspect", emoji: "🔎" },
-        { label: "Wire", emoji: "🔌" },
-        { label: "Bulldozer", emoji: "🚜" },
-        { label: "Railroad", emoji: "🚂" },
-        { label: "Road", emoji: "🚗" },
-        { label: "Stadium", emoji: "🏟️" },
-        { label: "Park", emoji: "🌴" },
-        { label: "Seaport", emoji: "🚢" },
-        { label: "Coal Power", emoji: "🔋" },
-        { label: "Nuclear Power", emoji: "☢️" },
-        { label: "Airport", emoji: "✈️" },
-        { label: "Network", emoji: "🚜" },
-        { label: "Water", emoji: "💧" },
-        { label: "Land", emoji: "⛰️" },
-        { label: "Forest", emoji: "🌳" },
-    ];
+    let currencyFormatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+    });
     return (
         <Stack>
             <RadioGroup
@@ -40,11 +32,23 @@ export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
                     <Radio
                         key={index}
                         value={index.toString()}
-                        classNames={{ body: radio.body }}
+                        classNames={{
+                            body: radio.body,
+                            labelWrapper: radio.labelWrapper,
+                        }}
                         label={
-                            <Group>
-                                <Title>{tool.emoji}</Title>
-                                <Text>{tool.label}</Text>
+                            <Group justify="space-between">
+                                <Group>
+                                    <Title>{tool.emoji}</Title>
+                                    <Text>{tool.label}</Text>
+                                </Group>
+                                <Badge
+                                    variant={
+                                        value == index ? "filled" : "default"
+                                    }
+                                >
+                                    {currencyFormatter.format(tool.cost)}
+                                </Badge>
                             </Group>
                         }
                     />
