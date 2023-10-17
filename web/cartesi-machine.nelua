@@ -45,7 +45,6 @@ end
 -- Loads a machine from a snapshot.
 function CartesiMachine.load(dir: cstring): CartesiMachine
   -- loads the machine
-  print("Loading machine from "..dir)
   local self: CartesiMachine
   cm_assert!(cm_load_machine(dir, cm_machine_runtime_config{}, &self.machine))
   return self

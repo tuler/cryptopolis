@@ -18,6 +18,7 @@ cflags '-sNO_EXIT_RUNTIME=1 -sFORCE_FILESYSTEM=1 -sASSERTIONS -sALLOW_MEMORY_GRO
 local export_functions = {
   '_hello',
   '_load',
+  '_step',
 }
 cflags('-sEXPORTED_FUNCTIONS='..table.concat(export_functions,','))
 local export_runtime_functions = {
@@ -38,6 +39,9 @@ local function hello(): void <cexport'hello'>
   print("Hello")
 end
 
+local machine: CartesiMachine
+local config
+
 local function load(): void <cexport'load'>
   -- rootfs flash drive
   local flash_drive_entries: [1]cm_memory_range_config = {{
@@ -48,7 +52,7 @@ local function load(): void <cexport'load'>
   }}
 
   -- set config
-  local config = CartesiMachine.get_default_config()
+  config = CartesiMachine.get_default_config()
   config.ram = {
     image_filename = 'images/linux-5.15.63-ctsi-2-v0.17.0.bin',
     length = 512*1024*1024 --512MB
@@ -60,22 +64,41 @@ local function load(): void <cexport'load'>
       rootfstype=ext2 \z
       root=/dev/mtdblock0 \z
       rw quiet \z
-      swiotlb=noforce \z
       mtdparts=flash.0:-(root) \z
       init=/opt/cartesi/bin/init \z
-      single=yes -- node --version"
+      -- rollup-init node /opt/cartesi/dapp/index.js"
   }
   config.htif = {
     yield_automatic = true,
-    console_getchar = true,
+    yield_manual = true,
   }
   config.flash_drive = {
     count = 1,
     entry = &flash_drive_entries,
   }
+  config.rollup = {
+    has_value = true,
+    rx_buffer = { start = 0x60000000, length = 2<<20 },
+    tx_buffer = { start = 0x60200000, length = 2<<20 },
+    input_metadata = { start = 0x60400000, length = 4096 },
+    voucher_hashes = { start = 0x60600000, length = 2<<20 },
+    notice_hashes = { start = 0x60800000, length = 2<<20 },
+  }
 
-  local machine = CartesiMachine.create(config)
+  machine = CartesiMachine.create(config)
   machine:run()
-  io.stdout:printf("Halted\n")
-  io.stdout:printf('Cycles %d\n', machine:read_mcycle())
+  print("Halted\n")
+  print('Cycles', machine:read_mcycle())
+end
+
+local function addInput(): void <cexport'step'>
+  -- machine = CartesiMachine.load('images/0')
+  -- write rollups input metadata
+  -- write rollups input payload
+  machine:write_memory(config.rollup.input_metadata.start, 'Hello World!\n')
+  -- execute machine until manual yield
+  local reason = machine:run()
+  -- read rollups reports
+  -- return outputs
+  print(reason)
 end

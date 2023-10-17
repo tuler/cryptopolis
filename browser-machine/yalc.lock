@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "micropolis": {
+      "signature": "7efd1c7f50ff0953002e8517b534d2d9",
+      "file": true
+    }
+  }
+}

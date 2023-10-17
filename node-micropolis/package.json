@@ -1,34 +1,39 @@
 {
-  "name": "micropolis",
-  "version": "0.1.0",
-  "description": "MicropolisEngine Node Module",
-  "scripts": {
-    "build": "cmake-js build",
-    "clean": "rimraf build",
-    "install": "cmake-js compile",
-    "test": "vitest"
-  },
-  "keywords": [
-    "micropolis",
-    "simcity",
-    "node"
-  ],
-  "main": "index.js",
-  "types": "MicropolisEngine.d.ts",
-  "author": "Danilo Tuler",
-  "license": "GPL-3.0-or-later",
-  "engines": {
-    "node": ">= 14.0.0"
-  },
-  "dependencies": {
-    "bindings": "^1.5.0",
-    "cmake-js": "^7.2.1",
-    "node-addon-api": "^7.0.0"
-  },
-  "devDependencies": {
-    "canvas": "^2.11.2",
-    "rimraf": "^5.0.5",
-    "typescript": "^5",
-    "vitest": "^0.34"
-  }
+    "name": "micropolis",
+    "version": "0.1.0",
+    "description": "MicropolisEngine Node Module",
+    "scripts": {
+        "build": "cmake-js build",
+        "clean": "rimraf build",
+        "install": "cmake-js compile",
+        "test": "vitest"
+    },
+    "keywords": [
+        "micropolis",
+        "simcity",
+        "node"
+    ],
+    "main": "./index.js",
+    "types": "./module.d.ts",
+    "author": "Danilo Tuler",
+    "license": "GPL-3.0-or-later",
+    "engines": {
+        "node": ">= 14.0.0"
+    },
+    "dependencies": {
+        "bindings": "^1.5.0",
+        "cmake-js": "^7.2.1",
+        "node-addon-api": "^7.0.0"
+    },
+    "devDependencies": {
+        "rimraf": "^5.0.5",
+        "typescript": "^5",
+        "vitest": "^0.34"
+    },
+    "files": [
+        "build",
+        "index.js",
+        "module.d.ts",
+        "package.json"
+    ]
 }

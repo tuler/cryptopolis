@@ -3,21 +3,41 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
         "build": "next build",
+        "codegen": "wagmi generate",
+        "dev": "next dev",
         "start": "next start",
         "lint": "next lint"
     },
     "dependencies": {
+        "@mantine/carousel": "^7",
+        "@mantine/core": "^7",
+        "@mantine/dates": "^7",
+        "@mantine/dropzone": "^7",
+        "@mantine/form": "^7",
+        "@mantine/hooks": "^7",
+        "@mantine/notifications": "^7",
+        "@rainbow-me/rainbowkit": "^1",
+        "encoding": "^0.1.13",
+        "lokijs": "^1.5.12",
         "next": "^13",
+        "pino-pretty": "^10.2.3",
         "react": "^18",
-        "react-dom": "^18"
+        "react-dom": "^18",
+        "react-icons": "^4.11.0",
+        "react-jazzicon": "^1",
+        "urql": "^4",
+        "viem": "^1",
+        "wagmi": "^1"
     },
     "devDependencies": {
+        "@cartesi/rollups": "^1.0",
+        "@sunodo/wagmi-plugin-hardhat-deploy": "^0.2",
         "@types/emscripten": "^1.39.8",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
+        "@wagmi/cli": "^1",
         "eslint": "^8",
         "eslint-config-next": "13.5.4",
         "typescript": "^5"

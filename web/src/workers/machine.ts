@@ -1,16 +1,6 @@
 import { TWorkerMess } from "../models/worker";
 console.log("🐝 Worker: I'm a worker!");
 
-const onmessage = (event: MessageEvent<TWorkerMess>) => {
-    console.log("🐝 Worker: Message received from main script");
-    const data = event.data;
-    const result = data[0] + data[1];
-
-    const workerResult = "Result: " + result;
-    console.log("🐝 Worker: Posting message back to main script");
-    postMessage(workerResult);
-};
-
 importScripts("/machine.js");
 /* @ts-ignore */
 createModule({
@@ -23,7 +13,18 @@ createModule({
     module.ready.then(() => {
         module._hello();
         module._load();
+
+        // let browser know module is loaded
+        postMessage("🐝 Worker: Module loaded");
+
+        addEventListener("message", (event: MessageEvent<TWorkerMess>) => {
+            console.log("🐝 Worker: Message received from main script");
+            const data = event.data;
+            const result = data[0] + data[1];
+
+            const workerResult = "Result: " + result;
+            console.log("🐝 Worker: Posting message back to main script");
+            postMessage(workerResult);
+        });
     });
 });
-
-addEventListener("message", onmessage);
