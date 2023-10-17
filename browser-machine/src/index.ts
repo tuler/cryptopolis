@@ -30,10 +30,9 @@ export const shortArrayToHex = (array: Uint16Array): Hex => {
     return `0x${str}`;
 };
 
-//const getGame = (data: Inpt)
 app.addAdvanceHandler(async ({ metadata, payload }) => {
     const { msg_sender } = metadata;
-    console.log(payload);
+    console.log("input", payload);
 
     // get or create new game
     let game = games[msg_sender];
@@ -43,6 +42,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             engine: new Micropolis(),
             block: metadata.block_number,
         };
+        // XXX: every player has a single game
         games[msg_sender] = game;
         // TODO: setup callback hook
     }
@@ -70,7 +70,6 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             app.createNotice({
                 payload: map,
             });
-            console.log(map);
 
             return "accept";
 
@@ -91,6 +90,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
     return "accept";
 });
 
+console.log(`Game server listening for inputs from ${url}`);
 app.start().catch((e) => {
     console.log(e);
     process.exit(1);

@@ -1,3 +1,4 @@
+"use client";
 import { Stage } from "@pixi/react";
 import { FC, useState } from "react";
 import { Hex } from "viem";

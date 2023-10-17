@@ -1,3 +1,4 @@
+"use client";
 import { Spritesheet, Texture } from "pixi.js";
 import { FC, useEffect, useState } from "react";
 import { tools } from "../models/Tool";

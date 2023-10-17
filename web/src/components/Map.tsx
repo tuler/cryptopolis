@@ -4,7 +4,7 @@ import { Sprite } from "@pixi/react";
 import { Sprite as PSprite, Spritesheet, Texture } from "pixi.js";
 
 export type MapProps = {
-    value: Hex;
+    value?: Hex;
     onMouseMove?: (x: number, y: number) => void;
 };
 
@@ -35,6 +35,11 @@ export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
 
     const rows = [...Array(height).keys()];
     const cols = [...Array(width).keys()];
+
+    // default value is a blank map
+    value =
+        value ||
+        `0x${[...Array(width * height).keys()].map(() => "0000").join("")}`;
 
     // Split the hex string into pairs of characters
     const pairs = value.substring(2).match(/.{1,4}/g);
