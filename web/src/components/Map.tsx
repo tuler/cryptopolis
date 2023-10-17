@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
-import { Stage, Sprite } from "@pixi/react";
+import { Sprite } from "@pixi/react";
 import { Sprite as PSprite, Spritesheet, Texture } from "pixi.js";
 
 export type MapProps = {
     value: Hex;
+    onMouseMove?: (x: number, y: number) => void;
 };
 
 type Tile = {
@@ -27,7 +28,7 @@ const decodeTile = (tile: number): Tile => ({
     type: tile & 0x03ff,
 });
 
-export const Map: FC<MapProps> = ({ value }) => {
+export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
     const width = 120;
     const height = 100;
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
@@ -66,11 +67,6 @@ export const Map: FC<MapProps> = ({ value }) => {
     // Convert each pair to a decimal number and create a Uint16Array
     const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
 
-    const convertCoord = (sprite: PSprite) => ({
-        x: Math.floor(sprite.x / sprite.width),
-        y: Math.floor(sprite.y / sprite.height),
-    });
-
     const TileImage = (x: number, y: number) => {
         const t = map[x * 100 + y];
         const tile = decodeTile(t);
@@ -80,12 +76,17 @@ export const Map: FC<MapProps> = ({ value }) => {
                 key={coord}
                 eventMode="static"
                 texture={spritesheet.textures[tile.type]}
-                onclick={(event) =>
-                    console.log(convertCoord(event.target as PSprite))
-                }
+                onmouseenter={(event) => {
+                    if (onMouseMove) {
+                        const sprite = event.target as PSprite;
+                        onMouseMove(
+                            Math.floor(sprite.x / sprite.width),
+                            Math.floor(sprite.y / sprite.height)
+                        );
+                    }
+                }}
                 width={16}
                 height={16}
-                data-t={t}
                 x={x * 16}
                 y={y * 16}
             />
