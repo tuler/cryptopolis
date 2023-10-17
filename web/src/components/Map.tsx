@@ -1,7 +1,7 @@
-import { Group, ScrollArea, Stack } from "@mantine/core";
-import Image from "next/image";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
+import { Stage, Sprite } from "@pixi/react";
+import { Spritesheet, Texture } from "pixi.js";
 
 export type MapProps = {
     value: Hex;
@@ -27,12 +27,10 @@ const decodeTile = (tile: number): Tile => ({
     type: tile & 0x03ff,
 });
 
-const filename = (id: number) =>
-    `/img/micropolis_tile_${id.toString().padStart(4, "0")}.png`;
-
 export const Map: FC<MapProps> = ({ value }) => {
     const width = 120;
     const height = 100;
+    const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
     const rows = [...Array(height).keys()];
     const cols = [...Array(width).keys()];
@@ -40,34 +38,57 @@ export const Map: FC<MapProps> = ({ value }) => {
     // Split the hex string into pairs of characters
     const pairs = value.substring(2).match(/.{1,4}/g);
 
+    // create optimized spritesheet
+    useEffect(() => {
+        const texture = Texture.from("/img/micropolis_tiles.png");
+        const frames = [...Array(1024).keys()].map((i) => ({
+            frame: {
+                x: (i % 32) * 16,
+                y: Math.floor(i / 32) * 16,
+                w: 16,
+                h: 16,
+            },
+        }));
+        const sheet = new Spritesheet(texture, {
+            frames: frames.reduce(
+                (acc, frame, index) => ({ ...acc, [index]: frame }),
+                {}
+            ),
+            meta: {
+                scale: "1",
+            },
+        });
+        sheet.parse().then((texture) => {
+            setSpritesheet(sheet);
+        });
+    }, [value]);
+
     // Convert each pair to a decimal number and create a Uint16Array
     const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
 
     const TileImage = (x: number, y: number) => {
         const t = map[x * 100 + y];
         const tile = decodeTile(t);
-        const image = filename(tile.type);
         const coord = `(${x},${y})`;
-        return (
-            <Image
+        return spritesheet ? (
+            <Sprite
                 key={coord}
-                alt={coord}
-                src={image}
+                texture={spritesheet.textures[tile.type]}
                 width={16}
                 height={16}
                 data-t={t}
+                x={x * 16}
+                y={y * 16}
             />
+        ) : (
+            <></>
         );
     };
     return (
-        <ScrollArea w={width * 16} h={height * 16}>
-            <Stack gap={0}>
-                {rows.map((y) => (
-                    <Group key={y} gap={0}>
-                        {cols.map((x) => TileImage(x, y))}
-                    </Group>
-                ))}
-            </Stack>
-        </ScrollArea>
+        <Stage width={width * 16} height={height * 16}>
+            {rows.map((y) => (
+                <>{cols.map((x) => TileImage(x, y))}</>
+            ))}
+        </Stage>
     );
 };

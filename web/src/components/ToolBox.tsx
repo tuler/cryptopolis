@@ -1,5 +1,6 @@
 import { Group, Radio, RadioGroup, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
+import radio from "./ToolBox.module.css";
 
 export type ToolBoxProps = {
     value: number;
@@ -39,6 +40,7 @@ export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
                     <Radio
                         key={index}
                         value={index.toString()}
+                        classNames={{ body: radio.body }}
                         label={
                             <Group>
                                 <Title>{tool.emoji}</Title>

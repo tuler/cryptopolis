@@ -1,14 +1,7 @@
 "use client";
 import { Map } from "@/components/Map";
 import { ToolBox } from "@/components/ToolBox";
-import {
-    AppShell,
-    Burger,
-    Group,
-    ScrollArea,
-    Skeleton,
-    Title,
-} from "@mantine/core";
+import { AppShell, Burger, Group, ScrollArea, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
