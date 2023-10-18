@@ -2,7 +2,7 @@
 import { Button, Group, NumberInput } from "@mantine/core";
 import { FC, useEffect, useState } from "react";
 import { TbHomePlus } from "react-icons/tb";
-import { Hex } from "viem";
+import { Hex, encodePacked } from "viem";
 
 export type NewGameProps = {
     setInput: (input: Hex) => void;
@@ -13,7 +13,12 @@ export const NewGame: FC<NewGameProps> = ({ setInput, write }) => {
     const [value, setValue] = useState<string | number>(0);
 
     useEffect(() => {
-        setInput(`0x00${value.toString(16).padStart(8, "0")}`);
+        setInput(
+            encodePacked(
+                ["uint8", "uint32"],
+                [0, typeof value == "string" ? parseInt(value) : value]
+            )
+        );
     }, [setInput, value]);
 
     return (

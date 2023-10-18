@@ -2,14 +2,14 @@
 import { Spritesheet, Texture } from "pixi.js";
 import React, { FC, useEffect, useState } from "react";
 import { Sprite } from "@pixi/react";
-import { Hex } from "viem";
+import { Hex, encodePacked } from "viem";
 import { tools } from "../models/Tool";
 
 export type ToolOverlayProps = {
     tool: number;
     x?: number;
     y?: number;
-    setInput: (input: Hex) => void;
+    setInput?: (input: Hex) => void;
     write?: () => void;
 };
 
@@ -23,11 +23,15 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
     useEffect(() => {
-        // encode the input
-        const toolS = tool.toString(16).padStart(2, "0"); // 1 byte
-        const xS = (x ?? 0).toString(16).padStart(4, "0"); // 2 bytes - short
-        const yS = (y ?? 0).toString(16).padStart(4, "0"); // 2 bytes - short
-        setInput(`0x01${toolS}${xS}${yS}`);
+        if (setInput && x && y && tool >= 0) {
+            // encode the input
+            setInput(
+                encodePacked(
+                    ["uint8", "uint8", "uint16", "uint16"],
+                    [1, tool, x, y]
+                )
+            );
+        }
     }, [setInput, tool, x, y]);
 
     // create optimized spritesheet

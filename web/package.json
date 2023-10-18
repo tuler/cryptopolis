@@ -32,6 +32,7 @@
         "react-dom": "^18",
         "react-icons": "^4",
         "react-jazzicon": "^1",
+        "swr": "^2",
         "urql": "^4",
         "viem": "^1",
         "wagmi": "^1"

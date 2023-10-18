@@ -31,10 +31,10 @@ export enum ToolResult {
 export class Micropolis {
     constructor();
 
-    getVersion(): string;
     generateSomeCity(seed: number): void;
     simTick(): void;
     doTool(tool: EditingTool, x: number, y: number): ToolResult;
+    readonly version: string;
     readonly map: Uint16Array;
     readonly totalFunds: number;
     readonly population: number;

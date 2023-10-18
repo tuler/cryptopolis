@@ -4,11 +4,11 @@ export type GraphQLProviderProps = {
     children?: React.ReactNode;
 };
 
-const url = process.env.NEXT_PUBLIC_EXPLORER_API_URL;
+const url = process.env.NEXT_PUBLIC_GRAPHQL_URL;
 
 if (!url)
     throw new Error(
-        "NEXT_PUBLIC_EXPLORER_API_URL environment variable is not defined"
+        "NEXT_PUBLIC_GRAPHQL_URL environment variable is not defined"
     );
 
 const GraphQLProvider: FC<GraphQLProviderProps> = (props) => {

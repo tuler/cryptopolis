@@ -3,7 +3,7 @@ import fs from "fs";
 import { Micropolis } from "micropolis";
 import { Hex, slice } from "viem";
 import { describe, expect, test } from "vitest";
-import { shortArrayToHex } from "../src";
+import { Uint16ArrayToHex } from "../src";
 
 const hexToShort = (hex: Hex) => parseInt(hex);
 
@@ -19,7 +19,7 @@ type Tile = {
 
 let tileImages: Image[] = [];
 const tileImage = async (id: number): Promise<Image> => {
-    const filename = `../web/public/img/micropolis_tile_${id
+    const filename = `../node-micropolis/images/micropolis_tile_${id
         .toString()
         .padStart(4, "0")}.png`;
     return loadImage(filename);
@@ -115,7 +115,7 @@ describe("map", () => {
         expect(engine.map).toHaveLength(width * height);
 
         // create a hex value from the array
-        const str = shortArrayToHex(engine.map);
+        const str = Uint16ArrayToHex(engine.map);
         expect(str).toHaveLength(width * height * 4 + 2);
 
         for (let i = 0; i < engine.map.length; i++) {
@@ -124,7 +124,11 @@ describe("map", () => {
             expect(m.toString(16)).toEqual(n.toString(16));
         }
 
+        expect(engine.population).toEqual(0);
+        expect(engine.totalFunds).toEqual(20000);
+        expect(engine.cityTime).toEqual(0);
+
         await draw(seed, engine.map);
-        await draw2(seed, str);
+        // await draw2(seed, str);
     });
 });

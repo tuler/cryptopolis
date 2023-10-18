@@ -1,5 +1,14 @@
 import { createApp } from "@deroll/app";
-import { Address, Hex, hexToNumber, numberToHex, slice } from "viem";
+import {
+    Address,
+    Hex,
+    hexToNumber,
+    hexToString,
+    isAddress,
+    isHex,
+    numberToHex,
+    slice,
+} from "viem";
 import { Micropolis } from "micropolis";
 
 const url =
@@ -23,7 +32,7 @@ enum InputType {
     DO_TOOL,
 }
 
-export const Uint26ArrayToHex = (array: Uint16Array): Hex => {
+export const Uint16ArrayToHex = (array: Uint16Array): Hex => {
     const str = Array.from(array, (v) => v.toString(16).padStart(4, "0")).join(
         ""
     );
@@ -31,7 +40,7 @@ export const Uint26ArrayToHex = (array: Uint16Array): Hex => {
 };
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {
-    const { msg_sender } = metadata;
+    const { msg_sender, block_number } = metadata;
     console.log("input", payload);
 
     // get or create new game
@@ -40,7 +49,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
         game = {
             owner: msg_sender,
             engine: new Micropolis(),
-            block: metadata.block_number,
+            block: block_number,
         };
         // XXX: every player has a single game
         games[msg_sender] = game;
@@ -49,7 +58,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
     const { engine } = game;
 
     // run the simulation for the number of ticks since last input block
-    while (game.block < metadata.block_number) {
+    while (game.block < block_number) {
         for (let i = 0; i < TICKS_PER_BLOCK; i++) {
             engine.simTick();
         }
@@ -76,12 +85,51 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
     }
 
     // create notices with map, population, totalFunds, cityTime
-    app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
-    app.createNotice({ payload: numberToHex(engine.population) });
-    app.createNotice({ payload: numberToHex(engine.totalFunds) });
-    app.createNotice({ payload: numberToHex(engine.cityTime) });
+    await app.createNotice({ payload: Uint16ArrayToHex(engine.map) });
+    await app.createNotice({ payload: numberToHex(engine.population) });
+    await app.createNotice({ payload: numberToHex(engine.totalFunds) });
+    await app.createNotice({ payload: numberToHex(engine.cityTime) });
 
     return "accept";
+});
+
+app.addInspectHandler(async ({ payload }) => {
+    const url = hexToString(payload);
+    console.log("inspect", payload, url);
+    if (isAddress(url)) {
+        const game = games[payload];
+        if (game) {
+            const { engine } = game;
+
+            // create reports with map, population, totalFunds, cityTime
+            await app.createReport({ payload: Uint16ArrayToHex(engine.map) });
+            await app.createReport({
+                payload: numberToHex(engine.population, { size: 4 }),
+            });
+            await app.createReport({
+                payload: numberToHex(engine.totalFunds, { size: 4 }),
+            });
+            await app.createReport({
+                payload: numberToHex(engine.cityTime, { size: 4 }),
+            });
+        }
+    } else {
+        const seed = isHex(url) ? hexToNumber(url) : 0;
+        const engine = new Micropolis();
+        engine.generateSomeCity(seed);
+
+        // create reports with map, population, totalFunds, cityTime
+        await app.createReport({ payload: Uint16ArrayToHex(engine.map) });
+        await app.createReport({
+            payload: numberToHex(engine.population, { size: 4 }),
+        });
+        await app.createReport({
+            payload: numberToHex(engine.totalFunds, { size: 4 }),
+        });
+        await app.createReport({
+            payload: numberToHex(engine.cityTime, { size: 4 }),
+        });
+    }
 });
 
 console.log(`Game server listening for inputs from ${url}`);

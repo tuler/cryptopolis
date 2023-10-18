@@ -6,9 +6,9 @@ import { Map } from "./Map";
 import { ToolOverlay } from "./ToolOverlay";
 
 export type GameStageProps = {
-    map: Hex;
+    map?: Hex;
     tool: number;
-    setInput: (input: Hex) => void;
+    setInput?: (input: Hex) => void;
     write?: () => void;
 };
 
@@ -36,13 +36,15 @@ export const GameStage: FC<GameStageProps> = ({
                     write && write();
                 }}
             />
-            <ToolOverlay
-                tool={tool}
-                x={x}
-                y={y}
-                setInput={setInput}
-                write={write}
-            />
+            {tool >= 0 && (
+                <ToolOverlay
+                    tool={tool}
+                    x={x}
+                    y={y}
+                    setInput={setInput}
+                    write={write}
+                />
+            )}
         </Stage>
     );
 };

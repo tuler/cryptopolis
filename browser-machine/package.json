@@ -23,7 +23,7 @@
     "scripts": {
         "build": "run-s compile",
         "compile": "tsc && esbuild ./src/index.ts --bundle --outfile=dist/index.js --platform=node --target=node20",
-        "start": "ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:8080/host-runner/\" ts-node src/index.ts",
+        "start": "ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:8080/host-runner\" ts-node src/index.ts",
         "test": "vitest"
     },
     "keywords": [
