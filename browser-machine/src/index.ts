@@ -1,5 +1,5 @@
 import { createApp } from "@deroll/app";
-import { Address, Hex, hexToNumber, slice, toHex } from "viem";
+import { Address, Hex, hexToNumber, numberToHex, slice } from "viem";
 import { Micropolis } from "micropolis";
 
 const url =
@@ -16,7 +16,7 @@ type Game = {
 const games: Record<Address, Game> = {};
 
 // how many ticks the simulation runs per blockchain block
-const TICKS_PER_BLOCK = 10;
+const TICKS_PER_BLOCK = 16;
 
 enum InputType {
     START,
@@ -64,11 +64,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             const seed = hexToNumber(slice(payload, 1, 5)); // 4 bytes - int
             console.log("generating map", seed);
             engine.generateSomeCity(seed);
-
-            // create a report with map
-            app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
-
-            return "accept";
+            break;
 
         case InputType.DO_TOOL:
             const tool = hexToNumber(slice(payload, 1, 2)); // 1 byte
@@ -76,12 +72,14 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             const y = hexToNumber(slice(payload, 4, 6)); // 2 bytes - short
             console.log("tool", tool, x, y);
             engine.doTool(tool, x, y);
-
-            // create a report with map
-            app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
-
-            return "accept";
+            break;
     }
+
+    // create notices with map, population, totalFunds, cityTime
+    app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
+    app.createNotice({ payload: numberToHex(engine.population) });
+    app.createNotice({ payload: numberToHex(engine.totalFunds) });
+    app.createNotice({ payload: numberToHex(engine.cityTime) });
 
     return "accept";
 });

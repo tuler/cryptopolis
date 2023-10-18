@@ -36,4 +36,7 @@ export class Micropolis {
     simTick(): void;
     doTool(tool: EditingTool, x: number, y: number): ToolResult;
     readonly map: Uint16Array;
+    readonly totalFunds: number;
+    readonly population: number;
+    readonly cityTime: number;
 }

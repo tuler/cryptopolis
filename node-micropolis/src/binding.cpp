@@ -14,52 +14,58 @@ class MicropolisWrapper : public Napi::ObjectWrap<MicropolisWrapper> {
   void registerCallback(const Napi::CallbackInfo& info);
   void generateSomeCity(const Napi::CallbackInfo& info);
   void simTick(const Napi::CallbackInfo &info);
-  Napi::Value getMap(const Napi::CallbackInfo &info);
   Napi::Value doTool(const Napi::CallbackInfo &info);
+  Napi::Value getMap(const Napi::CallbackInfo &info);
+  Napi::Value getTotalFunds(const Napi::CallbackInfo &info);
+  Napi::Value getPopulation(const Napi::CallbackInfo &info);
+  Napi::Value getCityTime(const Napi::CallbackInfo &info);
 };
 
 MicropolisWrapper::MicropolisWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<MicropolisWrapper>(info) {
-    this->_micropolis = new Micropolis();
-    this->_micropolis->userData = this;
+  this->_micropolis = new Micropolis();
+  this->_micropolis->userData = this;
 }
 
 Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports) {
-    Napi::HandleScope scope(env);
+  Napi::HandleScope scope(env);
 
-    // This method is used to hook the accessor and method callbacks
-    Napi::Function func = DefineClass(env, "Micropolis", {
-        InstanceMethod("getVersion", &MicropolisWrapper::getVersion),
-        InstanceMethod("generateSomeCity", &MicropolisWrapper::generateSomeCity),
-        InstanceMethod("registerCallback", &MicropolisWrapper::registerCallback),
-        InstanceMethod("simTick", &MicropolisWrapper::simTick),
-        InstanceMethod("doTool", &MicropolisWrapper::doTool),
-        InstanceAccessor<&MicropolisWrapper::getMap>("map"),
-    });
+  // This method is used to hook the accessor and method callbacks
+  Napi::Function func = DefineClass(env, "Micropolis", {
+      InstanceMethod("getVersion", &MicropolisWrapper::getVersion),
+      InstanceMethod("generateSomeCity", &MicropolisWrapper::generateSomeCity),
+      InstanceMethod("registerCallback", &MicropolisWrapper::registerCallback),
+      InstanceMethod("simTick", &MicropolisWrapper::simTick),
+      InstanceMethod("doTool", &MicropolisWrapper::doTool),
+      InstanceAccessor<&MicropolisWrapper::getMap>("map"),
+      InstanceAccessor<&MicropolisWrapper::getTotalFunds>("totalFunds"),
+      InstanceAccessor<&MicropolisWrapper::getPopulation>("population"),
+      InstanceAccessor<&MicropolisWrapper::getCityTime>("cityTime"),
+  });
 
-    Napi::FunctionReference* constructor = new Napi::FunctionReference();
+  Napi::FunctionReference* constructor = new Napi::FunctionReference();
 
-    // Create a persistent reference to the class constructor. This will allow
-    // a function called on a class prototype and a function
-    // called on instance of a class to be distinguished from each other.
-    *constructor = Napi::Persistent(func);
+  // Create a persistent reference to the class constructor. This will allow
+  // a function called on a class prototype and a function
+  // called on instance of a class to be distinguished from each other.
+  *constructor = Napi::Persistent(func);
 
-    // Store the constructor as the add-on instance data. This will allow this
-    // add-on to support multiple instances of itself running on multiple worker
-    // threads, as well as multiple instances of itself running in different
-    // contexts on the same thread.
-    //
-    // By default, the value set on the environment here will be destroyed when
-    // the add-on is unloaded using the `delete` operator, but it is also
-    // possible to supply a custom deleter.
-    env.SetInstanceData(constructor);
+  // Store the constructor as the add-on instance data. This will allow this
+  // add-on to support multiple instances of itself running on multiple worker
+  // threads, as well as multiple instances of itself running in different
+  // contexts on the same thread.
+  //
+  // By default, the value set on the environment here will be destroyed when
+  // the add-on is unloaded using the `delete` operator, but it is also
+  // possible to supply a custom deleter.
+  env.SetInstanceData(constructor);
 
-    exports.Set("Micropolis", func);
-    return exports;
+  exports.Set("Micropolis", func);
+  return exports;
 }
 
 Napi::Value MicropolisWrapper::getVersion(const Napi::CallbackInfo& info){
-    Napi::Env env = info.Env();
-    return Napi::String::New(env, this->_micropolis->getMicropolisVersion());
+  Napi::Env env = info.Env();
+  return Napi::String::New(env, this->_micropolis->getMicropolisVersion());
 }
 
 // This callback hook glues javascript into Micropolis's language 
@@ -183,68 +189,87 @@ void napiCallbackHook(
 }
 
 void MicropolisWrapper::registerCallback(const Napi::CallbackInfo& info){
-    Napi::Env env = info.Env();
+  Napi::Env env = info.Env();
 
-    if (info.Length() < 1 || !info[0].IsFunction()) {
-        Napi::TypeError::New(env, "Callback function expected").ThrowAsJavaScriptException();
-        return;
-    }
+  if (info.Length() < 1 || !info[0].IsFunction()) {
+      Napi::TypeError::New(env, "Callback function expected").ThrowAsJavaScriptException();
+      return;
+  }
 
-    // XXX: release the previous reference?
-    callback = Napi::Persistent(info[0].As<Napi::Function>());
+  // XXX: release the previous reference?
+  callback = Napi::Persistent(info[0].As<Napi::Function>());
 
-    this->_micropolis->callbackData = &callback;
-    this->_micropolis->callbackHook = napiCallbackHook;
+  this->_micropolis->callbackData = &callback;
+  this->_micropolis->callbackHook = napiCallbackHook;
 }
 
 void MicropolisWrapper::generateSomeCity(const Napi::CallbackInfo& info){
-    Napi::Env env = info.Env();
-    if (info.Length() < 1) {
-      Napi::TypeError::New(env, "Wrong number of arguments")
-        .ThrowAsJavaScriptException();
-      return;
-    }
-    
-    if (!info[0].IsNumber()) {
-      Napi::TypeError::New(env, "Wrong argument").ThrowAsJavaScriptException();
-      return;
-    }
-    int seed = info[0].As<Napi::Number>();
-    this->_micropolis->generateSomeCity(seed);
+  Napi::Env env = info.Env();
+  if (info.Length() < 1) {
+    Napi::TypeError::New(env, "Wrong number of arguments")
+      .ThrowAsJavaScriptException();
+    return;
+  }
+  
+  if (!info[0].IsNumber()) {
+    Napi::TypeError::New(env, "Wrong argument").ThrowAsJavaScriptException();
+    return;
+  }
+  int seed = info[0].As<Napi::Number>();
+  this->_micropolis->generateSomeCity(seed);
 }
 
 void MicropolisWrapper::simTick(const Napi::CallbackInfo& info){
-    this->_micropolis->simTick();
+  this->_micropolis->simTick();
 }
 
 Napi::Value MicropolisWrapper::doTool(const Napi::CallbackInfo& info){
-    Napi::Env env = info.Env();
-    if (info.Length() < 3) {
-      Napi::TypeError::New(env, "Wrong number of arguments")
-        .ThrowAsJavaScriptException();
-    }
-    
-    if (!info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsNumber()) {
-      Napi::TypeError::New(env, "Wrong argument").ThrowAsJavaScriptException();
-    }
+  Napi::Env env = info.Env();
+  if (info.Length() < 3) {
+    Napi::TypeError::New(env, "Wrong number of arguments")
+      .ThrowAsJavaScriptException();
+  }
+  
+  if (!info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsNumber()) {
+    Napi::TypeError::New(env, "Wrong argument").ThrowAsJavaScriptException();
+  }
 
-    int toolId = info[0].As<Napi::Number>();
-    int tileX = info[1].As<Napi::Number>();
-    int tileY = info[2].As<Napi::Number>();
-    EditingTool tool = static_cast<EditingTool>(toolId);
-    ToolResult result = this->_micropolis->doTool(tool, tileX, tileY);
-    return Napi::Number::New(env, result);
+  int toolId = info[0].As<Napi::Number>();
+  int tileX = info[1].As<Napi::Number>();
+  int tileY = info[2].As<Napi::Number>();
+  EditingTool tool = static_cast<EditingTool>(toolId);
+  ToolResult result = this->_micropolis->doTool(tool, tileX, tileY);
+  return Napi::Number::New(env, result);
 }
 
 Napi::Value MicropolisWrapper::getMap(const Napi::CallbackInfo& info){
-    Napi::Env env = info.Env();
-    unsigned short *data = this->_micropolis->map[0];
-    Napi::ArrayBuffer mapBuffer = 
-      Napi::ArrayBuffer::New(env, data, sizeof(unsigned short) * WORLD_W * WORLD_H);
-    return Napi::Uint16Array::New(env, WORLD_W * WORLD_H, mapBuffer, 0);
+  Napi::Env env = info.Env();
+  unsigned short *data = this->_micropolis->map[0];
+  Napi::ArrayBuffer mapBuffer = 
+    Napi::ArrayBuffer::New(env, data, sizeof(unsigned short) * WORLD_W * WORLD_H);
+  return Napi::Uint16Array::New(env, WORLD_W * WORLD_H, mapBuffer, 0);
 }
 
-static Napi::Object Init(Napi::Env env, Napi::Object exports) {
+Napi::Value MicropolisWrapper::getTotalFunds(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->totalFunds);
+}
+
+Napi::Value MicropolisWrapper::getPopulation(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->cityPop);
+}
+
+Napi::Value MicropolisWrapper::getCityTime(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->cityTime);
+}
+
+static Napi::Object Init(Napi::Env env, Napi::Object exports)
+{
   MicropolisWrapper::Init(env, exports);
   return exports;
 }
