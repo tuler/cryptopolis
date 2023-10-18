@@ -81,7 +81,12 @@ const Home: FC = () => {
                 </AppShell.Section>
             </AppShell.Navbar>
             <AppShell.Main>
-                <GameStage map={map} tool={tool} />
+                <GameStage
+                    setInput={setInput}
+                    write={write}
+                    map={map}
+                    tool={tool}
+                />
             </AppShell.Main>
         </AppShell>
     );

@@ -1,17 +1,33 @@
 "use client";
 import { Spritesheet, Texture } from "pixi.js";
-import { FC, useEffect, useState } from "react";
-import { tools } from "../models/Tool";
+import React, { FC, useEffect, useState } from "react";
 import { Sprite } from "@pixi/react";
+import { Hex } from "viem";
 
 export type ToolOverlayProps = {
     tool: number;
     x?: number;
     y?: number;
+    setInput: (input: Hex) => void;
+    write?: () => void;
 };
 
-export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y }) => {
+export const ToolOverlay: FC<ToolOverlayProps> = ({
+    tool,
+    x,
+    y,
+    setInput,
+    write,
+}) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
+
+    useEffect(() => {
+        // encode the input
+        const toolS = tool.toString(16).padStart(2, "0"); // 1 byte
+        const xS = (x ?? 0).toString(16).padStart(4, "0"); // 2 bytes - short
+        const yS = (y ?? 0).toString(16).padStart(4, "0"); // 2 bytes - short
+        setInput(`0x01${toolS}${xS}${yS}`);
+    }, [setInput, tool, x, y]);
 
     // create optimized spritesheet
     useEffect(() => {
@@ -55,19 +71,14 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y }) => {
         });
     }, []);
 
-    const sprites = tools.map((_, index) =>
-        spritesheet ? (
-            <Sprite
-                key={index}
-                texture={spritesheet.textures[index]}
-                x={16 * (x ?? 0)}
-                y={16 * (y ?? 0)}
-                visible={index === tool}
-            />
-        ) : (
-            <></>
-        )
+    return spritesheet ? (
+        <Sprite
+            texture={spritesheet.textures[tool]}
+            x={16 * (x ?? 0)}
+            y={16 * (y ?? 0)}
+            visible={tool >= 0}
+        />
+    ) : (
+        <React.Fragment></React.Fragment>
     );
-
-    return sprites;
 };

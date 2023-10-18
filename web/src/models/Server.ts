@@ -4,31 +4,34 @@ import {
     usePrepareInputBoxAddInput,
 } from "@/hooks/contracts";
 import { CompletionStatus, useInputNoticesQuery } from "@/hooks/graphql";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Address, Hex, TransactionReceipt, decodeEventLog } from "viem";
 import { useWaitForTransaction } from "wagmi";
 
 const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
-    if (receipt) {
-        const inputIndex = receipt.logs
-            .map((log) => {
-                try {
-                    const decodedLog = decodeEventLog({
-                        abi: inputBoxABI,
-                        eventName: "InputAdded",
-                        topics: log.topics,
-                        data: log.data,
-                    });
-                    return decodedLog.args.inputIndex;
-                } catch (e: any) {
-                    return undefined;
-                }
-            })
-            .filter((id): id is bigint => !!id)
-            .at(0);
-        return inputIndex;
-    }
-    return;
+    const [inputIndex, setInputIndex] = useState<bigint | undefined>();
+    useEffect(() => {
+        if (receipt) {
+            const inputIndex = receipt.logs
+                .map((log) => {
+                    try {
+                        const decodedLog = decodeEventLog({
+                            abi: inputBoxABI,
+                            eventName: "InputAdded",
+                            topics: log.topics,
+                            data: log.data,
+                        });
+                        return decodedLog.args.inputIndex;
+                    } catch (e: any) {
+                        return undefined;
+                    }
+                })
+                .filter((id): id is bigint => !!id)
+                .at(0);
+            setInputIndex(inputIndex);
+        }
+    }, [receipt]);
+    return inputIndex;
 };
 
 export const useRollupsServer = (dapp: Address, input?: Hex) => {

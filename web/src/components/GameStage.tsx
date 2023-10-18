@@ -8,9 +8,16 @@ import { ToolOverlay } from "./ToolOverlay";
 export type GameStageProps = {
     map: Hex;
     tool: number;
+    setInput: (input: Hex) => void;
+    write?: () => void;
 };
 
-export const GameStage: FC<GameStageProps> = ({ map, tool }) => {
+export const GameStage: FC<GameStageProps> = ({
+    map,
+    tool,
+    setInput,
+    write,
+}) => {
     const width = 120;
     const height = 100;
     const [x, setX] = useState(0);
@@ -20,12 +27,22 @@ export const GameStage: FC<GameStageProps> = ({ map, tool }) => {
         <Stage width={width * 16} height={height * 16}>
             <Map
                 value={map}
-                onMouseMove={(x, y) => {
-                    setX(x);
-                    setY(y);
+                onMouseMove={(tile) => {
+                    setX(tile.x);
+                    setY(tile.y);
+                }}
+                onMouseClick={(tile) => {
+                    console.log("click", tile.x, tile.y);
+                    write && write();
                 }}
             />
-            <ToolOverlay tool={tool} x={x} y={y} />
+            <ToolOverlay
+                tool={tool}
+                x={x}
+                y={y}
+                setInput={setInput}
+                write={write}
+            />
         </Stage>
     );
 };

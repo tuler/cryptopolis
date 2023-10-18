@@ -1,14 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
 import { Sprite } from "@pixi/react";
 import { Sprite as PSprite, Spritesheet, Texture } from "pixi.js";
 
-export type MapProps = {
-    value?: Hex;
-    onMouseMove?: (x: number, y: number) => void;
-};
-
-type Tile = {
+export type Tile = {
+    x: number;
+    y: number;
     powered: boolean;
     conductor: boolean;
     burnable: boolean;
@@ -18,7 +15,15 @@ type Tile = {
     type: number;
 };
 
-const decodeTile = (tile: number): Tile => ({
+export type MapProps = {
+    value?: Hex;
+    onMouseMove?: (tile: Tile) => void;
+    onMouseClick?: (tile: Tile) => void;
+};
+
+const decodeTile = (x: number, y: number, tile: number): Tile => ({
+    x,
+    y,
     powered: (tile & 0x8000) !== 0,
     conductor: (tile & 0x4000) !== 0,
     burnable: (tile & 0x2000) !== 0,
@@ -28,13 +33,17 @@ const decodeTile = (tile: number): Tile => ({
     type: tile & 0x03ff,
 });
 
-export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
-    const width = 120;
-    const height = 100;
-    const [spritesheet, setSpritesheet] = useState<Spritesheet>();
+const width = 120;
+const height = 100;
+const rows = [...Array(height).keys()];
+const cols = [...Array(width).keys()];
 
-    const rows = [...Array(height).keys()];
-    const cols = [...Array(width).keys()];
+const coordinates = Array.from(rows, (_, y) =>
+    Array.from(cols, (_, x) => ({ x, y }))
+).flat();
+
+export const Map: FC<MapProps> = ({ value, onMouseMove, onMouseClick }) => {
+    const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
     // default value is a blank map
     value =
@@ -43,6 +52,9 @@ export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
 
     // Split the hex string into pairs of characters
     const pairs = value.substring(2).match(/.{1,4}/g);
+
+    // Convert each pair to a decimal number and create a Uint16Array
+    const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
 
     // create optimized spritesheet
     useEffect(() => {
@@ -67,28 +79,22 @@ export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
         sheet.parse().then((texture) => {
             setSpritesheet(sheet);
         });
-    }, [value]);
-
-    // Convert each pair to a decimal number and create a Uint16Array
-    const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
+    }, []);
 
     const TileImage = (x: number, y: number) => {
         const t = map[x * 100 + y];
-        const tile = decodeTile(t);
+        const tile = decodeTile(x, y, t);
         const coord = `(${x},${y})`;
         return spritesheet ? (
             <Sprite
                 key={coord}
                 eventMode="static"
                 texture={spritesheet.textures[tile.type]}
-                onmouseenter={(event) => {
-                    if (onMouseMove) {
-                        const sprite = event.target as PSprite;
-                        onMouseMove(
-                            Math.floor(sprite.x / sprite.width),
-                            Math.floor(sprite.y / sprite.height)
-                        );
-                    }
+                onpointerdown={(event) => {
+                    onMouseClick && onMouseClick(tile);
+                }}
+                onpointermove={(event) => {
+                    onMouseMove && onMouseMove(tile);
                 }}
                 width={16}
                 height={16}
@@ -96,14 +102,8 @@ export const Map: FC<MapProps> = ({ value, onMouseMove }) => {
                 y={y * 16}
             />
         ) : (
-            <></>
+            <React.Fragment key={coord}></React.Fragment>
         );
     };
-    return (
-        <>
-            {rows.map((y) => (
-                <>{cols.map((x) => TileImage(x, y))}</>
-            ))}
-        </>
-    );
+    return <>{coordinates.map(({ x, y }) => TileImage(x, y))}</>;
 };

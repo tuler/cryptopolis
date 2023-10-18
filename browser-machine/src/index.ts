@@ -15,7 +15,7 @@ type Game = {
 // store all games in memory, just one for each player
 const games: Record<Address, Game> = {};
 
-// how many ticks the simulation runs per block
+// how many ticks the simulation runs per blockchain block
 const TICKS_PER_BLOCK = 10;
 
 enum InputType {
@@ -23,7 +23,7 @@ enum InputType {
     DO_TOOL,
 }
 
-export const shortArrayToHex = (array: Uint16Array): Hex => {
+export const Uint26ArrayToHex = (array: Uint16Array): Hex => {
     const str = Array.from(array, (v) => v.toString(16).padStart(4, "0")).join(
         ""
     );
@@ -66,10 +66,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             engine.generateSomeCity(seed);
 
             // create a report with map
-            const map = shortArrayToHex(engine.map);
-            app.createNotice({
-                payload: map,
-            });
+            app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
 
             return "accept";
 
@@ -77,12 +74,11 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             const tool = hexToNumber(slice(payload, 1, 2)); // 1 byte
             const x = hexToNumber(slice(payload, 2, 4)); // 2 bytes - short
             const y = hexToNumber(slice(payload, 4, 6)); // 2 bytes - short
+            console.log("tool", tool, x, y);
             engine.doTool(tool, x, y);
 
             // create a report with map
-            app.createNotice({
-                payload: shortArrayToHex(engine.map),
-            });
+            app.createNotice({ payload: Uint26ArrayToHex(engine.map) });
 
             return "accept";
     }
