@@ -3,6 +3,7 @@ import { Spritesheet, Texture } from "pixi.js";
 import React, { FC, useEffect, useState } from "react";
 import { Sprite } from "@pixi/react";
 import { Hex } from "viem";
+import { tools } from "../models/Tool";
 
 export type ToolOverlayProps = {
     tool: number;
@@ -71,11 +72,16 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({
         });
     }, []);
 
+    const t = tools[tool];
+    x = x ?? 0;
+    y = y ?? 0;
+    const px = 16 * (x - Math.floor((t.size - 1) / 2));
+    const py = 16 * (y - Math.floor((t.size - 1) / 2));
     return spritesheet ? (
         <Sprite
             texture={spritesheet.textures[tool]}
-            x={16 * (x ?? 0)}
-            y={16 * (y ?? 0)}
+            x={px}
+            y={py}
             visible={tool >= 0}
         />
     ) : (
