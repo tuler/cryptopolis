@@ -39,7 +39,6 @@ type ReportResponse = {
 export type UseInspect = SWRResponse<InspectResponse> & ReportResponse;
 
 export const useInspect = (key: Key): UseInspect => {
-    console.log(`Requesting ${key}`);
     const swr = useSWR<InspectResponse>(() => (key ? `${url}${key}` : false));
 
     const response = swr.data;

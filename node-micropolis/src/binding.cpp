@@ -15,6 +15,8 @@ private:
   void registerCallback(const Napi::CallbackInfo &info);
   void generateSomeCity(const Napi::CallbackInfo &info);
   void simTick(const Napi::CallbackInfo &info);
+  void setSpeed(const Napi::CallbackInfo &info, const Napi::Value &value);
+  Napi::Value getSpeed(const Napi::CallbackInfo &info);
   Napi::Value doTool(const Napi::CallbackInfo &info);
   Napi::Value getMap(const Napi::CallbackInfo &info);
   Napi::Value getTotalFunds(const Napi::CallbackInfo &info);
@@ -38,6 +40,7 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceMethod("registerCallback", &MicropolisWrapper::registerCallback),
                                                            InstanceMethod("simTick", &MicropolisWrapper::simTick),
                                                            InstanceMethod("doTool", &MicropolisWrapper::doTool),
+                                                           InstanceAccessor<&MicropolisWrapper::getSpeed, &MicropolisWrapper::setSpeed>("speed"),
                                                            InstanceAccessor<&MicropolisWrapper::getMap>("version"),
                                                            InstanceAccessor<&MicropolisWrapper::getMap>("map"),
                                                            InstanceAccessor<&MicropolisWrapper::getTotalFunds>("totalFunds"),
@@ -237,6 +240,24 @@ void MicropolisWrapper::generateSomeCity(const Napi::CallbackInfo &info)
 void MicropolisWrapper::simTick(const Napi::CallbackInfo &info)
 {
   this->_micropolis->simTick();
+}
+
+void MicropolisWrapper::setSpeed(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+
+  Napi::Number speed = value.As<Napi::Number>();
+  this->_micropolis->setSpeed(speed.Int32Value());
+}
+
+Napi::Value MicropolisWrapper::getSpeed(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->simSpeed);
 }
 
 Napi::Value MicropolisWrapper::doTool(const Napi::CallbackInfo &info)

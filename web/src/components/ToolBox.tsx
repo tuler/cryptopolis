@@ -44,6 +44,7 @@ export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
                                     <Text>{tool.label}</Text>
                                 </Group>
                                 <Badge
+                                    size="lg"
                                     variant={
                                         value == index ? "filled" : "default"
                                     }

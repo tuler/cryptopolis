@@ -36,6 +36,7 @@ export class Micropolis {
     doTool(tool: EditingTool, x: number, y: number): ToolResult;
     readonly version: string;
     readonly map: Uint16Array;
+    speed: number;
     readonly totalFunds: number;
     readonly population: number;
     readonly cityTime: number;

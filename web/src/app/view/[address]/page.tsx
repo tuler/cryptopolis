@@ -3,7 +3,6 @@ import { CityStats } from "@/components/CityStats";
 import { GameStage } from "@/components/GameStage";
 import { useInspect } from "@/hooks/inspect";
 import { AppShell, Group, Title } from "@mantine/core";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { hexToNumber } from "viem";
 
 const View = ({ params }: { params: { address: string } }) => {
@@ -26,7 +25,6 @@ const View = ({ params }: { params: { address: string } }) => {
                                 cityTime={hexToNumber(cityTime)}
                             />
                         )}
-                        <ConnectButton />
                     </Group>
                 </Group>
             </AppShell.Header>

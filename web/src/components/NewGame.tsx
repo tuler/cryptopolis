@@ -16,7 +16,14 @@ export const NewGame: FC<NewGameProps> = ({ setInput, write }) => {
         setInput(
             encodePacked(
                 ["uint8", "uint32"],
-                [0, typeof value == "string" ? parseInt(value) : value]
+                [
+                    0,
+                    typeof value == "string"
+                        ? isNaN(parseInt(value))
+                            ? 0
+                            : parseInt(value)
+                        : value,
+                ]
             )
         );
     }, [setInput, value]);
