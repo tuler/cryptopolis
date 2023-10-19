@@ -24,7 +24,7 @@ export const abi = parseAbi([
 export const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
     "function getUserMap(address)",
-    "function getBalance(address)",
+    "function balanceOf(address)",
 ]);
 
 const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {

@@ -32,9 +32,9 @@
     viem "^1"
 
 "@deroll/wallet@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@deroll/wallet/-/wallet-0.3.5.tgz#f288148f683d37fa8a9ecd3b2706572093ee4223"
-  integrity sha512-5+N+YSCiPUHHoxbmq71ATVqeDyICOX6O440YCH+CFfXKJc+IWO7C1C3Uwyhqg6h6vRkl955oUBmU0cawiA5AQQ==
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@deroll/wallet/-/wallet-0.3.6.tgz#56d9055c7653cac661b48bfead1089a18790e5ac"
+  integrity sha512-5RHGGv5BuVTmsZcbO2zrunfrKbjpC/HR2dhak1owj9fzcUgR9dv5hXQwy6sMAb++/P67TaBCeVVQyadNUZoTMg==
   dependencies:
     "@deroll/app" "0.4.0"
     viem "^1"
@@ -2290,9 +2290,9 @@ validate-npm-package-license@^3.0.1:
     spdx-expression-parse "^3.0.0"
 
 viem@^1:
-  version "1.16.4"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-1.16.4.tgz#4cb90dd27d13356ea00d21f6fd363bdfe0628c4e"
-  integrity sha512-T9ziN3EERXz0BtQSS2VJM+P1EJ2W7K7PviobFrmvWCEYmNQ/vJDhfFqGjvq0ZL9LVz9HvevCbenEy8oIdMEZ+w==
+  version "1.16.6"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.16.6.tgz#78118c9269506a59e2bc4deab13f1646e113d3fc"
+  integrity sha512-jcWcFQ+xzIfDwexwPJRvCuCRJKEkK9iHTStG7mpU5MmuSBpACs4nATBDyXNFtUiyYTFzLlVEwWkt68K0nCSImg==
   dependencies:
     "@adraffy/ens-normalize" "1.9.4"
     "@noble/curves" "1.2.0"

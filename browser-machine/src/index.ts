@@ -28,7 +28,7 @@ const abi = parseAbi([
 const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
     "function getUserMap(address)",
-    "function getBalance(address)",
+    "function balanceOf(address)",
 ]);
 
 // create wallet for global economy and hook it up to application
@@ -37,6 +37,7 @@ app.addAdvanceHandler(wallet.handler);
 
 // Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
 const token = "0xae7f61eCf06C65405560166b259C54031428A9C4";
+const decimals = 18n;
 
 // this is the address of the in-game locked tokens
 const inGameWallet = zeroAddress;
@@ -123,7 +124,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                 token,
                 from,
                 inGameWallet,
-                BigInt(requiredFunds)
+                BigInt(requiredFunds) * 10n ** decimals // consider token has 18 decimals
             );
 
             // store game in memory. keep track of block number
@@ -166,7 +167,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                     token,
                     peopleWallet,
                     inGameWallet,
-                    BigInt(fundsAfter - fundsBefore)
+                    BigInt(fundsAfter - fundsBefore) * 10n ** decimals
                 );
             } else if (fundsBefore > fundsAfter) {
                 // spent funds (expenses > collected taxes)
@@ -175,7 +176,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                     token,
                     inGameWallet,
                     peopleWallet,
-                    BigInt(fundsBefore - fundsAfter)
+                    BigInt(fundsBefore - fundsAfter) * 10n ** decimals
                 );
             }
             // XXX: maybe we don't need to do the accounting above every time we run the simulation
@@ -203,10 +204,10 @@ app.addInspectHandler(async ({ payload }) => {
     });
 
     switch (functionName) {
-        case "getBalance":
+        case "balanceOf":
             const [address] = args;
-            console.log(`getBalance(${address})`);
             const balance = wallet.balanceOf(token, address);
+            console.log(`balanceOf(${address}): ${balance}`);
             await app.createReport({
                 payload: numberToHex(balance, { size: 32 }),
             });
@@ -232,32 +233,6 @@ app.addInspectHandler(async ({ payload }) => {
             }
             break;
     }
-
-    /*
-    console.log("inspect", payload, url);
-    if (isAddress(url)) {
-        // normalize address
-        const address = getAddress(url);
-
-        const game = games[address];
-        if (game) {
-            const { engine } = game;
-
-            // create reports with map, population, totalFunds, cityTime
-            await createEngineReports(engine);
-        } else {
-            // no game found for that address
-            // just respond with no reports
-        }
-    } else {
-        // this is only for showing a initial game map
-        const seed = isHex(url) ? hexToNumber(url) : 0;
-        const engine = new Micropolis();
-        engine.generateSomeCity(seed);
-
-        // create reports with map, population, totalFunds, cityTime
-        await createEngineReports(engine);
-    }*/
 });
 
 console.log(`Game server listening for inputs from ${url}`);
