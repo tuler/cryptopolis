@@ -14,7 +14,7 @@ import { tools } from "../models/Tool";
 
 export type ToolBoxProps = {
     value: number;
-    onChange: (value: number) => void;
+    onChange?: (value: number) => void;
 };
 
 export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
@@ -27,7 +27,7 @@ export const ToolBox: FC<ToolBoxProps> = ({ value, onChange }) => {
         <Stack>
             <RadioGroup
                 value={value.toString()}
-                onChange={(value) => onChange(parseInt(value))}
+                onChange={(value) => onChange && onChange(parseInt(value))}
             >
                 {tools.map((tool, index) => (
                     <Radio

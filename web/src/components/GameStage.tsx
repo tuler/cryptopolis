@@ -32,7 +32,6 @@ export const GameStage: FC<GameStageProps> = ({
                     setY(tile.y);
                 }}
                 onMouseClick={(tile) => {
-                    console.log("click", tile.x, tile.y);
                     write && write();
                 }}
             />

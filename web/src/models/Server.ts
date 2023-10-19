@@ -5,8 +5,27 @@ import {
 } from "@/hooks/contracts";
 import { CompletionStatus, useInputNoticesQuery } from "@/hooks/graphql";
 import { useEffect, useState } from "react";
-import { Address, Hex, TransactionReceipt, decodeEventLog } from "viem";
+import {
+    Address,
+    Hex,
+    TransactionReceipt,
+    decodeEventLog,
+    parseAbi,
+} from "viem";
 import { useWaitForTransaction } from "wagmi";
+
+// define application API (or ABI so to say)
+export const abi = parseAbi([
+    "function transfer(address to, uint256 amount)",
+    "function start(uint32 seed)",
+    "function doTool(uint8 tool, uint16 x, uint16 y)",
+]);
+
+export const inspectAbi = parseAbi([
+    "function getMap(uint32 seed)",
+    "function getUserMap(address)",
+    "function getBalance(address)",
+]);
 
 const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
     const [inputIndex, setInputIndex] = useState<bigint | undefined>();

@@ -17,7 +17,7 @@ export const NewGame: FC<NewGameProps> = ({ setInput, write }) => {
             encodePacked(
                 ["uint8", "uint32"],
                 [
-                    0,
+                    1, // 1 = New Game
                     typeof value == "string"
                         ? isNaN(parseInt(value))
                             ? 0

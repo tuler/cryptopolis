@@ -2,8 +2,9 @@
 import { Spritesheet, Texture } from "pixi.js";
 import React, { FC, useEffect, useState } from "react";
 import { Sprite } from "@pixi/react";
-import { Hex, encodePacked } from "viem";
+import { Hex, encodeFunctionData } from "viem";
 import { tools } from "../models/Tool";
+import { abi } from "@/models/Server";
 
 export type ToolOverlayProps = {
     tool: number;
@@ -26,10 +27,11 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({
         if (setInput && x && y && tool >= 0) {
             // encode the input
             setInput(
-                encodePacked(
-                    ["uint8", "uint8", "uint16", "uint16"],
-                    [1, tool, x, y]
-                )
+                encodeFunctionData({
+                    abi,
+                    functionName: "doTool",
+                    args: [tool, x, y],
+                })
             );
         }
     }, [setInput, tool, x, y]);
@@ -86,6 +88,7 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({
             texture={spritesheet.textures[tool]}
             x={px}
             y={py}
+            cursor="grab"
             visible={tool >= 0}
         />
     ) : (

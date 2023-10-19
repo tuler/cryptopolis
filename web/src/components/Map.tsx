@@ -1,7 +1,8 @@
+"use client";
 import React, { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
 import { Sprite } from "@pixi/react";
-import { Sprite as PSprite, Spritesheet, Texture } from "pixi.js";
+import { Spritesheet, Texture } from "pixi.js";
 
 export type Tile = {
     x: number;
@@ -76,7 +77,7 @@ export const Map: FC<MapProps> = ({ value, onMouseMove, onMouseClick }) => {
                 scale: "1",
             },
         });
-        sheet.parse().then((texture) => {
+        sheet.parse().then((_texture) => {
             setSpritesheet(sheet);
         });
     }, []);
@@ -89,11 +90,12 @@ export const Map: FC<MapProps> = ({ value, onMouseMove, onMouseClick }) => {
             <Sprite
                 key={coord}
                 eventMode="static"
+                cursor="cell"
                 texture={spritesheet.textures[tile.type]}
-                onpointerdown={(event) => {
+                onpointerdown={(_event) => {
                     onMouseClick && onMouseClick(tile);
                 }}
-                onpointermove={(event) => {
+                onpointermove={(_event) => {
                     onMouseMove && onMouseMove(tile);
                 }}
                 width={16}

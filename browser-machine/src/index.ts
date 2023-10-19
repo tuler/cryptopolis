@@ -1,52 +1,60 @@
 import { createApp } from "@deroll/app";
+import { createWallet } from "@deroll/wallet";
 import {
     Address,
     Hex,
+    decodeFunctionData,
     getAddress,
-    hexToNumber,
     hexToString,
-    isAddress,
-    isHex,
     numberToHex,
-    slice,
+    parseAbi,
+    zeroAddress,
 } from "viem";
 import { Micropolis } from "micropolis";
+import { createEnginePayloads } from "./util";
 
+// instantiate deroll application
 const url =
-    process.env.ROLLUP_HTTP_SERVER_URL || "http://localhost:8080/host-runner";
+    process.env.ROLLUP_HTTP_SERVER_URL || "http://127.0.0.1:8080/host-runner";
 const app = createApp({ url });
 
+// define application API (or ABI so to say)
+const abi = parseAbi([
+    "function transfer(address to, uint256 amount)",
+    "function start(uint32 seed)",
+    "function doTool(uint8 tool, uint16 x, uint16 y)",
+]);
+
+const inspectAbi = parseAbi([
+    "function getMap(uint32 seed)",
+    "function getUserMap(address)",
+    "function getBalance(address)",
+]);
+
+// create wallet for global economy and hook it up to application
+const wallet = createWallet();
+app.addAdvanceHandler(wallet.handler);
+
+// Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
+const token = "0xae7f61eCf06C65405560166b259C54031428A9C4";
+
+// this is the address of the in-game locked tokens
+const inGameWallet = zeroAddress;
+
+// this is the address of the people's wallet
+const peopleWallet = "0x0000000000000000000000000000000000000001";
+
+// game state. keep track of block number for real-time clock simulation
 type Game = {
-    owner: Address;
     engine: Micropolis;
     block: number; // block number of last input related to this game
 };
 
-// store all games in memory, just one for each player
+// store all games in memory, just one for each player (address)
 const games: Record<Address, Game> = {};
 
 // how many ticks the simulation runs per blockchain block
 const TICKS_PER_BLOCK = 16;
-
-enum InputType {
-    START,
-    DO_TOOL,
-}
-
-export const Uint16ArrayToHex = (array: Uint16Array): Hex => {
-    const str = Array.from(array, (v) => v.toString(16).padStart(4, "0")).join(
-        ""
-    );
-    return `0x${str}`;
-};
-
-const createEnginePayloads = (engine: Micropolis) => {
-    const map = Uint16ArrayToHex(engine.map);
-    const population = numberToHex(engine.population, { size: 4 });
-    const totalFunds = numberToHex(engine.totalFunds, { size: 4 });
-    const cityTime = numberToHex(engine.cityTime, { size: 4 });
-    return { map, population, totalFunds, cityTime };
-};
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
@@ -69,70 +77,163 @@ const createEngineNotices = async (engine: Micropolis) => {
 };
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {
-    const { msg_sender, block_number } = metadata;
-
-    // normalize address
-    const address = getAddress(msg_sender);
-
     // debug
     console.log("input", payload);
 
-    // get or create new game
-    let game = games[address];
-    if (!game) {
-        game = {
-            owner: address,
-            engine: new Micropolis(),
-            block: block_number,
-        };
-        // XXX: every player has a single game
-        games[address] = game;
-        game.engine.speed = 3; // initial value is 0
-        // TODO: setup callback hook
-    }
-    const { engine } = game;
+    const from = getAddress(metadata.msg_sender);
+    const blockNumber = metadata.block_number;
 
-    // run the simulation for the number of ticks since last input block
-    const ticks = (block_number - game.block) * TICKS_PER_BLOCK;
-    console.log(
-        `running simulation from block ${game.block} to ${block_number} (${ticks} ticks)`
-    );
-    const previousTime = engine.cityTime;
-    while (game.block < block_number) {
-        for (let i = 0; i < TICKS_PER_BLOCK; i++) {
-            engine.simTick();
-        }
-        game.block++;
-    }
-    console.log(`cityTime ${previousTime} -> ${engine.cityTime}`);
+    const game = games[from]; // may be undefined
+    const { functionName, args } = decodeFunctionData({ abi, data: payload });
+    switch (functionName) {
+        case "transfer":
+            const [to, amount] = args;
 
-    // first byte is the type of input
-    const type = hexToNumber(slice(payload, 0, 1));
+            // transfer L2 funds. throws if not enough funds
+            wallet.transferERC20(token, from, to, amount);
 
-    switch (type) {
-        case InputType.START:
-            const seed = hexToNumber(slice(payload, 1, 5)); // 4 bytes - int
-            console.log(`creating game for ${address} using seed ${seed}`);
+            return "accept";
+
+        case "start":
+            if (game) {
+                // game already exists, reject
+                // TODO: allow resetting the game?
+                return "reject";
+            }
+
+            const [seed] = args;
+            console.log(`creating game for ${from} using seed ${seed}`);
+
+            // instantiate new game engine
+            const engine = new Micropolis();
+
+            // generate city
             engine.generateSomeCity(seed);
-            break;
 
-        case InputType.DO_TOOL:
-            const tool = hexToNumber(slice(payload, 1, 2)); // 1 byte
-            const x = hexToNumber(slice(payload, 2, 4)); // 2 bytes - short
-            const y = hexToNumber(slice(payload, 4, 6)); // 2 bytes - short
-            console.log(`applying tool ${tool} at (${x},${y})`);
-            engine.doTool(tool, x, y);
-            break;
+            // set speed to 3 because initial value is 0
+            engine.speed = 3;
+
+            // this is the required initial funds to build a city
+            // XXX: this is amount of easy mode. support medium (10k) and hard (5k)
+            const requiredFunds = engine.totalFunds;
+
+            // transfer funds to zero address, which is considered locked "in-game funds"
+            // throws if not enough funds
+            wallet.transferERC20(
+                token,
+                from,
+                inGameWallet,
+                BigInt(requiredFunds)
+            );
+
+            // store game in memory. keep track of block number
+            games[from] = {
+                block: blockNumber,
+                engine: engine,
+            };
+
+            // create notices with map, population, totalFunds, cityTime
+            await createEngineNotices(engine);
+
+            return "accept";
+
+        case "doTool":
+            if (!game) {
+                // game does not exist, reject input
+                return "reject";
+            }
+
+            const ticks = (blockNumber - game.block) * TICKS_PER_BLOCK;
+            console.log(
+                `running simulation from block ${game.block} to ${blockNumber} (${ticks} ticks)`
+            );
+
+            // advance game simulation
+            const fundsBefore = game.engine.totalFunds;
+            while (game.block < blockNumber) {
+                for (let i = 0; i < TICKS_PER_BLOCK; i++) {
+                    game.engine.simTick();
+                }
+                game.block++;
+            }
+            const fundsAfter = game.engine.totalFunds;
+
+            // do accounting
+            if (fundsAfter > fundsBefore) {
+                // earned funds (collected taxes > expenses)
+                // transfer funds from people's wallet to in-game wallet
+                wallet.transferERC20(
+                    token,
+                    peopleWallet,
+                    inGameWallet,
+                    BigInt(fundsAfter - fundsBefore)
+                );
+            } else if (fundsBefore > fundsAfter) {
+                // spent funds (expenses > collected taxes)
+                // transfer funds from in-game wallet to people's wallet
+                wallet.transferERC20(
+                    token,
+                    inGameWallet,
+                    peopleWallet,
+                    BigInt(fundsBefore - fundsAfter)
+                );
+            }
+            // XXX: maybe we don't need to do the accounting above every time we run the simulation
+            // but only when the game is "terminated"?
+
+            const [tool, x, y] = args;
+            console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
+            const result = game.engine.doTool(tool, x, y);
+            // XXX: reject input if result is not successuful?
+
+            // create notices with map, population, totalFunds, cityTime
+            await createEngineNotices(game.engine);
+
+            return "accept";
     }
-
-    // create notices with map, population, totalFunds, cityTime
-    await createEngineNotices(engine);
-
-    return "accept";
+    return "reject";
 });
 
 app.addInspectHandler(async ({ payload }) => {
     const url = hexToString(payload);
+    console.log("inspect", payload, url);
+    const { functionName, args } = decodeFunctionData({
+        abi: inspectAbi,
+        data: url as Hex,
+    });
+
+    switch (functionName) {
+        case "getBalance":
+            const [address] = args;
+            console.log(`getBalance(${address})`);
+            const balance = wallet.balanceOf(token, address);
+            await app.createReport({
+                payload: numberToHex(balance, { size: 32 }),
+            });
+            break;
+
+        case "getMap":
+            const [seed] = args;
+            const engine = new Micropolis();
+            console.log(`getMap(${seed})`);
+            engine.generateSomeCity(seed);
+            await createEngineReports(engine);
+            break;
+
+        case "getUserMap":
+            const [user] = args;
+            console.log(`getUserMap(${user})`);
+            const game = games[user];
+            if (game) {
+                await createEngineReports(game.engine);
+            } else {
+                // no game found for that address
+                // just respond with no reports
+            }
+            break;
+    }
+
+    /*
     console.log("inspect", payload, url);
     if (isAddress(url)) {
         // normalize address
@@ -149,14 +250,14 @@ app.addInspectHandler(async ({ payload }) => {
             // just respond with no reports
         }
     } else {
-        // this is only for basically showing a initial game map
+        // this is only for showing a initial game map
         const seed = isHex(url) ? hexToNumber(url) : 0;
         const engine = new Micropolis();
         engine.generateSomeCity(seed);
 
         // create reports with map, population, totalFunds, cityTime
         await createEngineReports(engine);
-    }
+    }*/
 });
 
 console.log(`Game server listening for inputs from ${url}`);

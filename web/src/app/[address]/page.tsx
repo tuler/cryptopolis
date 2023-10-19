@@ -13,7 +13,6 @@ import {
 } from "viem";
 
 const View = ({ params }: { params: { address: string } }) => {
-    // inspect user map
     const { reports } = useInspect(
         encodeFunctionData({
             abi: inspectAbi,

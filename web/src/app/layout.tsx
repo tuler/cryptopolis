@@ -3,10 +3,10 @@ import "@mantine/core/styles.css";
 import React, { FC } from "react";
 import { ColorSchemeScript } from "@mantine/core";
 
-import GraphQLProvider from "@/providers/graphqlProvider";
-import StyleProvider from "@/providers/styleProvider";
-import WalletProvider from "@/providers/walletProvider";
-import InspectProvider from "@/providers/inspectProvider";
+import GraphQLProvider from "@/providers/GraphQLProvider";
+import StyleProvider from "@/providers/StyleProvider";
+import WalletProvider from "@/providers/WalletProvider";
+import InspectProvider from "@/providers/InspectProvider";
 
 const Layout: FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
