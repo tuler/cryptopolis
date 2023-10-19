@@ -2,13 +2,17 @@
 import { CityStats } from "@/components/CityStats";
 import { GameStage } from "@/components/GameStage";
 import { ToolBox } from "@/components/ToolBox";
-import { useRollupsServer } from "@/models/Server";
+import { useRollupsServer } from "@/hooks/rollups";
 import { AppShell, Group, ScrollArea, Title } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
 import { Hex, hexToNumber } from "viem";
 
-export const Play: FC = () => {
+type PlayProps = {
+    initialMap: Hex;
+};
+
+export const Play: FC<PlayProps> = ({ initialMap }) => {
     const [input, setInput] = useState<Hex>();
     const [tool, setTool] = useState(0);
 
@@ -52,7 +56,7 @@ export const Play: FC = () => {
                 <GameStage
                     setInput={setInput}
                     write={write}
-                    map={map}
+                    map={map || initialMap}
                     tool={tool}
                 />
             </AppShell.Main>

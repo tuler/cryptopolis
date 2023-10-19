@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import { Sprite } from "@pixi/react";
 import { Hex, encodeFunctionData } from "viem";
 import { tools } from "../models/Tool";
-import { abi } from "@/models/Server";
+import { abi } from "@/hooks/rollups";
 
 export type ToolOverlayProps = {
     tool: number;

@@ -1,7 +1,7 @@
 "use client";
 import { Map } from "@/components/Map";
-import { useInspect } from "@/hooks/inspect";
-import { abi, inspectAbi, useRollupsServer } from "@/models/Server";
+import { useInspectMap } from "@/hooks/game";
+import { abi, useRollupsServer } from "@/hooks/rollups";
 import {
     AppShell,
     Button,
@@ -17,7 +17,7 @@ import { Stage } from "@pixi/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
 import { TbHomePlus } from "react-icons/tb";
-import { encodeFunctionData, numberToHex } from "viem";
+import { encodeFunctionData } from "viem";
 
 export const Create: FC = () => {
     const width = 120;
@@ -31,14 +31,7 @@ export const Create: FC = () => {
                 : parseInt(seed)
             : seed;
 
-    const { reports } = useInspect(
-        encodeFunctionData({
-            abi: inspectAbi,
-            functionName: "getMap",
-            args: [seed_],
-        })
-    );
-    const [map] = reports;
+    const { map } = useInspectMap(seed_);
 
     // encode input
     const input = encodeFunctionData({

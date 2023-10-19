@@ -1,3 +1,4 @@
+"use client";
 import { Center, Paper, Skeleton, Stack, Title } from "@mantine/core";
 import { FC } from "react";
 import { Address } from "viem";

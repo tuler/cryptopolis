@@ -1,9 +1,3 @@
-import {
-    inputBoxABI,
-    useInputBoxAddInput,
-    usePrepareInputBoxAddInput,
-} from "@/hooks/contracts";
-import { CompletionStatus, useInputNoticesQuery } from "@/hooks/graphql";
 import { useEffect, useState } from "react";
 import {
     Address,
@@ -12,7 +6,13 @@ import {
     decodeEventLog,
     parseAbi,
 } from "viem";
+import {
+    inputBoxABI,
+    useInputBoxAddInput,
+    usePrepareInputBoxAddInput,
+} from "./contracts";
 import { useWaitForTransaction } from "wagmi";
+import { CompletionStatus, useInputNoticesQuery } from "./graphql";
 
 // define application API (or ABI so to say)
 export const abi = parseAbi([
@@ -21,19 +21,21 @@ export const abi = parseAbi([
     "function doTool(uint8 tool, uint16 x, uint16 y)",
 ]);
 
-export const inspectAbi = parseAbi([
-    "function getMap(uint32 seed)",
-    "function getUserMap(address)",
-    "function balanceOf(address)",
-]);
-
+/**
+ * Hook to get the inputIndex from a transaction receipt
+ * @param receipt transaction receipt
+ * @returns inputIndex inside the transaction receipt
+ */
 const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
     const [inputIndex, setInputIndex] = useState<bigint | undefined>();
     useEffect(() => {
+        // runs when receipt changes
         if (receipt) {
+            // search for InputAdded event in receipt logs
             const inputIndex = receipt.logs
                 .map((log) => {
                     try {
+                        // decode the event
                         const decodedLog = decodeEventLog({
                             abi: inputBoxABI,
                             eventName: "InputAdded",
@@ -47,6 +49,8 @@ const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
                 })
                 .filter((id): id is bigint => !!id)
                 .at(0);
+
+            // set inputIndex state variable
             setInputIndex(inputIndex);
         }
     }, [receipt]);
@@ -75,12 +79,9 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
         pause: !inputIndex,
     });
 
-    console.log("InputIndex", inputIndex);
+    // console.log("InputIndex", inputIndex);
     useEffect(() => {
-        const id = setTimeout(
-            () => inputIndex && executeQuery({ requestPolicy: "network-only" }),
-            5000
-        );
+        const id = setTimeout(() => inputIndex && executeQuery(), 5000);
         return () => clearTimeout(id);
     }, [result.fetching, executeQuery, inputIndex]);
 

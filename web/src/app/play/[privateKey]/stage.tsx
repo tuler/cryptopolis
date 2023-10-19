@@ -1,25 +1,23 @@
+"use client";
 import { FC } from "react";
 import { Create } from "./create";
 import { useAccount } from "wagmi";
-import { useInspect } from "@/hooks/inspect";
 import { Play } from "./play";
-import { inspectAbi } from "@/models/Server";
-import { encodeFunctionData, zeroAddress } from "viem";
+import { useInspectGame } from "@/hooks/game";
+import { notFound } from "next/navigation";
 
 export const Stage: FC = () => {
     // get wallet address
     const { address } = useAccount();
 
+    if (!address) {
+        notFound();
+    }
+
     // inspect game
-    const { reports } = useInspect(
-        encodeFunctionData({
-            abi: inspectAbi,
-            functionName: "getUserMap",
-            args: [address ?? zeroAddress],
-        })
-    );
+    const { map } = useInspectGame(address);
 
     // if there is a game, render play component
     // otherwise render component to create game
-    return reports.length > 0 ? <Play /> : <Create />;
+    return map ? <Play initialMap={map} /> : <Create />;
 };

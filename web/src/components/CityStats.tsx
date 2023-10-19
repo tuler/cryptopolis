@@ -1,3 +1,4 @@
+"use client";
 import { Badge, Group } from "@mantine/core";
 import { FC } from "react";
 

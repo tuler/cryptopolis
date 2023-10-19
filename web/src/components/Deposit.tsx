@@ -1,3 +1,4 @@
+"use client";
 import {
     erc20PortalAddress,
     useErc20Allowance,
@@ -7,8 +8,6 @@ import {
     usePrepareErc20Approve,
     usePrepareErc20PortalDepositErc20Tokens,
 } from "@/hooks/contracts";
-import { useInspect } from "@/hooks/inspect";
-import { inspectAbi } from "@/models/Server";
 import {
     Button,
     Center,
@@ -24,18 +23,13 @@ import { useForm } from "@mantine/form";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC } from "react";
 import { TbArrowDown } from "react-icons/tb";
-import {
-    Address,
-    encodeFunctionData,
-    formatUnits,
-    hexToBigInt,
-    parseUnits,
-} from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
     TransactionProgress,
     TransactionStageStatus,
 } from "./TransactionProgress";
+import { useInspectBalance } from "@/hooks/game";
 
 type DepositProps = {
     address: Address;
@@ -115,17 +109,8 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     });
 
     // query L2 balance from dapp inspect server
-    const {
-        reports: [l2BalanceHex],
-        isLoading: l2BalanceLoading,
-    } = useInspect(
-        encodeFunctionData({
-            abi: inspectAbi,
-            functionName: "balanceOf",
-            args: [address],
-        })
-    );
-    const l2Balance = l2BalanceHex ? hexToBigInt(l2BalanceHex) : undefined;
+    const { balance: l2Balance, isLoading: l2BalanceLoading } =
+        useInspectBalance(address);
 
     // query allowance from ERC-20
     const { data: allowance, isLoading: allowanceLoading } = useErc20Allowance({

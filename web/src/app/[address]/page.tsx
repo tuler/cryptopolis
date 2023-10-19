@@ -1,31 +1,26 @@
 "use client";
 import { CityStats } from "@/components/CityStats";
-import { GameStage } from "@/components/GameStage";
-import { useInspect } from "@/hooks/inspect";
-import { inspectAbi } from "@/models/Server";
+import { Map } from "@/components/Map";
+import { useInspectGame } from "@/hooks/game";
 import { AppShell, Group, Title } from "@mantine/core";
-import {
-    encodeFunctionData,
-    getAddress,
-    hexToNumber,
-    isAddress,
-    zeroAddress,
-} from "viem";
+import { Stage } from "@pixi/react";
+import { notFound } from "next/navigation";
+import { isAddress } from "viem";
 
 const View = ({ params }: { params: { address: string } }) => {
-    const { reports } = useInspect(
-        encodeFunctionData({
-            abi: inspectAbi,
-            functionName: "getUserMap",
-            args: [
-                isAddress(params.address)
-                    ? getAddress(params.address)
-                    : zeroAddress,
-            ],
-        })
+    if (!params.address || !isAddress(params.address)) {
+        notFound();
+    }
+
+    const width = 120;
+    const height = 100;
+    const { map, population, totalFunds, cityTime } = useInspectGame(
+        params.address
     );
-    const [map, population, totalFunds, cityTime] = reports;
-    const loaded = !!population && !!totalFunds && !!cityTime;
+    const loaded =
+        population != undefined &&
+        totalFunds != undefined &&
+        cityTime != undefined;
 
     return (
         <AppShell header={{ height: 60 }} padding="md">
@@ -35,16 +30,18 @@ const View = ({ params }: { params: { address: string } }) => {
                         <Title>🏗️ Cryptopolis</Title>
                         {loaded && (
                             <CityStats
-                                population={hexToNumber(population)}
-                                totalFunds={hexToNumber(totalFunds)}
-                                cityTime={hexToNumber(cityTime)}
+                                population={population}
+                                totalFunds={totalFunds}
+                                cityTime={cityTime}
                             />
                         )}
                     </Group>
                 </Group>
             </AppShell.Header>
             <AppShell.Main>
-                <GameStage map={map} tool={-1} />
+                <Stage width={width * 16} height={height * 16}>
+                    <Map value={map} />
+                </Stage>
             </AppShell.Main>
         </AppShell>
     );
