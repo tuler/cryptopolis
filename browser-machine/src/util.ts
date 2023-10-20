@@ -3,7 +3,7 @@ import { Address, Hex, formatUnits, numberToHex } from "viem";
 import { decimals } from ".";
 
 // convert Uint16Array to hex string (i.e. used for map)
-const Uint16ArrayToHex = (array: Uint16Array): Hex => {
+export const Uint16ArrayToHex = (array: Uint16Array): Hex => {
     const str = Array.from(array, (v) => v.toString(16).padStart(4, "0")).join(
         ""
     );

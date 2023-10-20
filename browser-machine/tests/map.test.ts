@@ -3,7 +3,7 @@ import fs from "fs";
 import { Micropolis } from "micropolis";
 import { Hex, slice } from "viem";
 import { describe, expect, test } from "vitest";
-import { Uint16ArrayToHex } from "../src";
+import { Uint16ArrayToHex } from "../src/util";
 
 const hexToShort = (hex: Hex) => parseInt(hex);
 
