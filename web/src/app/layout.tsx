@@ -5,7 +5,6 @@ import { ColorSchemeScript } from "@mantine/core";
 
 import GraphQLProvider from "@/providers/GraphQLProvider";
 import StyleProvider from "@/providers/StyleProvider";
-import WalletProvider from "@/providers/WalletProvider";
 import InspectProvider from "@/providers/InspectProvider";
 
 const Layout: FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -17,11 +16,9 @@ const Layout: FC<{ children: React.ReactNode }> = ({ children }) => {
             </head>
             <body>
                 <StyleProvider>
-                    <WalletProvider>
-                        <GraphQLProvider>
-                            <InspectProvider>{children}</InspectProvider>
-                        </GraphQLProvider>
-                    </WalletProvider>
+                    <GraphQLProvider>
+                        <InspectProvider>{children}</InspectProvider>
+                    </GraphQLProvider>
                 </StyleProvider>
             </body>
         </html>

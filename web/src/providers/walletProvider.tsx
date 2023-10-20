@@ -9,11 +9,6 @@ import {
     lightTheme,
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import {
-    argentWallet,
-    ledgerWallet,
-    trustWallet,
-} from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { foundry, mainnet, sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
@@ -31,31 +26,21 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     [publicProvider()]
 );
 
-const projectId = "a6265c875f8a7513ac7c52362abf434b";
+const projectId = "7b9b1e1c04677127ab05aa422f1640c4";
+
 const { wallets } = getDefaultWallets({
-    appName: "CartesiScan",
+    appName: "Cryptopolis",
     projectId,
     chains,
 });
 
-const appInfo = {
-    appName: "CartesiScan",
-    learnMoreUrl: "https://cartesiscan.io",
+export const appInfo = {
+    appName: "Cryptopolis",
 };
 
-const connectors = connectorsForWallets([
-    ...wallets,
-    {
-        groupName: "Other",
-        wallets: [
-            argentWallet({ chains, projectId }),
-            trustWallet({ chains, projectId }),
-            ledgerWallet({ chains, projectId }),
-        ],
-    },
-]);
+const connectors = connectorsForWallets(wallets);
 
-const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
     return ensImage ? (
         <Image
             src={ensImage}

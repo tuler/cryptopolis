@@ -1,11 +1,11 @@
 import { Bridge } from "@/components/Bridge";
-import WalletProvider from "@/providers/WalletProvider";
 import {
     AppShell,
     BackgroundImage,
     Center,
     Group,
     Paper,
+    Stack,
     Title,
 } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -20,10 +20,6 @@ type BridgeProps = {
 
 export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
     const { address } = useAccount();
-    if (!address) {
-        return <></>;
-    }
-
     return (
         <AppShell header={{ height: 60 }} padding="md">
             <AppShell.Header>
@@ -38,11 +34,14 @@ export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
                 <AppShell.Main>
                     <Center>
                         <Paper opacity={0.9} p={40}>
-                            <Bridge
-                                address={address}
-                                dapp={dapp}
-                                token={token}
-                            />
+                            {!!address && (
+                                <Bridge
+                                    address={address}
+                                    dapp={dapp}
+                                    token={token}
+                                />
+                            )}
+                            {!address && <ConnectButton />}
                         </Paper>
                     </Center>
                 </AppShell.Main>

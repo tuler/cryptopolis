@@ -5,6 +5,13 @@ import { foundry, mainnet, sepolia } from "viem/chains";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { PrivateKeyConnector } from "./PrivateKeyConnector";
+import {
+    RainbowKitProvider,
+    darkTheme,
+    lightTheme,
+} from "@rainbow-me/rainbowkit";
+import { useMantineColorScheme } from "@mantine/core";
+import { CustomAvatar, appInfo } from "./WalletProvider";
 
 type PrivateKeyWalletProviderProps = {
     children?: React.ReactNode;
@@ -15,6 +22,10 @@ const PrivateKeyWalletProvider: FC<PrivateKeyWalletProviderProps> = ({
     children,
     privateKey,
 }) => {
+    const scheme = useMantineColorScheme();
+    const walletTheme =
+        scheme.colorScheme == "dark" ? darkTheme() : lightTheme();
+
     // select chain based on env var
     const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "31337");
     const chain =
@@ -40,7 +51,18 @@ const PrivateKeyWalletProvider: FC<PrivateKeyWalletProviderProps> = ({
         webSocketPublicClient,
     });
 
-    return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
+    return (
+        <WagmiConfig config={wagmiConfig}>
+            <RainbowKitProvider
+                appInfo={appInfo}
+                chains={chains}
+                theme={walletTheme}
+                avatar={CustomAvatar}
+            >
+                {children}
+            </RainbowKitProvider>
+        </WagmiConfig>
+    );
 };
 
 export default PrivateKeyWalletProvider;
