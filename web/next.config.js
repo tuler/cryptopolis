@@ -1,14 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    /*experimental: {
-        nextScriptWorkers: true,
-    },
-    webpack(config) {
-        config.output.webassemblyModuleFilename =
-            "static/wasm/[modulehash].wasm";
-        config.experiments = { asyncWebAssembly: true };
-        return config;
-    },*/
     reactStrictMode: true,
     async headers() {
         return [
