@@ -4,14 +4,14 @@ import {
     Address,
     Hex,
     decodeFunctionData,
+    formatUnits,
     getAddress,
     hexToString,
     numberToHex,
     parseAbi,
-    zeroAddress,
 } from "viem";
 import { Micropolis } from "micropolis";
-import { createEnginePayloads } from "./util";
+import { createEnginePayloads, logTransfer } from "./util";
 
 // instantiate deroll application
 const url =
@@ -37,13 +37,13 @@ app.addAdvanceHandler(wallet.handler);
 
 // Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
 const token = "0xae7f61eCf06C65405560166b259C54031428A9C4";
-const decimals = 18n;
+export const decimals = 18n;
 
 // this is the address of the in-game locked tokens
-const inGameWallet = zeroAddress;
+const inGameWallet = "0x0000000000000000000000000000000000000001";
 
 // this is the address of the people's wallet
-const peopleWallet = "0x0000000000000000000000000000000000000001";
+const peopleWallet = "0x0000000000000000000000000000000000000002";
 
 // game state. keep track of block number for real-time clock simulation
 type Game = {
@@ -79,7 +79,7 @@ const createEngineNotices = async (engine: Micropolis) => {
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {
     // debug
-    console.log("input", payload);
+    // console.log("input", payload);
 
     const from = getAddress(metadata.msg_sender);
     const blockNumber = metadata.block_number;
@@ -91,6 +91,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             const [to, amount] = args;
 
             // transfer L2 funds. throws if not enough funds
+            logTransfer(from, to, amount);
             wallet.transferERC20(token, from, to, amount);
 
             return "accept";
@@ -120,6 +121,12 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
 
             // transfer funds to zero address, which is considered locked "in-game funds"
             // throws if not enough funds
+            console.log(
+                `transferring ${formatUnits(
+                    BigInt(requiredFunds) * 10n ** decimals,
+                    Number(decimals)
+                )} from ${from} to in-game ${inGameWallet}`
+            );
             wallet.transferERC20(
                 token,
                 from,
@@ -149,43 +156,41 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                 `running simulation from block ${game.block} to ${blockNumber} (${ticks} ticks)`
             );
 
-            // advance game simulation
+            // save funds before we run the simulation below and apply the tool
             const fundsBefore = game.engine.totalFunds;
+
+            // advance game simulation
             while (game.block < blockNumber) {
                 for (let i = 0; i < TICKS_PER_BLOCK; i++) {
                     game.engine.simTick();
                 }
                 game.block++;
             }
-            const fundsAfter = game.engine.totalFunds;
-
-            // do accounting
-            if (fundsAfter > fundsBefore) {
-                // earned funds (collected taxes > expenses)
-                // transfer funds from people's wallet to in-game wallet
-                wallet.transferERC20(
-                    token,
-                    peopleWallet,
-                    inGameWallet,
-                    BigInt(fundsAfter - fundsBefore) * 10n ** decimals
-                );
-            } else if (fundsBefore > fundsAfter) {
-                // spent funds (expenses > collected taxes)
-                // transfer funds from in-game wallet to people's wallet
-                wallet.transferERC20(
-                    token,
-                    inGameWallet,
-                    peopleWallet,
-                    BigInt(fundsBefore - fundsAfter) * 10n ** decimals
-                );
-            }
-            // XXX: maybe we don't need to do the accounting above every time we run the simulation
-            // but only when the game is "terminated"?
 
             const [tool, x, y] = args;
             console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
             const result = game.engine.doTool(tool, x, y);
             // XXX: reject input if result is not successuful?
+
+            // do accounting
+            const fundsAfter = game.engine.totalFunds;
+            if (fundsAfter > fundsBefore) {
+                // earned funds (collected taxes > expenses)
+                // transfer funds from people's wallet to in-game wallet
+                const amount =
+                    BigInt(fundsAfter - fundsBefore) * 10n ** decimals;
+                logTransfer(peopleWallet, inGameWallet, amount);
+                wallet.transferERC20(token, peopleWallet, inGameWallet, amount);
+            } else if (fundsBefore > fundsAfter) {
+                // spent funds (expenses > collected taxes)
+                // transfer funds from in-game wallet to people's wallet
+                const amount =
+                    BigInt(fundsBefore - fundsAfter) * 10n ** decimals;
+                logTransfer(inGameWallet, peopleWallet, amount);
+                wallet.transferERC20(token, inGameWallet, peopleWallet, amount);
+            }
+            // XXX: maybe we don't need to do the accounting above every time we run the simulation
+            // but only when the game is "terminated"?
 
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(game.engine);
@@ -197,7 +202,10 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
 
 app.addInspectHandler(async ({ payload }) => {
     const url = hexToString(payload);
-    console.log("inspect", payload, url);
+
+    // debug
+    // console.log("inspect", payload, url);
+
     const { functionName, args } = decodeFunctionData({
         abi: inspectAbi,
         data: url as Hex,

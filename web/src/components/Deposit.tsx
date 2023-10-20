@@ -110,7 +110,7 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
 
     // query L2 balance from dapp inspect server
     const { balance: l2Balance, isLoading: l2BalanceLoading } =
-        useInspectBalance(address);
+        useInspectBalance(address, { refreshInterval: 3000 });
 
     // query allowance from ERC-20
     const { data: allowance, isLoading: allowanceLoading } = useErc20Allowance({

@@ -7,6 +7,7 @@ import {
     parseAbi,
 } from "viem";
 import { UseInspect, useInspect } from "./inspect";
+import { SWRConfiguration } from "swr";
 
 const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
@@ -60,14 +61,16 @@ export const useInspectMap = (seed: number): UseInspect & GameInspect => {
 };
 
 export const useInspectBalance = (
-    address: Address
+    address: Address,
+    options?: SWRConfiguration
 ): UseInspect & { balance?: bigint } => {
     const swr = useInspect(
         encodeFunctionData({
             abi: inspectAbi,
             functionName: "balanceOf",
             args: [address],
-        })
+        }),
+        options
     );
     const { reports } = swr;
     const [balance] = reports;

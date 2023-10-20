@@ -1,4 +1,4 @@
-import useSWR, { Key, SWRResponse } from "swr";
+import useSWR, { Key, SWRResponse, SWRConfiguration } from "swr";
 import { Hex } from "viem";
 
 const url = process.env.NEXT_PUBLIC_INSPECT_URL;
@@ -38,10 +38,14 @@ type ReportResponse = {
 
 export type UseInspect = SWRResponse<InspectResponse> & ReportResponse;
 
-export const useInspect = (key: Key): UseInspect => {
-    const swr = useSWR<InspectResponse>(() => (key ? `${url}${key}` : false), {
-        revalidateOnFocus: false,
-    });
+export const useInspect = (
+    key: Key,
+    options?: SWRConfiguration
+): UseInspect => {
+    const swr = useSWR<InspectResponse>(
+        () => (key ? `${url}${key}` : false),
+        options
+    );
 
     const response = swr.data;
     let reports: InspectReport[] = [];
