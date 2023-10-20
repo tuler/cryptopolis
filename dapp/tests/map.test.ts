@@ -19,7 +19,7 @@ type Tile = {
 
 let tileImages: Image[] = [];
 const tileImage = async (id: number): Promise<Image> => {
-    const filename = `../node-micropolis/images/micropolis_tile_${id
+    const filename = `../micropolis/images/micropolis_tile_${id
         .toString()
         .padStart(4, "0")}.png`;
     return loadImage(filename);

@@ -10,9 +10,9 @@ EOF
 
 WORKDIR /app
 COPY ./browser-machine ./browser-machine
-COPY ./node-micropolis ./node-micropolis
+COPY ./micropolis ./micropolis
 
-WORKDIR /app/node-micropolis
+WORKDIR /app/micropolis
 RUN <<EOF
 yarn install
 yarn build
