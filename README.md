@@ -38,9 +38,69 @@ If the `people` wallet runs out of funds, the global economy is in trouble. The 
 
 ## Subprojects
 
-- micropolis: the original C++ game engine + Node.js binding
-- dapp: a Cartesi Rollups application in TypeScript
-- web: the game UI as a Next.js application
+-   micropolis: the original C++ game engine + Node.js binding
+-   dapp: a Cartesi Rollups application in TypeScript
+-   web: the game UI as a Next.js application
+
+## Building
+
+-   Building the game engine
+
+The command below will build the C++ engine and the Node.js binding targeted to the host machine where it's executed.
+
+```shell
+cd micropolis
+yarn
+yalc publish
+```
+
+A RISC-V build can be done using Docker and its RISC-V emulation support through QEMU.
+
+-   Building the dapp
+
+```shell
+cd dapp
+yalc update
+yarn
+yarn build
+```
+
+-   Building the web UI
+
+The UI is a Next.js application, and can be built with the command below:
+
+```shell
+cd web
+yarn
+yarn build
+```
+
+## Running
+
+-   Running the dapp
+
+Running on the host:
+
+```shell
+sunodo run --no-backend
+cd dapp
+ts-node src/index.ts
+```
+
+Running in the Cartesi Machine:
+
+```shell
+sunodo build
+sunodo run
+```
+
+-   Running the web UI
+
+```shell
+cd web
+yarn
+yarn dev
+```
 
 ## Future Improvements
 
