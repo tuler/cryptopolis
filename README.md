@@ -36,6 +36,12 @@ In a nutshell, if the player does a good job he recovers the initial investment 
 
 If the `people` wallet runs out of funds, the global economy is in trouble. The game will stop working and the player will not be able to play anymore. However the application deployer can be in control of a token supply and donate more token to the `people`, which can be seen as a World Bank providing humanitarian support.
 
+## Subprojects
+
+- micropolis: the original C++ game engine + Node.js binding
+- dapp: a Cartesi Rollups application in TypeScript
+- web: the game UI as a Next.js application
+
 ## Future Improvements
 
 1. The simulation is currently running only as a Cartesi Rollups application. That means the game is not playable in absolute real-time, because only when a new input is received the game advances its simulation clock and updates its state. In order to run the game in real time we need to run it inside the browser, using the WebAssembly build of the Cartesi Machine, which is still [unmerged](https://github.com/cartesi/machine-emulator/pull/132) at the time of this writing.
