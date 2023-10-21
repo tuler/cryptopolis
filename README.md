@@ -4,9 +4,13 @@ Cryptopolis brings back the original city simulator that started it all in 1989 
 
 SimCity was launched back in 1989 developed by the legendary game designer Will Write. In 2008, the engine C code was ported to C++ and released as free software under the GPL-3.0-or-later license, renamed to Micropolis for trademark reasons.
 
-This project was developed for the [ETHOnline 2023](https://ethglobal.com/events/ethonline2023/) event and the first [Cartesi](https://cartesi.io/) Experiment Week.
+This project was developed for the [ETHOnline 2023](https://ethglobal.com/events/ethonline2023/) event and the first [Cartesi](https://cartesi.io/) Experiment Week. Here is the [slide deck](https://docs.google.com/presentation/d/1_Xq0s_CqR8bfzQD77MLC0m9lVUvZA1ueloEbXzcr1gU/edit?usp=sharing) of the presentation video below.
 
-![Cryptopolis](cryptopolis.png)
+[![Cryptopolis presentation](https://img.youtube.com/vi/k5TGutk0Euk/0.jpg)](https://www.youtube.com/watch?v=k5TGutk0Euk)
+
+For a throughtout retrospective of SimCity, especially for those under the age of 40, I recommend watching the following video.
+
+[![SimCity 30 Year Later: A Retrospective](https://img.youtube.com/vi/TrScy1icWjI/0.jpg)](https://www.youtube.com/watch?v=YTrScy1icWjI)
 
 ## How it works
 
@@ -107,3 +111,11 @@ yarn dev
 1. The simulation is currently running only as a Cartesi Rollups application. That means the game is not playable in absolute real-time, because only when a new input is received the game advances its simulation clock and updates its state. In order to run the game in real time we need to run it inside the browser, using the WebAssembly build of the Cartesi Machine, which is still [unmerged](https://github.com/cartesi/machine-emulator/pull/132) at the time of this writing.
 
 2. This is just a prototype, a lot of features are missing in the UI, and in how the player can interfere with the game simulation. For example, the engine supports changing the tax rate, which can help the city collect more funds but repel citizens.
+
+## Thanks
+
+Thanks to all the original coders for building these amazing toys.
+
+Thanks to the awesome Cartesi community.
+
+Made with ❤️ by [tuler](https://github.com/tuler/). Long live open source! 🙌
