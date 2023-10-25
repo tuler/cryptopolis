@@ -19,7 +19,7 @@ type BridgeProps = {
 };
 
 export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     return (
         <AppShell header={{ height: 60 }} padding="md">
             <AppShell.Header>
@@ -34,14 +34,14 @@ export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
                 <AppShell.Main>
                     <Center>
                         <Paper opacity={0.9} p={40}>
-                            {!!address && (
+                            {isConnected && address && (
                                 <Bridge
                                     address={address}
                                     dapp={dapp}
                                     token={token}
                                 />
                             )}
-                            {!address && <ConnectButton />}
+                            {!isConnected && <ConnectButton />}
                         </Paper>
                     </Center>
                 </AppShell.Main>
