@@ -106,6 +106,7 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     const { data: l1Balance, isLoading: l1BalanceLoading } = useErc20BalanceOf({
         address: token,
         args: [address],
+        watch: true,
     });
 
     // query L2 balance from dapp inspect server
@@ -116,6 +117,7 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     const { data: allowance, isLoading: allowanceLoading } = useErc20Allowance({
         address: token,
         args: [address, erc20PortalAddress],
+        watch: true,
     });
 
     // prepare approve transaction
