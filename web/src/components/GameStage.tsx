@@ -27,6 +27,7 @@ export const GameStage: FC<GameStageProps> = ({
         <Stage width={width * 16} height={height * 16}>
             <Map
                 value={map}
+                scale={1}
                 onMouseMove={(tile) => {
                     setX(tile.x);
                     setY(tile.y);

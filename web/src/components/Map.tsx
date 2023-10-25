@@ -18,6 +18,7 @@ export type Tile = {
 
 export type MapProps = {
     value?: Hex;
+    scale: number;
     onMouseMove?: (tile: Tile) => void;
     onMouseClick?: (tile: Tile) => void;
 };
@@ -43,7 +44,12 @@ const coordinates = Array.from(rows, (_, y) =>
     Array.from(cols, (_, x) => ({ x, y }))
 ).flat();
 
-export const Map: FC<MapProps> = ({ value, onMouseMove, onMouseClick }) => {
+export const Map: FC<MapProps> = ({
+    value,
+    scale,
+    onMouseMove,
+    onMouseClick,
+}) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
     // default value is a blank map
@@ -98,10 +104,10 @@ export const Map: FC<MapProps> = ({ value, onMouseMove, onMouseClick }) => {
                 onpointermove={(_event) => {
                     onMouseMove && onMouseMove(tile);
                 }}
-                width={16}
-                height={16}
-                x={x * 16}
-                y={y * 16}
+                width={16 * scale}
+                height={16 * scale}
+                x={x * 16 * scale}
+                y={y * 16 * scale}
             />
         ) : (
             <React.Fragment key={coord}></React.Fragment>

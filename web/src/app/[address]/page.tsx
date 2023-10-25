@@ -40,7 +40,7 @@ const View = ({ params }: { params: { address: string } }) => {
             </AppShell.Header>
             <AppShell.Main>
                 <Stage width={width * 16} height={height * 16}>
-                    <Map value={map} />
+                    <Map value={map} scale={1} />
                 </Stage>
             </AppShell.Main>
         </AppShell>

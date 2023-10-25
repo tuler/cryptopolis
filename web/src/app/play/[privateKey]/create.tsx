@@ -73,11 +73,8 @@ export const Create: FC = () => {
                 </Group>
             </AppShell.Header>
             <AppShell.Main>
-                <Stage width={width * 16} height={height * 16}>
-                    <Map value={map} />
-                </Stage>
-                <Overlay color="#000" backgroundOpacity={0.6}>
-                    <Stack h="100%" justify="center">
+                <Group>
+                    <Stack>
                         <Center>
                             <Paper p="50">
                                 <Stack>
@@ -144,7 +141,10 @@ export const Create: FC = () => {
                             </Paper>
                         </Center>
                     </Stack>
-                </Overlay>
+                    <Stage width={(width * 16) / 2} height={(height * 16) / 2}>
+                        <Map value={map} scale={0.5} />
+                    </Stage>
+                </Group>
             </AppShell.Main>
         </AppShell>
     );
