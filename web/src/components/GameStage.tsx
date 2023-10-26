@@ -8,11 +8,13 @@ import { ToolOverlay } from "./ToolOverlay";
 export type GameStageProps = {
     map?: Hex;
     tool: number;
+    loading?: boolean;
     setInput?: (input: Hex) => void;
     write?: () => void;
 };
 
 export const GameStage: FC<GameStageProps> = ({
+    loading,
     map,
     tool,
     setInput,
@@ -26,6 +28,7 @@ export const GameStage: FC<GameStageProps> = ({
     return (
         <Stage width={width * 16} height={height * 16}>
             <Map
+                loading={loading}
                 value={map}
                 scale={1}
                 onMouseMove={(tile) => {
@@ -37,13 +40,7 @@ export const GameStage: FC<GameStageProps> = ({
                 }}
             />
             {tool >= 0 && (
-                <ToolOverlay
-                    tool={tool}
-                    x={x}
-                    y={y}
-                    setInput={setInput}
-                    write={write}
-                />
+                <ToolOverlay tool={tool} x={x} y={y} setInput={setInput} />
             )}
         </Stage>
     );

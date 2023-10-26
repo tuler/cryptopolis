@@ -3,7 +3,14 @@ import { CityStats } from "@/components/CityStats";
 import { GameStage } from "@/components/GameStage";
 import { ToolBox } from "@/components/ToolBox";
 import { useRollupsServer } from "@/hooks/rollups";
-import { AppShell, Group, ScrollArea, Title } from "@mantine/core";
+import {
+    AppShell,
+    Group,
+    Loader,
+    ScrollArea,
+    Textarea,
+    Title,
+} from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
 import { Hex, hexToNumber } from "viem";
@@ -17,15 +24,17 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const [tool, setTool] = useState(0);
 
     const dapp = "0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C";
-    const { write, notices } = useRollupsServer(dapp, input);
+    const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map
     const [map, population, totalFunds, cityTime] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
+    const debug = false;
 
     return (
         <AppShell
             header={{ height: 60 }}
+            footer={debug ? { height: 120 } : undefined}
             navbar={{
                 width: 320,
                 breakpoint: "sm",
@@ -56,10 +65,17 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                 <GameStage
                     setInput={setInput}
                     write={write}
+                    loading={loading}
                     map={map || initialMap}
                     tool={tool}
                 />
             </AppShell.Main>
+            {debug && (
+                <AppShell.Footer p="md">
+                    <Textarea value={input}></Textarea>
+                    {loading && <Loader />}
+                </AppShell.Footer>
+            )}
         </AppShell>
     );
 };

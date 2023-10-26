@@ -11,16 +11,9 @@ export type ToolOverlayProps = {
     x?: number;
     y?: number;
     setInput?: (input: Hex) => void;
-    write?: () => void;
 };
 
-export const ToolOverlay: FC<ToolOverlayProps> = ({
-    tool,
-    x,
-    y,
-    setInput,
-    write,
-}) => {
+export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
     useEffect(() => {
@@ -88,7 +81,6 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({
             texture={spritesheet.textures[tool]}
             x={px}
             y={py}
-            cursor="grab"
             visible={tool >= 0}
         />
     ) : (

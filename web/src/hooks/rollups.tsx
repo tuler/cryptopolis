@@ -6,13 +6,14 @@ import {
     decodeEventLog,
     parseAbi,
 } from "viem";
+import { useWaitForTransaction } from "wagmi";
 import {
     inputBoxABI,
     useInputBoxAddInput,
     usePrepareInputBoxAddInput,
 } from "./contracts";
-import { useWaitForTransaction } from "wagmi";
-import { CompletionStatus, useInputNoticesQuery } from "./graphql";
+import { useQuery } from "@apollo/client";
+import { CompletionStatus, InputNoticesDocument } from "./graphql/graphql";
 
 // define application API (or ABI so to say)
 export const abi = parseAbi([
@@ -74,33 +75,40 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
     const inputIndex = useInputIndex(wait.data);
 
     // query for the input outputs (after transaction is mined)
-    const [result, executeQuery] = useInputNoticesQuery({
+    const query = useQuery(InputNoticesDocument, {
         variables: { inputIndex: Number(inputIndex) },
-        pause: !inputIndex,
+        skip: !inputIndex,
+        pollInterval: 1000,
     });
 
-    // console.log("InputIndex", inputIndex);
+    // state with notices, change when graphql query result change
+    const [notices, setNotices] = useState<Hex[]>([]);
+    const [queryLoading, setQueryLoading] = useState(false);
     useEffect(() => {
-        const id = setTimeout(() => inputIndex && executeQuery(), 5000);
-        return () => clearTimeout(id);
-    }, [result.fetching, executeQuery, inputIndex]);
-
-    if (result.data?.input) {
-        if (result.data.input.status == CompletionStatus.Accepted) {
-            const notices = result.data.input.notices.edges
-                .map((notice) => notice.node)
-                .sort((a) => a.index)
-                .map((n) => n.payload as Hex);
-            return {
-                write: execute.write,
-                notices,
-            };
+        if (inputIndex && query.data) {
+            setQueryLoading(true);
+            if (query.data.input.status == CompletionStatus.Accepted) {
+                const payloads = query.data.input.notices.edges
+                    .map((notice) => notice.node)
+                    .sort((notice) => notice.index)
+                    .map((notice) => notice.payload as Hex);
+                setNotices(payloads);
+                setQueryLoading(false);
+            }
         }
-    }
+    }, [inputIndex, query.data]);
+    /*console.log(
+        JSON.stringify({
+            prepare: prepare.status,
+            execute: execute.status,
+            wait: wait.status,
+            query: query.loading,
+        })
+    );*/
 
     return {
         write: execute.write,
-        notices: [],
-        loading: wait.isLoading || result.fetching,
+        notices,
+        loading: execute.isLoading || wait.isLoading || queryLoading,
     };
 };

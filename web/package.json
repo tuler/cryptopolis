@@ -12,6 +12,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@apollo/client": "^3.8.6",
         "@mantine/carousel": "^7",
         "@mantine/core": "^7",
         "@mantine/dates": "^7",

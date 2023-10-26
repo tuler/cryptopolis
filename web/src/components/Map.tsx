@@ -19,6 +19,7 @@ export type Tile = {
 export type MapProps = {
     value?: Hex;
     scale: number;
+    loading?: boolean;
     onMouseMove?: (tile: Tile) => void;
     onMouseClick?: (tile: Tile) => void;
 };
@@ -45,6 +46,7 @@ const coordinates = Array.from(rows, (_, y) =>
 ).flat();
 
 export const Map: FC<MapProps> = ({
+    loading,
     value,
     scale,
     onMouseMove,
@@ -96,7 +98,7 @@ export const Map: FC<MapProps> = ({
             <Sprite
                 key={coord}
                 eventMode="static"
-                cursor="cell"
+                cursor={loading ? "wait" : "cell"}
                 texture={spritesheet.textures[tile.type]}
                 onpointerdown={(_event) => {
                     onMouseClick && onMouseClick(tile);
