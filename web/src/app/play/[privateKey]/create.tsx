@@ -7,11 +7,13 @@ import {
     AppShell,
     Button,
     Center,
+    Collapse,
     Group,
     Loader,
     NumberInput,
     Overlay,
     Paper,
+    Progress,
     Skeleton,
     Stack,
     Text,
@@ -56,7 +58,7 @@ export const Create: FC = () => {
         args: [form.values.seed],
     });
     const dapp = "0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C";
-    const { write, notices } = useRollupsServer(dapp, input);
+    const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // this is the amount of funds for an easy game
     const requiredFunds = 20000n * 10n ** 18n;
@@ -128,6 +130,14 @@ export const Create: FC = () => {
                                                 allowNegative={false}
                                                 allowDecimal={false}
                                             />
+                                            <Collapse in={loading}>
+                                                <Progress
+                                                    value={100}
+                                                    striped
+                                                    animated
+                                                    size="sm"
+                                                />
+                                            </Collapse>
                                             <Button
                                                 leftSection={<TbHomePlus />}
                                                 onClick={write}
