@@ -6,7 +6,7 @@ SimCity was launched back in 1989 developed by the legendary game designer Will 
 
 This project was developed for the [ETHOnline 2023](https://ethglobal.com/events/ethonline2023/) event and the first [Cartesi](https://cartesi.io/) Experiment Week. Here is the [slide deck](https://docs.google.com/presentation/d/1_Xq0s_CqR8bfzQD77MLC0m9lVUvZA1ueloEbXzcr1gU/edit?usp=sharing) of the presentation video below.
 
-[![Cryptopolis presentation](https://img.youtube.com/vi/k5TGutk0Euk/0.jpg)](https://www.youtube.com/watch?v=k5TGutk0Euk)
+[![Cryptopolis presentation](https://img.youtube.com/vi/mrkqRfVU12s/0.jpg)](https://www.youtube.com/watch?v=mrkqRfVU12s)
 
 For a throughtout retrospective of SimCity, especially for those under the age of 40, I recommend watching the following video.
 
