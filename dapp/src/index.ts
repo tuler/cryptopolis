@@ -36,7 +36,8 @@ const wallet = createWallet();
 app.addAdvanceHandler(wallet.handler);
 
 // Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
-const token = "0xae7f61eCf06C65405560166b259C54031428A9C4";
+// fixed after migration
+const token = "0x92C6bcA388E99d6B304f1Af3c3Cd749Ff0b591e2";
 export const decimals = 18n;
 
 // this is the address of the in-game locked tokens

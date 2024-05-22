@@ -8,7 +8,7 @@ const Home: FC = () => {
     const dapp = "0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C";
 
     // Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
-    const token = "0xae7f61eCf06C65405560166b259C54031428A9C4";
+    const token = "0x92C6bcA388E99d6B304f1Af3c3Cd749Ff0b591e2";
 
     return (
         <WalletProvider>

@@ -73,6 +73,7 @@ const WalletProvider = ({ children }: { children: React.ReactNode }) => {
                 chains={chains}
                 theme={walletTheme}
                 avatar={CustomAvatar}
+
             >
                 {children}
             </RainbowKitProvider>
