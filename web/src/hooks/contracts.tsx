@@ -1,24 +1,15 @@
 import {
-    useContractRead,
-    UseContractReadConfig,
-    useContractWrite,
-    UseContractWriteConfig,
-    usePrepareContractWrite,
-    UsePrepareContractWriteConfig,
-    useContractEvent,
-    UseContractEventConfig,
-} from 'wagmi'
-import {
-    ReadContractResult,
-    WriteContractMode,
-    PrepareWriteContractResult,
-} from 'wagmi/actions'
+    createUseReadContract,
+    createUseWriteContract,
+    createUseSimulateContract,
+    createUseWatchContractEvent,
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // AuthorityFactory
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const authorityFactoryABI = [
+export const authorityFactoryAbi = [
     {
         type: 'event',
         anonymous: false,
@@ -39,7 +30,6 @@ export const authorityFactoryABI = [
         name: 'AuthorityCreated',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [
             {
@@ -51,9 +41,9 @@ export const authorityFactoryABI = [
         ],
         name: 'calculateAuthorityAddress',
         outputs: [{ name: '', internalType: 'address', type: 'address' }],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -67,9 +57,9 @@ export const authorityFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract Authority', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -82,6 +72,7 @@ export const authorityFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract Authority', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
 ] as const
 
@@ -90,16 +81,15 @@ export const authorityFactoryAddress =
 
 export const authorityFactoryConfig = {
     address: authorityFactoryAddress,
-    abi: authorityFactoryABI,
+    abi: authorityFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // AuthorityHistoryPairFactory
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const authorityHistoryPairFactoryABI = [
+export const authorityHistoryPairFactoryAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -113,6 +103,7 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
         type: 'event',
@@ -134,7 +125,6 @@ export const authorityHistoryPairFactoryABI = [
         name: 'AuthorityHistoryPairFactoryCreated',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [
             {
@@ -157,9 +147,9 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getAuthorityFactory',
@@ -170,9 +160,9 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getHistoryFactory',
@@ -183,9 +173,9 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -207,9 +197,9 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -232,6 +222,7 @@ export const authorityHistoryPairFactoryABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
 ] as const
 
@@ -240,28 +231,28 @@ export const authorityHistoryPairFactoryAddress =
 
 export const authorityHistoryPairFactoryConfig = {
     address: authorityHistoryPairFactoryAddress,
-    abi: authorityHistoryPairFactoryABI,
+    abi: authorityHistoryPairFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Bitmask
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const bitmaskABI = [] as const
+export const bitmaskAbi = [] as const
 
 export const bitmaskAddress =
     '0xF5B2d8c81cDE4D6238bBf20D3D77DB37df13f735' as const
 
 export const bitmaskConfig = {
     address: bitmaskAddress,
-    abi: bitmaskABI,
+    abi: bitmaskAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CartesiDAppFactory
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const cartesiDAppFactoryABI = [
+export const cartesiDAppFactoryAbi = [
     {
         type: 'event',
         anonymous: false,
@@ -294,7 +285,6 @@ export const cartesiDAppFactoryABI = [
         name: 'ApplicationCreated',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [
             {
@@ -308,9 +298,9 @@ export const cartesiDAppFactoryABI = [
         ],
         name: 'calculateApplicationAddress',
         outputs: [{ name: '', internalType: 'address', type: 'address' }],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -326,9 +316,9 @@ export const cartesiDAppFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract CartesiDApp', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -343,6 +333,7 @@ export const cartesiDAppFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract CartesiDApp', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
 ] as const
 
@@ -351,55 +342,55 @@ export const cartesiDAppFactoryAddress =
 
 export const cartesiDAppFactoryConfig = {
     address: cartesiDAppFactoryAddress,
-    abi: cartesiDAppFactoryABI,
+    abi: cartesiDAppFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CartesiMathV2
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const cartesiMathV2ABI = [
+export const cartesiMathV2Abi = [
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'clz',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'ctz',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'getLog2Floor',
         outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'getLog2TableTimes1M',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'isPowerOf2',
         outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_num', internalType: 'uint256', type: 'uint256' }],
         name: 'log2ApproxTimes1M',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'pure',
     },
 ] as const
 
@@ -408,16 +399,15 @@ export const cartesiMathV2Address =
 
 export const cartesiMathV2Config = {
     address: cartesiMathV2Address,
-    abi: cartesiMathV2ABI,
+    abi: cartesiMathV2Abi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DAppAddressRelay
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const dAppAddressRelayABI = [
+export const dAppAddressRelayAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -426,22 +416,23 @@ export const dAppAddressRelayABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [{ name: '_dapp', internalType: 'address', type: 'address' }],
         name: 'relayDAppAddress',
         outputs: [],
+        stateMutability: 'nonpayable',
     },
 ] as const
 
@@ -450,16 +441,15 @@ export const dAppAddressRelayAddress =
 
 export const dAppAddressRelayConfig = {
     address: dAppAddressRelayAddress,
-    abi: dAppAddressRelayABI,
+    abi: dAppAddressRelayAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC1155BatchPortal
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const erc1155BatchPortalABI = [
+export const erc1155BatchPortalAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -468,9 +458,9 @@ export const erc1155BatchPortalABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -486,15 +476,16 @@ export const erc1155BatchPortalABI = [
         ],
         name: 'depositBatchERC1155Token',
         outputs: [],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -503,16 +494,15 @@ export const erc1155BatchPortalAddress =
 
 export const erc1155BatchPortalConfig = {
     address: erc1155BatchPortalAddress,
-    abi: erc1155BatchPortalABI,
+    abi: erc1155BatchPortalAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC1155SinglePortal
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const erc1155SinglePortalABI = [
+export const erc1155SinglePortalAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -521,9 +511,9 @@ export const erc1155SinglePortalABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -539,15 +529,16 @@ export const erc1155SinglePortalABI = [
         ],
         name: 'depositSingleERC1155Token',
         outputs: [],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -556,137 +547,15 @@ export const erc1155SinglePortalAddress =
 
 export const erc1155SinglePortalConfig = {
     address: erc1155SinglePortalAddress,
-    abi: erc1155SinglePortalABI,
+    abi: erc1155SinglePortalAbi,
 } as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ERC20
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const erc20ABI = [
-    {
-        type: 'event',
-        inputs: [
-            { name: 'owner', type: 'address', indexed: true },
-            { name: 'spender', type: 'address', indexed: true },
-            { name: 'value', type: 'uint256', indexed: false },
-        ],
-        name: 'Approval',
-    },
-    {
-        type: 'event',
-        inputs: [
-            { name: 'from', type: 'address', indexed: true },
-            { name: 'to', type: 'address', indexed: true },
-            { name: 'value', type: 'uint256', indexed: false },
-        ],
-        name: 'Transfer',
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [
-            { name: 'owner', type: 'address' },
-            { name: 'spender', type: 'address' },
-        ],
-        name: 'allowance',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'spender', type: 'address' },
-            { name: 'amount', type: 'uint256' },
-        ],
-        name: 'approve',
-        outputs: [{ type: 'bool' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'account', type: 'address' }],
-        name: 'balanceOf',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'decimals',
-        outputs: [{ type: 'uint8' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'name',
-        outputs: [{ type: 'string' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'symbol',
-        outputs: [{ type: 'string' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'totalSupply',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'recipient', type: 'address' },
-            { name: 'amount', type: 'uint256' },
-        ],
-        name: 'transfer',
-        outputs: [{ type: 'bool' }],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'sender', type: 'address' },
-            { name: 'recipient', type: 'address' },
-            { name: 'amount', type: 'uint256' },
-        ],
-        name: 'transferFrom',
-        outputs: [{ type: 'bool' }],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'spender', type: 'address' },
-            { name: 'addedValue', type: 'uint256' },
-        ],
-        name: 'increaseAllowance',
-        outputs: [{ type: 'bool' }],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'spender', type: 'address' },
-            { name: 'subtractedValue', type: 'uint256' },
-        ],
-        name: 'decreaseAllowance',
-        outputs: [{ type: 'bool' }],
-    },
-] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC20Portal
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const erc20PortalABI = [
+export const erc20PortalAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -695,9 +564,9 @@ export const erc20PortalABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -711,15 +580,16 @@ export const erc20PortalABI = [
         ],
         name: 'depositERC20Tokens',
         outputs: [],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -728,180 +598,15 @@ export const erc20PortalAddress =
 
 export const erc20PortalConfig = {
     address: erc20PortalAddress,
-    abi: erc20PortalABI,
+    abi: erc20PortalAbi,
 } as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ERC721
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const erc721ABI = [
-    {
-        type: 'event',
-        inputs: [
-            { name: 'owner', type: 'address', indexed: true },
-            { name: 'spender', type: 'address', indexed: true },
-            { name: 'tokenId', type: 'uint256', indexed: true },
-        ],
-        name: 'Approval',
-    },
-    {
-        type: 'event',
-        inputs: [
-            { name: 'owner', type: 'address', indexed: true },
-            { name: 'operator', type: 'address', indexed: true },
-            { name: 'approved', type: 'bool', indexed: false },
-        ],
-        name: 'ApprovalForAll',
-    },
-    {
-        type: 'event',
-        inputs: [
-            { name: 'from', type: 'address', indexed: true },
-            { name: 'to', type: 'address', indexed: true },
-            { name: 'tokenId', type: 'uint256', indexed: true },
-        ],
-        name: 'Transfer',
-    },
-    {
-        stateMutability: 'payable',
-        type: 'function',
-        inputs: [
-            { name: 'spender', type: 'address' },
-            { name: 'tokenId', type: 'uint256' },
-        ],
-        name: 'approve',
-        outputs: [],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'account', type: 'address' }],
-        name: 'balanceOf',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'tokenId', type: 'uint256' }],
-        name: 'getApproved',
-        outputs: [{ type: 'address' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [
-            { name: 'owner', type: 'address' },
-            { name: 'operator', type: 'address' },
-        ],
-        name: 'isApprovedForAll',
-        outputs: [{ type: 'bool' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'name',
-        outputs: [{ type: 'string' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'tokenId', type: 'uint256' }],
-        name: 'ownerOf',
-        outputs: [{ name: 'owner', type: 'address' }],
-    },
-    {
-        stateMutability: 'payable',
-        type: 'function',
-        inputs: [
-            { name: 'from', type: 'address' },
-            { name: 'to', type: 'address' },
-            { name: 'tokenId', type: 'uint256' },
-        ],
-        name: 'safeTransferFrom',
-        outputs: [],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'from', type: 'address' },
-            { name: 'to', type: 'address' },
-            { name: 'id', type: 'uint256' },
-            { name: 'data', type: 'bytes' },
-        ],
-        name: 'safeTransferFrom',
-        outputs: [],
-    },
-    {
-        stateMutability: 'nonpayable',
-        type: 'function',
-        inputs: [
-            { name: 'operator', type: 'address' },
-            { name: 'approved', type: 'bool' },
-        ],
-        name: 'setApprovalForAll',
-        outputs: [],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'symbol',
-        outputs: [{ type: 'string' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'index', type: 'uint256' }],
-        name: 'tokenByIndex',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [
-            { name: 'owner', type: 'address' },
-            { name: 'index', type: 'uint256' },
-        ],
-        name: 'tokenByIndex',
-        outputs: [{ name: 'tokenId', type: 'uint256' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [{ name: 'tokenId', type: 'uint256' }],
-        name: 'tokenURI',
-        outputs: [{ type: 'string' }],
-    },
-    {
-        stateMutability: 'view',
-        type: 'function',
-        inputs: [],
-        name: 'totalSupply',
-        outputs: [{ type: 'uint256' }],
-    },
-    {
-        stateMutability: 'payable',
-        type: 'function',
-        inputs: [
-            { name: 'sender', type: 'address' },
-            { name: 'recipient', type: 'address' },
-            { name: 'tokenId', type: 'uint256' },
-        ],
-        name: 'transferFrom',
-        outputs: [],
-    },
-] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC721Portal
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const erc721PortalABI = [
+export const erc721PortalAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -910,9 +615,9 @@ export const erc721PortalABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             {
@@ -927,15 +632,16 @@ export const erc721PortalABI = [
         ],
         name: 'depositERC721Token',
         outputs: [],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -944,16 +650,15 @@ export const erc721PortalAddress =
 
 export const erc721PortalConfig = {
     address: erc721PortalAddress,
-    abi: erc721PortalABI,
+    abi: erc721PortalAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // EtherPortal
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const etherPortalABI = [
+export const etherPortalAbi = [
     {
-        stateMutability: 'nonpayable',
         type: 'constructor',
         inputs: [
             {
@@ -962,10 +667,10 @@ export const etherPortalABI = [
                 type: 'address',
             },
         ],
+        stateMutability: 'nonpayable',
     },
     { type: 'error', inputs: [], name: 'EtherTransferFailed' },
     {
-        stateMutability: 'payable',
         type: 'function',
         inputs: [
             { name: '_dapp', internalType: 'address', type: 'address' },
@@ -973,15 +678,16 @@ export const etherPortalABI = [
         ],
         name: 'depositEther',
         outputs: [],
+        stateMutability: 'payable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [],
         name: 'getInputBox',
         outputs: [
             { name: '', internalType: 'contract IInputBox', type: 'address' },
         ],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -990,14 +696,14 @@ export const etherPortalAddress =
 
 export const etherPortalConfig = {
     address: etherPortalAddress,
-    abi: etherPortalABI,
+    abi: etherPortalAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // HistoryFactory
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const historyFactoryABI = [
+export const historyFactoryAbi = [
     {
         type: 'event',
         anonymous: false,
@@ -1018,7 +724,6 @@ export const historyFactoryABI = [
         name: 'HistoryCreated',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [
             { name: '_historyOwner', internalType: 'address', type: 'address' },
@@ -1026,9 +731,9 @@ export const historyFactoryABI = [
         ],
         name: 'calculateHistoryAddress',
         outputs: [{ name: '', internalType: 'address', type: 'address' }],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             { name: '_historyOwner', internalType: 'address', type: 'address' },
@@ -1038,9 +743,9 @@ export const historyFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract History', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             { name: '_historyOwner', internalType: 'address', type: 'address' },
@@ -1049,6 +754,7 @@ export const historyFactoryABI = [
         outputs: [
             { name: '', internalType: 'contract History', type: 'address' },
         ],
+        stateMutability: 'nonpayable',
     },
 ] as const
 
@@ -1057,14 +763,14 @@ export const historyFactoryAddress =
 
 export const historyFactoryConfig = {
     address: historyFactoryAddress,
-    abi: historyFactoryABI,
+    abi: historyFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // InputBox
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const inputBoxABI = [
+export const inputBoxAbi = [
     { type: 'error', inputs: [], name: 'InputSizeExceedsLimit' },
     {
         type: 'event',
@@ -1098,7 +804,6 @@ export const inputBoxABI = [
         name: 'InputAdded',
     },
     {
-        stateMutability: 'nonpayable',
         type: 'function',
         inputs: [
             { name: '_dapp', internalType: 'address', type: 'address' },
@@ -1106,9 +811,9 @@ export const inputBoxABI = [
         ],
         name: 'addInput',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'nonpayable',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [
             { name: '_dapp', internalType: 'address', type: 'address' },
@@ -1116,13 +821,14 @@ export const inputBoxABI = [
         ],
         name: 'getInputHash',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'view',
     },
     {
-        stateMutability: 'view',
         type: 'function',
         inputs: [{ name: '_dapp', internalType: 'address', type: 'address' }],
         name: 'getNumberOfInputs',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'view',
     },
 ] as const
 
@@ -1131,32 +837,32 @@ export const inputBoxAddress =
 
 export const inputBoxConfig = {
     address: inputBoxAddress,
-    abi: inputBoxABI,
+    abi: inputBoxAbi,
 } as const
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MerkleV2
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const merkleV2ABI = [
+export const merkleV2Abi = [
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [
             { name: 'hashes', internalType: 'bytes32[]', type: 'bytes32[]' },
         ],
         name: 'calculateRootFromPowerOfTwo',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: '_index', internalType: 'uint256', type: 'uint256' }],
         name: 'getEmptyTreeHashAtIndex',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [
             { name: '_data', internalType: 'bytes', type: 'bytes' },
@@ -1164,9 +870,9 @@ export const merkleV2ABI = [
         ],
         name: 'getHashOfWordAtIndex',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [
             { name: '_data', internalType: 'bytes', type: 'bytes' },
@@ -1174,9 +880,9 @@ export const merkleV2ABI = [
         ],
         name: 'getMerkleRootFromBytes',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'pure',
     },
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [
             { name: '_position', internalType: 'uint256', type: 'uint256' },
@@ -1195,6 +901,7 @@ export const merkleV2ABI = [
         ],
         name: 'getRootAfterReplacementInDrive',
         outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+        stateMutability: 'pure',
     },
 ] as const
 
@@ -1203,20 +910,20 @@ export const merkleV2Address =
 
 export const merkleV2Config = {
     address: merkleV2Address,
-    abi: merkleV2ABI,
+    abi: merkleV2Abi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UnrolledCordic
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const unrolledCordicABI = [
+export const unrolledCordicAbi = [
     {
-        stateMutability: 'pure',
         type: 'function',
         inputs: [{ name: 'val', internalType: 'uint256', type: 'uint256' }],
         name: 'log2Times1e18',
         outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+        stateMutability: 'pure',
     },
 ] as const
 
@@ -1225,3340 +932,1118 @@ export const unrolledCordicAddress =
 
 export const unrolledCordicConfig = {
     address: unrolledCordicAddress,
-    abi: unrolledCordicABI,
+    abi: unrolledCordicAbi,
 } as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// erc20
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const erc20Abi = [
+    {
+        type: 'event',
+        inputs: [
+            { name: 'owner', type: 'address', indexed: true },
+            { name: 'spender', type: 'address', indexed: true },
+            { name: 'value', type: 'uint256', indexed: false },
+        ],
+        name: 'Approval',
+    },
+    {
+        type: 'event',
+        inputs: [
+            { name: 'from', type: 'address', indexed: true },
+            { name: 'to', type: 'address', indexed: true },
+            { name: 'value', type: 'uint256', indexed: false },
+        ],
+        name: 'Transfer',
+    },
+    {
+        type: 'function',
+        inputs: [
+            { name: 'owner', type: 'address' },
+            { name: 'spender', type: 'address' },
+        ],
+        name: 'allowance',
+        outputs: [{ type: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [
+            { name: 'spender', type: 'address' },
+            { name: 'amount', type: 'uint256' },
+        ],
+        name: 'approve',
+        outputs: [{ type: 'bool' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        inputs: [{ name: 'account', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ type: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [],
+        name: 'decimals',
+        outputs: [{ type: 'uint8' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [],
+        name: 'name',
+        outputs: [{ type: 'string' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [],
+        name: 'symbol',
+        outputs: [{ type: 'string' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [],
+        name: 'totalSupply',
+        outputs: [{ type: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        inputs: [
+            { name: 'recipient', type: 'address' },
+            { name: 'amount', type: 'uint256' },
+        ],
+        name: 'transfer',
+        outputs: [{ type: 'bool' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        inputs: [
+            { name: 'sender', type: 'address' },
+            { name: 'recipient', type: 'address' },
+            { name: 'amount', type: 'uint256' },
+        ],
+        name: 'transferFrom',
+        outputs: [{ type: 'bool' }],
+        stateMutability: 'nonpayable',
+    },
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityFactoryABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityFactoryAbi}__
  */
-export function useAuthorityFactoryRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof authorityFactoryABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityFactoryABI,
-        address: authorityFactoryAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadAuthorityFactory = /*#__PURE__*/ createUseReadContract({
+    abi: authorityFactoryAbi,
+    address: authorityFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityFactoryABI}__ and `functionName` set to `"calculateAuthorityAddress"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityFactoryAbi}__ and `functionName` set to `"calculateAuthorityAddress"`
  */
-export function useAuthorityFactoryCalculateAuthorityAddress<
-    TFunctionName extends 'calculateAuthorityAddress',
-    TSelectData = ReadContractResult<typeof authorityFactoryABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityFactoryABI,
+export const useReadAuthorityFactoryCalculateAuthorityAddress =
+    /*#__PURE__*/ createUseReadContract({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
         functionName: 'calculateAuthorityAddress',
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link authorityFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link authorityFactoryAbi}__
  */
-export function useAuthorityFactoryWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof authorityFactoryABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof authorityFactoryABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof authorityFactoryABI, TFunctionName, TMode>({
-        abi: authorityFactoryABI,
-        address: authorityFactoryAddress,
-        ...config,
-    } as any)
-}
+export const useWriteAuthorityFactory = /*#__PURE__*/ createUseWriteContract({
+    abi: authorityFactoryAbi,
+    address: authorityFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link authorityFactoryABI}__ and `functionName` set to `"newAuthority"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link authorityFactoryAbi}__ and `functionName` set to `"newAuthority"`
  */
-export function useAuthorityFactoryNewAuthority<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof authorityFactoryABI,
-                  'newAuthority'
-              >['request']['abi'],
-              'newAuthority',
-              TMode
-          > & { functionName?: 'newAuthority' }
-        : UseContractWriteConfig<
-              typeof authorityFactoryABI,
-              'newAuthority',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'newAuthority'
-          } = {} as any,
-) {
-    return useContractWrite<typeof authorityFactoryABI, 'newAuthority', TMode>({
-        abi: authorityFactoryABI,
+export const useWriteAuthorityFactoryNewAuthority =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
         functionName: 'newAuthority',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link authorityFactoryABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link authorityFactoryAbi}__
  */
-export function usePrepareAuthorityFactoryWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof authorityFactoryABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: authorityFactoryABI,
+export const useSimulateAuthorityFactory =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof authorityFactoryABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link authorityFactoryABI}__ and `functionName` set to `"newAuthority"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link authorityFactoryAbi}__ and `functionName` set to `"newAuthority"`
  */
-export function usePrepareAuthorityFactoryNewAuthority(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof authorityFactoryABI,
-            'newAuthority'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: authorityFactoryABI,
+export const useSimulateAuthorityFactoryNewAuthority =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
         functionName: 'newAuthority',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof authorityFactoryABI,
-        'newAuthority'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link authorityFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link authorityFactoryAbi}__
  */
-export function useAuthorityFactoryEvent<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof authorityFactoryABI, TEventName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: authorityFactoryABI,
+export const useWatchAuthorityFactoryEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
-        ...config,
-    } as UseContractEventConfig<typeof authorityFactoryABI, TEventName>)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link authorityFactoryABI}__ and `eventName` set to `"AuthorityCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link authorityFactoryAbi}__ and `eventName` set to `"AuthorityCreated"`
  */
-export function useAuthorityFactoryAuthorityCreatedEvent(
-    config: Omit<
-        UseContractEventConfig<typeof authorityFactoryABI, 'AuthorityCreated'>,
-        'abi' | 'address' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: authorityFactoryABI,
+export const useWatchAuthorityFactoryAuthorityCreatedEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: authorityFactoryAbi,
         address: authorityFactoryAddress,
         eventName: 'AuthorityCreated',
-        ...config,
-    } as UseContractEventConfig<typeof authorityFactoryABI, 'AuthorityCreated'>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__
  */
-export function useAuthorityHistoryPairFactoryRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityHistoryPairFactoryABI,
+export const useReadAuthorityHistoryPairFactory =
+    /*#__PURE__*/ createUseReadContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `functionName` set to `"calculateAuthorityHistoryAddressPair"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `functionName` set to `"calculateAuthorityHistoryAddressPair"`
  */
-export function useAuthorityHistoryPairFactoryCalculateAuthorityHistoryAddressPair<
-    TFunctionName extends 'calculateAuthorityHistoryAddressPair',
-    TSelectData = ReadContractResult<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityHistoryPairFactoryABI,
+export const useReadAuthorityHistoryPairFactoryCalculateAuthorityHistoryAddressPair =
+    /*#__PURE__*/ createUseReadContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         functionName: 'calculateAuthorityHistoryAddressPair',
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `functionName` set to `"getAuthorityFactory"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `functionName` set to `"getAuthorityFactory"`
  */
-export function useAuthorityHistoryPairFactoryGetAuthorityFactory<
-    TFunctionName extends 'getAuthorityFactory',
-    TSelectData = ReadContractResult<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityHistoryPairFactoryABI,
+export const useReadAuthorityHistoryPairFactoryGetAuthorityFactory =
+    /*#__PURE__*/ createUseReadContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         functionName: 'getAuthorityFactory',
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `functionName` set to `"getHistoryFactory"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `functionName` set to `"getHistoryFactory"`
  */
-export function useAuthorityHistoryPairFactoryGetHistoryFactory<
-    TFunctionName extends 'getHistoryFactory',
-    TSelectData = ReadContractResult<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: authorityHistoryPairFactoryABI,
+export const useReadAuthorityHistoryPairFactoryGetHistoryFactory =
+    /*#__PURE__*/ createUseReadContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         functionName: 'getHistoryFactory',
-        ...config,
-    } as UseContractReadConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__
  */
-export function useAuthorityHistoryPairFactoryWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof authorityHistoryPairFactoryABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof authorityHistoryPairFactoryABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName,
-        TMode
-    >({
-        abi: authorityHistoryPairFactoryABI,
+export const useWriteAuthorityHistoryPairFactory =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `functionName` set to `"newAuthorityHistoryPair"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `functionName` set to `"newAuthorityHistoryPair"`
  */
-export function useAuthorityHistoryPairFactoryNewAuthorityHistoryPair<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof authorityHistoryPairFactoryABI,
-                  'newAuthorityHistoryPair'
-              >['request']['abi'],
-              'newAuthorityHistoryPair',
-              TMode
-          > & { functionName?: 'newAuthorityHistoryPair' }
-        : UseContractWriteConfig<
-              typeof authorityHistoryPairFactoryABI,
-              'newAuthorityHistoryPair',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'newAuthorityHistoryPair'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof authorityHistoryPairFactoryABI,
-        'newAuthorityHistoryPair',
-        TMode
-    >({
-        abi: authorityHistoryPairFactoryABI,
+export const useWriteAuthorityHistoryPairFactoryNewAuthorityHistoryPair =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         functionName: 'newAuthorityHistoryPair',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__
  */
-export function usePrepareAuthorityHistoryPairFactoryWrite<
-    TFunctionName extends string,
->(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: authorityHistoryPairFactoryABI,
+export const useSimulateAuthorityHistoryPairFactory =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `functionName` set to `"newAuthorityHistoryPair"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `functionName` set to `"newAuthorityHistoryPair"`
  */
-export function usePrepareAuthorityHistoryPairFactoryNewAuthorityHistoryPair(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof authorityHistoryPairFactoryABI,
-            'newAuthorityHistoryPair'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: authorityHistoryPairFactoryABI,
+export const useSimulateAuthorityHistoryPairFactoryNewAuthorityHistoryPair =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         functionName: 'newAuthorityHistoryPair',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof authorityHistoryPairFactoryABI,
-        'newAuthorityHistoryPair'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__
  */
-export function useAuthorityHistoryPairFactoryEvent<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<
-            typeof authorityHistoryPairFactoryABI,
-            TEventName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: authorityHistoryPairFactoryABI,
+export const useWatchAuthorityHistoryPairFactoryEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
-        ...config,
-    } as UseContractEventConfig<
-        typeof authorityHistoryPairFactoryABI,
-        TEventName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link authorityHistoryPairFactoryABI}__ and `eventName` set to `"AuthorityHistoryPairFactoryCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link authorityHistoryPairFactoryAbi}__ and `eventName` set to `"AuthorityHistoryPairFactoryCreated"`
  */
-export function useAuthorityHistoryPairFactoryAuthorityHistoryPairFactoryCreatedEvent(
-    config: Omit<
-        UseContractEventConfig<
-            typeof authorityHistoryPairFactoryABI,
-            'AuthorityHistoryPairFactoryCreated'
-        >,
-        'abi' | 'address' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: authorityHistoryPairFactoryABI,
+export const useWatchAuthorityHistoryPairFactoryAuthorityHistoryPairFactoryCreatedEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: authorityHistoryPairFactoryAbi,
         address: authorityHistoryPairFactoryAddress,
         eventName: 'AuthorityHistoryPairFactoryCreated',
-        ...config,
-    } as UseContractEventConfig<
-        typeof authorityHistoryPairFactoryABI,
-        'AuthorityHistoryPairFactoryCreated'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiDAppFactoryABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__
  */
-export function useCartesiDAppFactoryRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<
-        typeof cartesiDAppFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiDAppFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiDAppFactoryABI,
-        address: cartesiDAppFactoryAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiDAppFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadCartesiDAppFactory = /*#__PURE__*/ createUseReadContract({
+    abi: cartesiDAppFactoryAbi,
+    address: cartesiDAppFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiDAppFactoryABI}__ and `functionName` set to `"calculateApplicationAddress"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__ and `functionName` set to `"calculateApplicationAddress"`
  */
-export function useCartesiDAppFactoryCalculateApplicationAddress<
-    TFunctionName extends 'calculateApplicationAddress',
-    TSelectData = ReadContractResult<
-        typeof cartesiDAppFactoryABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiDAppFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiDAppFactoryABI,
+export const useReadCartesiDAppFactoryCalculateApplicationAddress =
+    /*#__PURE__*/ createUseReadContract({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
         functionName: 'calculateApplicationAddress',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiDAppFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link cartesiDAppFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__
  */
-export function useCartesiDAppFactoryWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof cartesiDAppFactoryABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof cartesiDAppFactoryABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof cartesiDAppFactoryABI, TFunctionName, TMode>(
-        {
-            abi: cartesiDAppFactoryABI,
-            address: cartesiDAppFactoryAddress,
-            ...config,
-        } as any,
-    )
-}
+export const useWriteCartesiDAppFactory = /*#__PURE__*/ createUseWriteContract({
+    abi: cartesiDAppFactoryAbi,
+    address: cartesiDAppFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link cartesiDAppFactoryABI}__ and `functionName` set to `"newApplication"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__ and `functionName` set to `"newApplication"`
  */
-export function useCartesiDAppFactoryNewApplication<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof cartesiDAppFactoryABI,
-                  'newApplication'
-              >['request']['abi'],
-              'newApplication',
-              TMode
-          > & { functionName?: 'newApplication' }
-        : UseContractWriteConfig<
-              typeof cartesiDAppFactoryABI,
-              'newApplication',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'newApplication'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof cartesiDAppFactoryABI,
-        'newApplication',
-        TMode
-    >({
-        abi: cartesiDAppFactoryABI,
+export const useWriteCartesiDAppFactoryNewApplication =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
         functionName: 'newApplication',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link cartesiDAppFactoryABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__
  */
-export function usePrepareCartesiDAppFactoryWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof cartesiDAppFactoryABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: cartesiDAppFactoryABI,
+export const useSimulateCartesiDAppFactory =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof cartesiDAppFactoryABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link cartesiDAppFactoryABI}__ and `functionName` set to `"newApplication"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__ and `functionName` set to `"newApplication"`
  */
-export function usePrepareCartesiDAppFactoryNewApplication(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof cartesiDAppFactoryABI,
-            'newApplication'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: cartesiDAppFactoryABI,
+export const useSimulateCartesiDAppFactoryNewApplication =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
         functionName: 'newApplication',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof cartesiDAppFactoryABI,
-        'newApplication'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link cartesiDAppFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__
  */
-export function useCartesiDAppFactoryEvent<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof cartesiDAppFactoryABI, TEventName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: cartesiDAppFactoryABI,
+export const useWatchCartesiDAppFactoryEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
-        ...config,
-    } as UseContractEventConfig<typeof cartesiDAppFactoryABI, TEventName>)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link cartesiDAppFactoryABI}__ and `eventName` set to `"ApplicationCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cartesiDAppFactoryAbi}__ and `eventName` set to `"ApplicationCreated"`
  */
-export function useCartesiDAppFactoryApplicationCreatedEvent(
-    config: Omit<
-        UseContractEventConfig<
-            typeof cartesiDAppFactoryABI,
-            'ApplicationCreated'
-        >,
-        'abi' | 'address' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: cartesiDAppFactoryABI,
+export const useWatchCartesiDAppFactoryApplicationCreatedEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: cartesiDAppFactoryAbi,
         address: cartesiDAppFactoryAddress,
         eventName: 'ApplicationCreated',
-        ...config,
-    } as UseContractEventConfig<
-        typeof cartesiDAppFactoryABI,
-        'ApplicationCreated'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__
  */
-export function useCartesiMathV2Read<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
-        address: cartesiMathV2Address,
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadCartesiMathV2 = /*#__PURE__*/ createUseReadContract({
+    abi: cartesiMathV2Abi,
+    address: cartesiMathV2Address,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"clz"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"clz"`
  */
-export function useCartesiMathV2Clz<
-    TFunctionName extends 'clz',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
-        address: cartesiMathV2Address,
-        functionName: 'clz',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadCartesiMathV2Clz = /*#__PURE__*/ createUseReadContract({
+    abi: cartesiMathV2Abi,
+    address: cartesiMathV2Address,
+    functionName: 'clz',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"ctz"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"ctz"`
  */
-export function useCartesiMathV2Ctz<
-    TFunctionName extends 'ctz',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
-        address: cartesiMathV2Address,
-        functionName: 'ctz',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadCartesiMathV2Ctz = /*#__PURE__*/ createUseReadContract({
+    abi: cartesiMathV2Abi,
+    address: cartesiMathV2Address,
+    functionName: 'ctz',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"getLog2Floor"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"getLog2Floor"`
  */
-export function useCartesiMathV2GetLog2Floor<
-    TFunctionName extends 'getLog2Floor',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
+export const useReadCartesiMathV2GetLog2Floor =
+    /*#__PURE__*/ createUseReadContract({
+        abi: cartesiMathV2Abi,
         address: cartesiMathV2Address,
         functionName: 'getLog2Floor',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"getLog2TableTimes1M"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"getLog2TableTimes1M"`
  */
-export function useCartesiMathV2GetLog2TableTimes1M<
-    TFunctionName extends 'getLog2TableTimes1M',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
+export const useReadCartesiMathV2GetLog2TableTimes1M =
+    /*#__PURE__*/ createUseReadContract({
+        abi: cartesiMathV2Abi,
         address: cartesiMathV2Address,
         functionName: 'getLog2TableTimes1M',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"isPowerOf2"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"isPowerOf2"`
  */
-export function useCartesiMathV2IsPowerOf2<
-    TFunctionName extends 'isPowerOf2',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
+export const useReadCartesiMathV2IsPowerOf2 =
+    /*#__PURE__*/ createUseReadContract({
+        abi: cartesiMathV2Abi,
         address: cartesiMathV2Address,
         functionName: 'isPowerOf2',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link cartesiMathV2ABI}__ and `functionName` set to `"log2ApproxTimes1M"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cartesiMathV2Abi}__ and `functionName` set to `"log2ApproxTimes1M"`
  */
-export function useCartesiMathV2Log2ApproxTimes1M<
-    TFunctionName extends 'log2ApproxTimes1M',
-    TSelectData = ReadContractResult<typeof cartesiMathV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof cartesiMathV2ABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: cartesiMathV2ABI,
+export const useReadCartesiMathV2Log2ApproxTimes1M =
+    /*#__PURE__*/ createUseReadContract({
+        abi: cartesiMathV2Abi,
         address: cartesiMathV2Address,
         functionName: 'log2ApproxTimes1M',
-        ...config,
-    } as UseContractReadConfig<
-        typeof cartesiMathV2ABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link dAppAddressRelayABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__
  */
-export function useDAppAddressRelayRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof dAppAddressRelayABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof dAppAddressRelayABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: dAppAddressRelayABI,
-        address: dAppAddressRelayAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof dAppAddressRelayABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadDAppAddressRelay = /*#__PURE__*/ createUseReadContract({
+    abi: dAppAddressRelayAbi,
+    address: dAppAddressRelayAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link dAppAddressRelayABI}__ and `functionName` set to `"getInputBox"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useDAppAddressRelayGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<typeof dAppAddressRelayABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof dAppAddressRelayABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: dAppAddressRelayABI,
+export const useReadDAppAddressRelayGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: dAppAddressRelayAbi,
         address: dAppAddressRelayAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof dAppAddressRelayABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link dAppAddressRelayABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__
  */
-export function useDAppAddressRelayWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof dAppAddressRelayABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof dAppAddressRelayABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof dAppAddressRelayABI, TFunctionName, TMode>({
-        abi: dAppAddressRelayABI,
-        address: dAppAddressRelayAddress,
-        ...config,
-    } as any)
-}
+export const useWriteDAppAddressRelay = /*#__PURE__*/ createUseWriteContract({
+    abi: dAppAddressRelayAbi,
+    address: dAppAddressRelayAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link dAppAddressRelayABI}__ and `functionName` set to `"relayDAppAddress"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__ and `functionName` set to `"relayDAppAddress"`
  */
-export function useDAppAddressRelayRelayDAppAddress<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof dAppAddressRelayABI,
-                  'relayDAppAddress'
-              >['request']['abi'],
-              'relayDAppAddress',
-              TMode
-          > & { functionName?: 'relayDAppAddress' }
-        : UseContractWriteConfig<
-              typeof dAppAddressRelayABI,
-              'relayDAppAddress',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'relayDAppAddress'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof dAppAddressRelayABI,
-        'relayDAppAddress',
-        TMode
-    >({
-        abi: dAppAddressRelayABI,
+export const useWriteDAppAddressRelayRelayDAppAddress =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: dAppAddressRelayAbi,
         address: dAppAddressRelayAddress,
         functionName: 'relayDAppAddress',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link dAppAddressRelayABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__
  */
-export function usePrepareDAppAddressRelayWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof dAppAddressRelayABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: dAppAddressRelayABI,
+export const useSimulateDAppAddressRelay =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: dAppAddressRelayAbi,
         address: dAppAddressRelayAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof dAppAddressRelayABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link dAppAddressRelayABI}__ and `functionName` set to `"relayDAppAddress"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dAppAddressRelayAbi}__ and `functionName` set to `"relayDAppAddress"`
  */
-export function usePrepareDAppAddressRelayRelayDAppAddress(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof dAppAddressRelayABI,
-            'relayDAppAddress'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: dAppAddressRelayABI,
+export const useSimulateDAppAddressRelayRelayDAppAddress =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: dAppAddressRelayAbi,
         address: dAppAddressRelayAddress,
         functionName: 'relayDAppAddress',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof dAppAddressRelayABI,
-        'relayDAppAddress'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc1155BatchPortalABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__
  */
-export function useErc1155BatchPortalRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<
-        typeof erc1155BatchPortalABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc1155BatchPortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc1155BatchPortalABI,
-        address: erc1155BatchPortalAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc1155BatchPortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadErc1155BatchPortal = /*#__PURE__*/ createUseReadContract({
+    abi: erc1155BatchPortalAbi,
+    address: erc1155BatchPortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc1155BatchPortalABI}__ and `functionName` set to `"getInputBox"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useErc1155BatchPortalGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<
-        typeof erc1155BatchPortalABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc1155BatchPortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc1155BatchPortalABI,
+export const useReadErc1155BatchPortalGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: erc1155BatchPortalAbi,
         address: erc1155BatchPortalAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc1155BatchPortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc1155BatchPortalABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__
  */
-export function useErc1155BatchPortalWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc1155BatchPortalABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof erc1155BatchPortalABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc1155BatchPortalABI, TFunctionName, TMode>(
-        {
-            abi: erc1155BatchPortalABI,
-            address: erc1155BatchPortalAddress,
-            ...config,
-        } as any,
-    )
-}
+export const useWriteErc1155BatchPortal = /*#__PURE__*/ createUseWriteContract({
+    abi: erc1155BatchPortalAbi,
+    address: erc1155BatchPortalAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc1155BatchPortalABI}__ and `functionName` set to `"depositBatchERC1155Token"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__ and `functionName` set to `"depositBatchERC1155Token"`
  */
-export function useErc1155BatchPortalDepositBatchErc1155Token<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc1155BatchPortalABI,
-                  'depositBatchERC1155Token'
-              >['request']['abi'],
-              'depositBatchERC1155Token',
-              TMode
-          > & { functionName?: 'depositBatchERC1155Token' }
-        : UseContractWriteConfig<
-              typeof erc1155BatchPortalABI,
-              'depositBatchERC1155Token',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'depositBatchERC1155Token'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof erc1155BatchPortalABI,
-        'depositBatchERC1155Token',
-        TMode
-    >({
-        abi: erc1155BatchPortalABI,
+export const useWriteErc1155BatchPortalDepositBatchErc1155Token =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: erc1155BatchPortalAbi,
         address: erc1155BatchPortalAddress,
         functionName: 'depositBatchERC1155Token',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc1155BatchPortalABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__
  */
-export function usePrepareErc1155BatchPortalWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc1155BatchPortalABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc1155BatchPortalABI,
+export const useSimulateErc1155BatchPortal =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc1155BatchPortalAbi,
         address: erc1155BatchPortalAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc1155BatchPortalABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc1155BatchPortalABI}__ and `functionName` set to `"depositBatchERC1155Token"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc1155BatchPortalAbi}__ and `functionName` set to `"depositBatchERC1155Token"`
  */
-export function usePrepareErc1155BatchPortalDepositBatchErc1155Token(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc1155BatchPortalABI,
-            'depositBatchERC1155Token'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc1155BatchPortalABI,
+export const useSimulateErc1155BatchPortalDepositBatchErc1155Token =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc1155BatchPortalAbi,
         address: erc1155BatchPortalAddress,
         functionName: 'depositBatchERC1155Token',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc1155BatchPortalABI,
-        'depositBatchERC1155Token'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc1155SinglePortalABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__
  */
-export function useErc1155SinglePortalRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<
-        typeof erc1155SinglePortalABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc1155SinglePortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc1155SinglePortalABI,
-        address: erc1155SinglePortalAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc1155SinglePortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadErc1155SinglePortal = /*#__PURE__*/ createUseReadContract({
+    abi: erc1155SinglePortalAbi,
+    address: erc1155SinglePortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc1155SinglePortalABI}__ and `functionName` set to `"getInputBox"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useErc1155SinglePortalGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<
-        typeof erc1155SinglePortalABI,
-        TFunctionName
-    >,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc1155SinglePortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc1155SinglePortalABI,
+export const useReadErc1155SinglePortalGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: erc1155SinglePortalAbi,
         address: erc1155SinglePortalAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc1155SinglePortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc1155SinglePortalABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__
  */
-export function useErc1155SinglePortalWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc1155SinglePortalABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof erc1155SinglePortalABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof erc1155SinglePortalABI,
-        TFunctionName,
-        TMode
-    >({
-        abi: erc1155SinglePortalABI,
-        address: erc1155SinglePortalAddress,
-        ...config,
-    } as any)
-}
+export const useWriteErc1155SinglePortal = /*#__PURE__*/ createUseWriteContract(
+    { abi: erc1155SinglePortalAbi, address: erc1155SinglePortalAddress },
+)
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc1155SinglePortalABI}__ and `functionName` set to `"depositSingleERC1155Token"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__ and `functionName` set to `"depositSingleERC1155Token"`
  */
-export function useErc1155SinglePortalDepositSingleErc1155Token<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc1155SinglePortalABI,
-                  'depositSingleERC1155Token'
-              >['request']['abi'],
-              'depositSingleERC1155Token',
-              TMode
-          > & { functionName?: 'depositSingleERC1155Token' }
-        : UseContractWriteConfig<
-              typeof erc1155SinglePortalABI,
-              'depositSingleERC1155Token',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'depositSingleERC1155Token'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof erc1155SinglePortalABI,
-        'depositSingleERC1155Token',
-        TMode
-    >({
-        abi: erc1155SinglePortalABI,
+export const useWriteErc1155SinglePortalDepositSingleErc1155Token =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: erc1155SinglePortalAbi,
         address: erc1155SinglePortalAddress,
         functionName: 'depositSingleERC1155Token',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc1155SinglePortalABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__
  */
-export function usePrepareErc1155SinglePortalWrite<
-    TFunctionName extends string,
->(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc1155SinglePortalABI,
-            TFunctionName
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc1155SinglePortalABI,
+export const useSimulateErc1155SinglePortal =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc1155SinglePortalAbi,
         address: erc1155SinglePortalAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc1155SinglePortalABI,
-        TFunctionName
-    >)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc1155SinglePortalABI}__ and `functionName` set to `"depositSingleERC1155Token"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc1155SinglePortalAbi}__ and `functionName` set to `"depositSingleERC1155Token"`
  */
-export function usePrepareErc1155SinglePortalDepositSingleErc1155Token(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc1155SinglePortalABI,
-            'depositSingleERC1155Token'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc1155SinglePortalABI,
+export const useSimulateErc1155SinglePortalDepositSingleErc1155Token =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc1155SinglePortalAbi,
         address: erc1155SinglePortalAddress,
         functionName: 'depositSingleERC1155Token',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc1155SinglePortalABI,
-        'depositSingleERC1155Token'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PortalAbi}__
  */
-export function useErc20Read<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
+export const useReadErc20Portal = /*#__PURE__*/ createUseReadContract({
+    abi: erc20PortalAbi,
+    address: erc20PortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"allowance"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PortalAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useErc20Allowance<
-    TFunctionName extends 'allowance',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'allowance',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"balanceOf"`.
- */
-export function useErc20BalanceOf<
-    TFunctionName extends 'balanceOf',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'balanceOf',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"decimals"`.
- */
-export function useErc20Decimals<
-    TFunctionName extends 'decimals',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'decimals',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"name"`.
- */
-export function useErc20Name<
-    TFunctionName extends 'name',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'name',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"symbol"`.
- */
-export function useErc20Symbol<
-    TFunctionName extends 'symbol',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'symbol',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"totalSupply"`.
- */
-export function useErc20TotalSupply<
-    TFunctionName extends 'totalSupply',
-    TSelectData = ReadContractResult<typeof erc20ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20ABI,
-        functionName: 'totalSupply',
-        ...config,
-    } as UseContractReadConfig<typeof erc20ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__.
- */
-export function useErc20Write<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<typeof erc20ABI, TFunctionName, TMode> & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, TFunctionName, TMode>({
-        abi: erc20ABI,
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"approve"`.
- */
-export function useErc20Approve<TMode extends WriteContractMode = undefined>(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  'approve'
-              >['request']['abi'],
-              'approve',
-              TMode
-          > & { functionName?: 'approve' }
-        : UseContractWriteConfig<typeof erc20ABI, 'approve', TMode> & {
-              abi?: never
-              functionName?: 'approve'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, 'approve', TMode>({
-        abi: erc20ABI,
-        functionName: 'approve',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"transfer"`.
- */
-export function useErc20Transfer<TMode extends WriteContractMode = undefined>(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  'transfer'
-              >['request']['abi'],
-              'transfer',
-              TMode
-          > & { functionName?: 'transfer' }
-        : UseContractWriteConfig<typeof erc20ABI, 'transfer', TMode> & {
-              abi?: never
-              functionName?: 'transfer'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, 'transfer', TMode>({
-        abi: erc20ABI,
-        functionName: 'transfer',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"transferFrom"`.
- */
-export function useErc20TransferFrom<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  'transferFrom'
-              >['request']['abi'],
-              'transferFrom',
-              TMode
-          > & { functionName?: 'transferFrom' }
-        : UseContractWriteConfig<typeof erc20ABI, 'transferFrom', TMode> & {
-              abi?: never
-              functionName?: 'transferFrom'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, 'transferFrom', TMode>({
-        abi: erc20ABI,
-        functionName: 'transferFrom',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"increaseAllowance"`.
- */
-export function useErc20IncreaseAllowance<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  'increaseAllowance'
-              >['request']['abi'],
-              'increaseAllowance',
-              TMode
-          > & { functionName?: 'increaseAllowance' }
-        : UseContractWriteConfig<
-              typeof erc20ABI,
-              'increaseAllowance',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'increaseAllowance'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, 'increaseAllowance', TMode>({
-        abi: erc20ABI,
-        functionName: 'increaseAllowance',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"decreaseAllowance"`.
- */
-export function useErc20DecreaseAllowance<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20ABI,
-                  'decreaseAllowance'
-              >['request']['abi'],
-              'decreaseAllowance',
-              TMode
-          > & { functionName?: 'decreaseAllowance' }
-        : UseContractWriteConfig<
-              typeof erc20ABI,
-              'decreaseAllowance',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'decreaseAllowance'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20ABI, 'decreaseAllowance', TMode>({
-        abi: erc20ABI,
-        functionName: 'decreaseAllowance',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__.
- */
-export function usePrepareErc20Write<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, TFunctionName>,
-        'abi'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, TFunctionName>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"approve"`.
- */
-export function usePrepareErc20Approve(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, 'approve'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        functionName: 'approve',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, 'approve'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"transfer"`.
- */
-export function usePrepareErc20Transfer(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, 'transfer'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        functionName: 'transfer',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, 'transfer'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"transferFrom"`.
- */
-export function usePrepareErc20TransferFrom(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, 'transferFrom'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        functionName: 'transferFrom',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, 'transferFrom'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"increaseAllowance"`.
- */
-export function usePrepareErc20IncreaseAllowance(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, 'increaseAllowance'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        functionName: 'increaseAllowance',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, 'increaseAllowance'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20ABI}__ and `functionName` set to `"decreaseAllowance"`.
- */
-export function usePrepareErc20DecreaseAllowance(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20ABI, 'decreaseAllowance'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20ABI,
-        functionName: 'decreaseAllowance',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20ABI, 'decreaseAllowance'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc20ABI}__.
- */
-export function useErc20Event<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof erc20ABI, TEventName>,
-        'abi'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc20ABI,
-        ...config,
-    } as UseContractEventConfig<typeof erc20ABI, TEventName>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc20ABI}__ and `eventName` set to `"Approval"`.
- */
-export function useErc20ApprovalEvent(
-    config: Omit<
-        UseContractEventConfig<typeof erc20ABI, 'Approval'>,
-        'abi' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc20ABI,
-        eventName: 'Approval',
-        ...config,
-    } as UseContractEventConfig<typeof erc20ABI, 'Approval'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc20ABI}__ and `eventName` set to `"Transfer"`.
- */
-export function useErc20TransferEvent(
-    config: Omit<
-        UseContractEventConfig<typeof erc20ABI, 'Transfer'>,
-        'abi' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc20ABI,
-        eventName: 'Transfer',
-        ...config,
-    } as UseContractEventConfig<typeof erc20ABI, 'Transfer'>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20PortalABI}__.
- */
-export function useErc20PortalRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof erc20PortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc20PortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20PortalABI,
-        address: erc20PortalAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc20PortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc20PortalABI}__ and `functionName` set to `"getInputBox"`.
- */
-export function useErc20PortalGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<typeof erc20PortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc20PortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc20PortalABI,
+export const useReadErc20PortalGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: erc20PortalAbi,
         address: erc20PortalAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc20PortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20PortalABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PortalAbi}__
  */
-export function useErc20PortalWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20PortalABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof erc20PortalABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20PortalABI, TFunctionName, TMode>({
-        abi: erc20PortalABI,
-        address: erc20PortalAddress,
-        ...config,
-    } as any)
-}
+export const useWriteErc20Portal = /*#__PURE__*/ createUseWriteContract({
+    abi: erc20PortalAbi,
+    address: erc20PortalAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc20PortalABI}__ and `functionName` set to `"depositERC20Tokens"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PortalAbi}__ and `functionName` set to `"depositERC20Tokens"`
  */
-export function useErc20PortalDepositErc20Tokens<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc20PortalABI,
-                  'depositERC20Tokens'
-              >['request']['abi'],
-              'depositERC20Tokens',
-              TMode
-          > & { functionName?: 'depositERC20Tokens' }
-        : UseContractWriteConfig<
-              typeof erc20PortalABI,
-              'depositERC20Tokens',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'depositERC20Tokens'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc20PortalABI, 'depositERC20Tokens', TMode>(
-        {
-            abi: erc20PortalABI,
-            address: erc20PortalAddress,
-            functionName: 'depositERC20Tokens',
-            ...config,
-        } as any,
-    )
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20PortalABI}__.
- */
-export function usePrepareErc20PortalWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc20PortalABI, TFunctionName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20PortalABI,
-        address: erc20PortalAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc20PortalABI, TFunctionName>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc20PortalABI}__ and `functionName` set to `"depositERC20Tokens"`.
- */
-export function usePrepareErc20PortalDepositErc20Tokens(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc20PortalABI,
-            'depositERC20Tokens'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc20PortalABI,
+export const useWriteErc20PortalDepositErc20Tokens =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: erc20PortalAbi,
         address: erc20PortalAddress,
         functionName: 'depositERC20Tokens',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc20PortalABI,
-        'depositERC20Tokens'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PortalAbi}__
  */
-export function useErc721Read<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
+export const useSimulateErc20Portal = /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20PortalAbi,
+    address: erc20PortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"balanceOf"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PortalAbi}__ and `functionName` set to `"depositERC20Tokens"`
  */
-export function useErc721BalanceOf<
-    TFunctionName extends 'balanceOf',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'balanceOf',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
+export const useSimulateErc20PortalDepositErc20Tokens =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc20PortalAbi,
+        address: erc20PortalAddress,
+        functionName: 'depositERC20Tokens',
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"getApproved"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc721PortalAbi}__
  */
-export function useErc721GetApproved<
-    TFunctionName extends 'getApproved',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'getApproved',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
+export const useReadErc721Portal = /*#__PURE__*/ createUseReadContract({
+    abi: erc721PortalAbi,
+    address: erc721PortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"isApprovedForAll"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc721PortalAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useErc721IsApprovedForAll<
-    TFunctionName extends 'isApprovedForAll',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'isApprovedForAll',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"name"`.
- */
-export function useErc721Name<
-    TFunctionName extends 'name',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'name',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"ownerOf"`.
- */
-export function useErc721OwnerOf<
-    TFunctionName extends 'ownerOf',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'ownerOf',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"symbol"`.
- */
-export function useErc721Symbol<
-    TFunctionName extends 'symbol',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'symbol',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"tokenByIndex"`.
- */
-export function useErc721TokenByIndex<
-    TFunctionName extends 'tokenByIndex',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'tokenByIndex',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"tokenURI"`.
- */
-export function useErc721TokenUri<
-    TFunctionName extends 'tokenURI',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'tokenURI',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"totalSupply"`.
- */
-export function useErc721TotalSupply<
-    TFunctionName extends 'totalSupply',
-    TSelectData = ReadContractResult<typeof erc721ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721ABI,
-        functionName: 'totalSupply',
-        ...config,
-    } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__.
- */
-export function useErc721Write<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721ABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<typeof erc721ABI, TFunctionName, TMode> & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721ABI, TFunctionName, TMode>({
-        abi: erc721ABI,
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"approve"`.
- */
-export function useErc721Approve<TMode extends WriteContractMode = undefined>(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721ABI,
-                  'approve'
-              >['request']['abi'],
-              'approve',
-              TMode
-          > & { functionName?: 'approve' }
-        : UseContractWriteConfig<typeof erc721ABI, 'approve', TMode> & {
-              abi?: never
-              functionName?: 'approve'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721ABI, 'approve', TMode>({
-        abi: erc721ABI,
-        functionName: 'approve',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"safeTransferFrom"`.
- */
-export function useErc721SafeTransferFrom<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721ABI,
-                  'safeTransferFrom'
-              >['request']['abi'],
-              'safeTransferFrom',
-              TMode
-          > & { functionName?: 'safeTransferFrom' }
-        : UseContractWriteConfig<
-              typeof erc721ABI,
-              'safeTransferFrom',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'safeTransferFrom'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721ABI, 'safeTransferFrom', TMode>({
-        abi: erc721ABI,
-        functionName: 'safeTransferFrom',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"setApprovalForAll"`.
- */
-export function useErc721SetApprovalForAll<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721ABI,
-                  'setApprovalForAll'
-              >['request']['abi'],
-              'setApprovalForAll',
-              TMode
-          > & { functionName?: 'setApprovalForAll' }
-        : UseContractWriteConfig<
-              typeof erc721ABI,
-              'setApprovalForAll',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'setApprovalForAll'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721ABI, 'setApprovalForAll', TMode>({
-        abi: erc721ABI,
-        functionName: 'setApprovalForAll',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"transferFrom"`.
- */
-export function useErc721TransferFrom<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721ABI,
-                  'transferFrom'
-              >['request']['abi'],
-              'transferFrom',
-              TMode
-          > & { functionName?: 'transferFrom' }
-        : UseContractWriteConfig<typeof erc721ABI, 'transferFrom', TMode> & {
-              abi?: never
-              functionName?: 'transferFrom'
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721ABI, 'transferFrom', TMode>({
-        abi: erc721ABI,
-        functionName: 'transferFrom',
-        ...config,
-    } as any)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__.
- */
-export function usePrepareErc721Write<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>,
-        'abi'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721ABI,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"approve"`.
- */
-export function usePrepareErc721Approve(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721ABI, 'approve'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721ABI,
-        functionName: 'approve',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721ABI, 'approve'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"safeTransferFrom"`.
- */
-export function usePrepareErc721SafeTransferFrom(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721ABI, 'safeTransferFrom'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721ABI,
-        functionName: 'safeTransferFrom',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721ABI, 'safeTransferFrom'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"setApprovalForAll"`.
- */
-export function usePrepareErc721SetApprovalForAll(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721ABI, 'setApprovalForAll'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721ABI,
-        functionName: 'setApprovalForAll',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721ABI, 'setApprovalForAll'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"transferFrom"`.
- */
-export function usePrepareErc721TransferFrom(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721ABI, 'transferFrom'>,
-        'abi' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721ABI,
-        functionName: 'transferFrom',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721ABI, 'transferFrom'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc721ABI}__.
- */
-export function useErc721Event<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof erc721ABI, TEventName>,
-        'abi'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc721ABI,
-        ...config,
-    } as UseContractEventConfig<typeof erc721ABI, TEventName>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc721ABI}__ and `eventName` set to `"Approval"`.
- */
-export function useErc721ApprovalEvent(
-    config: Omit<
-        UseContractEventConfig<typeof erc721ABI, 'Approval'>,
-        'abi' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc721ABI,
-        eventName: 'Approval',
-        ...config,
-    } as UseContractEventConfig<typeof erc721ABI, 'Approval'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc721ABI}__ and `eventName` set to `"ApprovalForAll"`.
- */
-export function useErc721ApprovalForAllEvent(
-    config: Omit<
-        UseContractEventConfig<typeof erc721ABI, 'ApprovalForAll'>,
-        'abi' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc721ABI,
-        eventName: 'ApprovalForAll',
-        ...config,
-    } as UseContractEventConfig<typeof erc721ABI, 'ApprovalForAll'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc721ABI}__ and `eventName` set to `"Transfer"`.
- */
-export function useErc721TransferEvent(
-    config: Omit<
-        UseContractEventConfig<typeof erc721ABI, 'Transfer'>,
-        'abi' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: erc721ABI,
-        eventName: 'Transfer',
-        ...config,
-    } as UseContractEventConfig<typeof erc721ABI, 'Transfer'>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721PortalABI}__.
- */
-export function useErc721PortalRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof erc721PortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc721PortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721PortalABI,
-        address: erc721PortalAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc721PortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link erc721PortalABI}__ and `functionName` set to `"getInputBox"`.
- */
-export function useErc721PortalGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<typeof erc721PortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof erc721PortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: erc721PortalABI,
+export const useReadErc721PortalGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: erc721PortalAbi,
         address: erc721PortalAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof erc721PortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721PortalABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc721PortalAbi}__
  */
-export function useErc721PortalWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721PortalABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof erc721PortalABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof erc721PortalABI, TFunctionName, TMode>({
-        abi: erc721PortalABI,
-        address: erc721PortalAddress,
-        ...config,
-    } as any)
-}
+export const useWriteErc721Portal = /*#__PURE__*/ createUseWriteContract({
+    abi: erc721PortalAbi,
+    address: erc721PortalAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721PortalABI}__ and `functionName` set to `"depositERC721Token"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc721PortalAbi}__ and `functionName` set to `"depositERC721Token"`
  */
-export function useErc721PortalDepositErc721Token<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof erc721PortalABI,
-                  'depositERC721Token'
-              >['request']['abi'],
-              'depositERC721Token',
-              TMode
-          > & { functionName?: 'depositERC721Token' }
-        : UseContractWriteConfig<
-              typeof erc721PortalABI,
-              'depositERC721Token',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'depositERC721Token'
-          } = {} as any,
-) {
-    return useContractWrite<
-        typeof erc721PortalABI,
-        'depositERC721Token',
-        TMode
-    >({
-        abi: erc721PortalABI,
+export const useWriteErc721PortalDepositErc721Token =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: erc721PortalAbi,
         address: erc721PortalAddress,
         functionName: 'depositERC721Token',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721PortalABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc721PortalAbi}__
  */
-export function usePrepareErc721PortalWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof erc721PortalABI, TFunctionName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721PortalABI,
-        address: erc721PortalAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof erc721PortalABI, TFunctionName>)
-}
+export const useSimulateErc721Portal = /*#__PURE__*/ createUseSimulateContract({
+    abi: erc721PortalAbi,
+    address: erc721PortalAddress,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721PortalABI}__ and `functionName` set to `"depositERC721Token"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc721PortalAbi}__ and `functionName` set to `"depositERC721Token"`
  */
-export function usePrepareErc721PortalDepositErc721Token(
-    config: Omit<
-        UsePrepareContractWriteConfig<
-            typeof erc721PortalABI,
-            'depositERC721Token'
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: erc721PortalABI,
+export const useSimulateErc721PortalDepositErc721Token =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc721PortalAbi,
         address: erc721PortalAddress,
         functionName: 'depositERC721Token',
-        ...config,
-    } as UsePrepareContractWriteConfig<
-        typeof erc721PortalABI,
-        'depositERC721Token'
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link etherPortalABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link etherPortalAbi}__
  */
-export function useEtherPortalRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof etherPortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof etherPortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: etherPortalABI,
-        address: etherPortalAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof etherPortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadEtherPortal = /*#__PURE__*/ createUseReadContract({
+    abi: etherPortalAbi,
+    address: etherPortalAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link etherPortalABI}__ and `functionName` set to `"getInputBox"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link etherPortalAbi}__ and `functionName` set to `"getInputBox"`
  */
-export function useEtherPortalGetInputBox<
-    TFunctionName extends 'getInputBox',
-    TSelectData = ReadContractResult<typeof etherPortalABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof etherPortalABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: etherPortalABI,
+export const useReadEtherPortalGetInputBox =
+    /*#__PURE__*/ createUseReadContract({
+        abi: etherPortalAbi,
         address: etherPortalAddress,
         functionName: 'getInputBox',
-        ...config,
-    } as UseContractReadConfig<
-        typeof etherPortalABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link etherPortalABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link etherPortalAbi}__
  */
-export function useEtherPortalWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof etherPortalABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof etherPortalABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof etherPortalABI, TFunctionName, TMode>({
-        abi: etherPortalABI,
-        address: etherPortalAddress,
-        ...config,
-    } as any)
-}
+export const useWriteEtherPortal = /*#__PURE__*/ createUseWriteContract({
+    abi: etherPortalAbi,
+    address: etherPortalAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link etherPortalABI}__ and `functionName` set to `"depositEther"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link etherPortalAbi}__ and `functionName` set to `"depositEther"`
  */
-export function useEtherPortalDepositEther<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof etherPortalABI,
-                  'depositEther'
-              >['request']['abi'],
-              'depositEther',
-              TMode
-          > & { functionName?: 'depositEther' }
-        : UseContractWriteConfig<
-              typeof etherPortalABI,
-              'depositEther',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'depositEther'
-          } = {} as any,
-) {
-    return useContractWrite<typeof etherPortalABI, 'depositEther', TMode>({
-        abi: etherPortalABI,
+export const useWriteEtherPortalDepositEther =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: etherPortalAbi,
         address: etherPortalAddress,
         functionName: 'depositEther',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link etherPortalABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link etherPortalAbi}__
  */
-export function usePrepareEtherPortalWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof etherPortalABI, TFunctionName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: etherPortalABI,
-        address: etherPortalAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof etherPortalABI, TFunctionName>)
-}
+export const useSimulateEtherPortal = /*#__PURE__*/ createUseSimulateContract({
+    abi: etherPortalAbi,
+    address: etherPortalAddress,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link etherPortalABI}__ and `functionName` set to `"depositEther"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link etherPortalAbi}__ and `functionName` set to `"depositEther"`
  */
-export function usePrepareEtherPortalDepositEther(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof etherPortalABI, 'depositEther'>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: etherPortalABI,
+export const useSimulateEtherPortalDepositEther =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: etherPortalAbi,
         address: etherPortalAddress,
         functionName: 'depositEther',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof etherPortalABI, 'depositEther'>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link historyFactoryABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link historyFactoryAbi}__
  */
-export function useHistoryFactoryRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof historyFactoryABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof historyFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: historyFactoryABI,
-        address: historyFactoryAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof historyFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadHistoryFactory = /*#__PURE__*/ createUseReadContract({
+    abi: historyFactoryAbi,
+    address: historyFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link historyFactoryABI}__ and `functionName` set to `"calculateHistoryAddress"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link historyFactoryAbi}__ and `functionName` set to `"calculateHistoryAddress"`
  */
-export function useHistoryFactoryCalculateHistoryAddress<
-    TFunctionName extends 'calculateHistoryAddress',
-    TSelectData = ReadContractResult<typeof historyFactoryABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof historyFactoryABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: historyFactoryABI,
+export const useReadHistoryFactoryCalculateHistoryAddress =
+    /*#__PURE__*/ createUseReadContract({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
         functionName: 'calculateHistoryAddress',
-        ...config,
-    } as UseContractReadConfig<
-        typeof historyFactoryABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link historyFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link historyFactoryAbi}__
  */
-export function useHistoryFactoryWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof historyFactoryABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<
-              typeof historyFactoryABI,
-              TFunctionName,
-              TMode
-          > & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof historyFactoryABI, TFunctionName, TMode>({
-        abi: historyFactoryABI,
-        address: historyFactoryAddress,
-        ...config,
-    } as any)
-}
+export const useWriteHistoryFactory = /*#__PURE__*/ createUseWriteContract({
+    abi: historyFactoryAbi,
+    address: historyFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link historyFactoryABI}__ and `functionName` set to `"newHistory"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link historyFactoryAbi}__ and `functionName` set to `"newHistory"`
  */
-export function useHistoryFactoryNewHistory<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof historyFactoryABI,
-                  'newHistory'
-              >['request']['abi'],
-              'newHistory',
-              TMode
-          > & { functionName?: 'newHistory' }
-        : UseContractWriteConfig<
-              typeof historyFactoryABI,
-              'newHistory',
-              TMode
-          > & {
-              abi?: never
-              functionName?: 'newHistory'
-          } = {} as any,
-) {
-    return useContractWrite<typeof historyFactoryABI, 'newHistory', TMode>({
-        abi: historyFactoryABI,
+export const useWriteHistoryFactoryNewHistory =
+    /*#__PURE__*/ createUseWriteContract({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
         functionName: 'newHistory',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link historyFactoryABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link historyFactoryAbi}__
  */
-export function usePrepareHistoryFactoryWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof historyFactoryABI, TFunctionName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: historyFactoryABI,
+export const useSimulateHistoryFactory =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof historyFactoryABI, TFunctionName>)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link historyFactoryABI}__ and `functionName` set to `"newHistory"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link historyFactoryAbi}__ and `functionName` set to `"newHistory"`
  */
-export function usePrepareHistoryFactoryNewHistory(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof historyFactoryABI, 'newHistory'>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: historyFactoryABI,
+export const useSimulateHistoryFactoryNewHistory =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
         functionName: 'newHistory',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof historyFactoryABI, 'newHistory'>)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link historyFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link historyFactoryAbi}__
  */
-export function useHistoryFactoryEvent<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof historyFactoryABI, TEventName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: historyFactoryABI,
+export const useWatchHistoryFactoryEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
-        ...config,
-    } as UseContractEventConfig<typeof historyFactoryABI, TEventName>)
-}
+    })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link historyFactoryABI}__ and `eventName` set to `"HistoryCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link historyFactoryAbi}__ and `eventName` set to `"HistoryCreated"`
  */
-export function useHistoryFactoryHistoryCreatedEvent(
-    config: Omit<
-        UseContractEventConfig<typeof historyFactoryABI, 'HistoryCreated'>,
-        'abi' | 'address' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: historyFactoryABI,
+export const useWatchHistoryFactoryHistoryCreatedEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: historyFactoryAbi,
         address: historyFactoryAddress,
         eventName: 'HistoryCreated',
-        ...config,
-    } as UseContractEventConfig<typeof historyFactoryABI, 'HistoryCreated'>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link inputBoxABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link inputBoxAbi}__
  */
-export function useInputBoxRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof inputBoxABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        ...config,
-    } as UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>)
-}
+export const useReadInputBox = /*#__PURE__*/ createUseReadContract({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link inputBoxABI}__ and `functionName` set to `"getInputHash"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link inputBoxAbi}__ and `functionName` set to `"getInputHash"`
  */
-export function useInputBoxGetInputHash<
-    TFunctionName extends 'getInputHash',
-    TSelectData = ReadContractResult<typeof inputBoxABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        functionName: 'getInputHash',
-        ...config,
-    } as UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>)
-}
+export const useReadInputBoxGetInputHash = /*#__PURE__*/ createUseReadContract({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+    functionName: 'getInputHash',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link inputBoxABI}__ and `functionName` set to `"getNumberOfInputs"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link inputBoxAbi}__ and `functionName` set to `"getNumberOfInputs"`
  */
-export function useInputBoxGetNumberOfInputs<
-    TFunctionName extends 'getNumberOfInputs',
-    TSelectData = ReadContractResult<typeof inputBoxABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: inputBoxABI,
+export const useReadInputBoxGetNumberOfInputs =
+    /*#__PURE__*/ createUseReadContract({
+        abi: inputBoxAbi,
         address: inputBoxAddress,
         functionName: 'getNumberOfInputs',
-        ...config,
-    } as UseContractReadConfig<typeof inputBoxABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link inputBoxABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link inputBoxAbi}__
  */
-export function useInputBoxWrite<
-    TFunctionName extends string,
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof inputBoxABI,
-                  string
-              >['request']['abi'],
-              TFunctionName,
-              TMode
-          >
-        : UseContractWriteConfig<typeof inputBoxABI, TFunctionName, TMode> & {
-              abi?: never
-          } = {} as any,
-) {
-    return useContractWrite<typeof inputBoxABI, TFunctionName, TMode>({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        ...config,
-    } as any)
-}
+export const useWriteInputBox = /*#__PURE__*/ createUseWriteContract({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link inputBoxABI}__ and `functionName` set to `"addInput"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link inputBoxAbi}__ and `functionName` set to `"addInput"`
  */
-export function useInputBoxAddInput<
-    TMode extends WriteContractMode = undefined,
->(
-    config: TMode extends 'prepared'
-        ? UseContractWriteConfig<
-              PrepareWriteContractResult<
-                  typeof inputBoxABI,
-                  'addInput'
-              >['request']['abi'],
-              'addInput',
-              TMode
-          > & { functionName?: 'addInput' }
-        : UseContractWriteConfig<typeof inputBoxABI, 'addInput', TMode> & {
-              abi?: never
-              functionName?: 'addInput'
-          } = {} as any,
-) {
-    return useContractWrite<typeof inputBoxABI, 'addInput', TMode>({
-        abi: inputBoxABI,
+export const useWriteInputBoxAddInput = /*#__PURE__*/ createUseWriteContract({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+    functionName: 'addInput',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link inputBoxAbi}__
+ */
+export const useSimulateInputBox = /*#__PURE__*/ createUseSimulateContract({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link inputBoxAbi}__ and `functionName` set to `"addInput"`
+ */
+export const useSimulateInputBoxAddInput =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: inputBoxAbi,
         address: inputBoxAddress,
         functionName: 'addInput',
-        ...config,
-    } as any)
-}
+    })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link inputBoxABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link inputBoxAbi}__
  */
-export function usePrepareInputBoxWrite<TFunctionName extends string>(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof inputBoxABI, TFunctionName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof inputBoxABI, TFunctionName>)
-}
+export const useWatchInputBoxEvent = /*#__PURE__*/ createUseWatchContractEvent({
+    abi: inputBoxAbi,
+    address: inputBoxAddress,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link inputBoxABI}__ and `functionName` set to `"addInput"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link inputBoxAbi}__ and `eventName` set to `"InputAdded"`
  */
-export function usePrepareInputBoxAddInput(
-    config: Omit<
-        UsePrepareContractWriteConfig<typeof inputBoxABI, 'addInput'>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return usePrepareContractWrite({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        functionName: 'addInput',
-        ...config,
-    } as UsePrepareContractWriteConfig<typeof inputBoxABI, 'addInput'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link inputBoxABI}__.
- */
-export function useInputBoxEvent<TEventName extends string>(
-    config: Omit<
-        UseContractEventConfig<typeof inputBoxABI, TEventName>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: inputBoxABI,
-        address: inputBoxAddress,
-        ...config,
-    } as UseContractEventConfig<typeof inputBoxABI, TEventName>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link inputBoxABI}__ and `eventName` set to `"InputAdded"`.
- */
-export function useInputBoxInputAddedEvent(
-    config: Omit<
-        UseContractEventConfig<typeof inputBoxABI, 'InputAdded'>,
-        'abi' | 'address' | 'eventName'
-    > = {} as any,
-) {
-    return useContractEvent({
-        abi: inputBoxABI,
+export const useWatchInputBoxInputAddedEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: inputBoxAbi,
         address: inputBoxAddress,
         eventName: 'InputAdded',
-        ...config,
-    } as UseContractEventConfig<typeof inputBoxABI, 'InputAdded'>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__
  */
-export function useMerkleV2Read<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
-        address: merkleV2Address,
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+export const useReadMerkleV2 = /*#__PURE__*/ createUseReadContract({
+    abi: merkleV2Abi,
+    address: merkleV2Address,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__ and `functionName` set to `"calculateRootFromPowerOfTwo"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__ and `functionName` set to `"calculateRootFromPowerOfTwo"`
  */
-export function useMerkleV2CalculateRootFromPowerOfTwo<
-    TFunctionName extends 'calculateRootFromPowerOfTwo',
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
+export const useReadMerkleV2CalculateRootFromPowerOfTwo =
+    /*#__PURE__*/ createUseReadContract({
+        abi: merkleV2Abi,
         address: merkleV2Address,
         functionName: 'calculateRootFromPowerOfTwo',
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__ and `functionName` set to `"getEmptyTreeHashAtIndex"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__ and `functionName` set to `"getEmptyTreeHashAtIndex"`
  */
-export function useMerkleV2GetEmptyTreeHashAtIndex<
-    TFunctionName extends 'getEmptyTreeHashAtIndex',
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
+export const useReadMerkleV2GetEmptyTreeHashAtIndex =
+    /*#__PURE__*/ createUseReadContract({
+        abi: merkleV2Abi,
         address: merkleV2Address,
         functionName: 'getEmptyTreeHashAtIndex',
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__ and `functionName` set to `"getHashOfWordAtIndex"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__ and `functionName` set to `"getHashOfWordAtIndex"`
  */
-export function useMerkleV2GetHashOfWordAtIndex<
-    TFunctionName extends 'getHashOfWordAtIndex',
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
+export const useReadMerkleV2GetHashOfWordAtIndex =
+    /*#__PURE__*/ createUseReadContract({
+        abi: merkleV2Abi,
         address: merkleV2Address,
         functionName: 'getHashOfWordAtIndex',
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__ and `functionName` set to `"getMerkleRootFromBytes"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__ and `functionName` set to `"getMerkleRootFromBytes"`
  */
-export function useMerkleV2GetMerkleRootFromBytes<
-    TFunctionName extends 'getMerkleRootFromBytes',
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
+export const useReadMerkleV2GetMerkleRootFromBytes =
+    /*#__PURE__*/ createUseReadContract({
+        abi: merkleV2Abi,
         address: merkleV2Address,
         functionName: 'getMerkleRootFromBytes',
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link merkleV2ABI}__ and `functionName` set to `"getRootAfterReplacementInDrive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleV2Abi}__ and `functionName` set to `"getRootAfterReplacementInDrive"`
  */
-export function useMerkleV2GetRootAfterReplacementInDrive<
-    TFunctionName extends 'getRootAfterReplacementInDrive',
-    TSelectData = ReadContractResult<typeof merkleV2ABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: merkleV2ABI,
+export const useReadMerkleV2GetRootAfterReplacementInDrive =
+    /*#__PURE__*/ createUseReadContract({
+        abi: merkleV2Abi,
         address: merkleV2Address,
         functionName: 'getRootAfterReplacementInDrive',
-        ...config,
-    } as UseContractReadConfig<typeof merkleV2ABI, TFunctionName, TSelectData>)
-}
+    })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link unrolledCordicABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link unrolledCordicAbi}__
  */
-export function useUnrolledCordicRead<
-    TFunctionName extends string,
-    TSelectData = ReadContractResult<typeof unrolledCordicABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof unrolledCordicABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: unrolledCordicABI,
-        address: unrolledCordicAddress,
-        ...config,
-    } as UseContractReadConfig<
-        typeof unrolledCordicABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+export const useReadUnrolledCordic = /*#__PURE__*/ createUseReadContract({
+    abi: unrolledCordicAbi,
+    address: unrolledCordicAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link unrolledCordicABI}__ and `functionName` set to `"log2Times1e18"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link unrolledCordicAbi}__ and `functionName` set to `"log2Times1e18"`
  */
-export function useUnrolledCordicLog2Times1e18<
-    TFunctionName extends 'log2Times1e18',
-    TSelectData = ReadContractResult<typeof unrolledCordicABI, TFunctionName>,
->(
-    config: Omit<
-        UseContractReadConfig<
-            typeof unrolledCordicABI,
-            TFunctionName,
-            TSelectData
-        >,
-        'abi' | 'address' | 'functionName'
-    > = {} as any,
-) {
-    return useContractRead({
-        abi: unrolledCordicABI,
+export const useReadUnrolledCordicLog2Times1e18 =
+    /*#__PURE__*/ createUseReadContract({
+        abi: unrolledCordicAbi,
         address: unrolledCordicAddress,
         functionName: 'log2Times1e18',
-        ...config,
-    } as UseContractReadConfig<
-        typeof unrolledCordicABI,
-        TFunctionName,
-        TSelectData
-    >)
-}
+    })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useReadErc20 = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadErc20Allowance = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'allowance',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadErc20BalanceOf = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadErc20Decimals = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'decimals',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"name"`
+ */
+export const useReadErc20Name = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadErc20Symbol = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadErc20TotalSupply = /*#__PURE__*/ createUseReadContract({
+    abi: erc20Abi,
+    functionName: 'totalSupply',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useWriteErc20 = /*#__PURE__*/ createUseWriteContract({
+    abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteErc20Approve = /*#__PURE__*/ createUseWriteContract({
+    abi: erc20Abi,
+    functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteErc20Transfer = /*#__PURE__*/ createUseWriteContract({
+    abi: erc20Abi,
+    functionName: 'transfer',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteErc20TransferFrom = /*#__PURE__*/ createUseWriteContract({
+    abi: erc20Abi,
+    functionName: 'transferFrom',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useSimulateErc20 = /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateErc20Approve = /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20Abi,
+    functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateErc20Transfer = /*#__PURE__*/ createUseSimulateContract(
+    { abi: erc20Abi, functionName: 'transfer' },
+)
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateErc20TransferFrom =
+    /*#__PURE__*/ createUseSimulateContract({
+        abi: erc20Abi,
+        functionName: 'transferFrom',
+    })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useWatchErc20Event = /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchErc20ApprovalEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: erc20Abi,
+        eventName: 'Approval',
+    })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchErc20TransferEvent =
+    /*#__PURE__*/ createUseWatchContractEvent({
+        abi: erc20Abi,
+        eventName: 'Transfer',
+    })

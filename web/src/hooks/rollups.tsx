@@ -6,18 +6,20 @@ import {
     decodeEventLog,
     parseAbi,
 } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import {
-    inputBoxABI,
-    useInputBoxAddInput,
-    usePrepareInputBoxAddInput,
+    inputBoxAbi,
+    useWriteInputBoxAddInput,
+    // useInputBoxAddInput,
+    // usePrepareInputBoxAddInput,
+    useSimulateInputBoxAddInput
 } from "./contracts";
 import { useQuery } from "@apollo/client";
 import { CompletionStatus, InputNoticesDocument } from "./graphql/graphql";
 
 // define application API (or ABI so to say)
 export const abi = parseAbi([
-    "function transfer(address to, uint256 amount)",
+    "function transfer(awddress to, uint256 amount)",
     "function start(uint32 seed)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
 ]);
@@ -38,7 +40,7 @@ const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
                     try {
                         // decode the event
                         const decodedLog = decodeEventLog({
-                            abi: inputBoxABI,
+                            abi: inputBoxAbi,
                             eventName: "InputAdded",
                             topics: log.topics,
                             data: log.data,
@@ -60,16 +62,16 @@ const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
 
 export const useRollupsServer = (dapp: Address, input?: Hex) => {
     // prepare the transaction
-    const prepare = usePrepareInputBoxAddInput({
+    const prepare = useSimulateInputBoxAddInput({
         args: [dapp, input!],
-        enabled: !!input,
+        // enabled: !!input,
     });
 
     // execute the transaction
-    const execute = useInputBoxAddInput(prepare.config);
+    const execute = useWriteInputBoxAddInput(prepare.config);
 
     // wait for the transaction to be mined
-    const wait = useWaitForTransaction(execute.data);
+    const wait = useWaitForTransactionReceipt(execute.data);
 
     // get id of the input sent
     const inputIndex = useInputIndex(wait.data);

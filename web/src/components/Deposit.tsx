@@ -1,12 +1,18 @@
 "use client";
 import {
     erc20PortalAddress,
-    useErc20Allowance,
-    useErc20Approve,
-    useErc20BalanceOf,
-    useErc20PortalDepositErc20Tokens,
-    usePrepareErc20Approve,
-    usePrepareErc20PortalDepositErc20Tokens,
+    // useErc20Allowance,
+    useReadErc20Allowance,
+    // useErc20Approve,
+    useWriteErc20Approve,
+    // useErc20BalanceOf,
+    useReadErc20BalanceOf,
+    // useErc20PortalDepositErc20Tokens,
+    useWriteErc20PortalDepositErc20Tokens,
+    // usePrepareErc20Approve,
+    useSimulateErc20Approve,
+    // usePrepareErc20PortalDepositErc20Tokens,
+    useSimulateErc20PortalDepositErc20Tokens,
 } from "@/hooks/contracts";
 import {
     Button,
@@ -24,7 +30,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC } from "react";
 import { TbArrowDown } from "react-icons/tb";
 import { Address, formatUnits, parseUnits } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import {
     TransactionProgress,
     TransactionStageStatus,
@@ -53,7 +59,6 @@ export const transactionButtonState = (
         prepare.error != null ||
         (disableOnSuccess && wait.status === "success") ||
         !write;
-
     return { loading, disabled };
 };
 
@@ -103,10 +108,10 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     const { amount } = form.getTransformedValues();
 
     // query L1 balance from ERC-20
-    const { data: l1Balance, isLoading: l1BalanceLoading } = useErc20BalanceOf({
+    const { data: l1Balance, isLoading: l1BalanceLoading } = useReadErc20BalanceOf({
         address: token,
         args: [address],
-        watch: true,
+        // watch: true,
     });
 
     // query L2 balance from dapp inspect server
@@ -114,34 +119,43 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
         useInspectBalance(address, { refreshInterval: 3000 });
 
     // query allowance from ERC-20
-    const { data: allowance, isLoading: allowanceLoading } = useErc20Allowance({
+    const { data: allowance, isLoading: allowanceLoading } = useReadErc20BalanceOf({
         address: token,
-        args: [address, erc20PortalAddress],
-        watch: true,
+        // args: [address, erc20PortalAddress],
+        args: [address],
+        // watch: true,
     });
 
     // prepare approve transaction
-    const approvePrepare = usePrepareErc20Approve({
+    const approvePrepare = useSimulateErc20Approve({
         address: token,
         args: [erc20PortalAddress, amount],
-        enabled:
+        query: {
+            enabled:
             amount != undefined && allowance != undefined && amount > allowance,
+        }
     });
-    const approve = useErc20Approve(approvePrepare.config);
-    const approveWait = useWaitForTransaction(approve.data);
+    const approve = useSimulateErc20Approve(approvePrepare.data);
+    const approveWait = useWaitForTransactionReceipt(approve.data);
 
     // prepare deposit transaction
-    const depositPrepare = usePrepareErc20PortalDepositErc20Tokens({
+    const depositPrepare = useSimulateErc20PortalDepositErc20Tokens({
         args: [token, dapp, amount, "0x"],
-        enabled:
-            amount != undefined &&
-            l1Balance != undefined &&
-            allowance != undefined &&
-            amount <= l1Balance &&
-            amount <= allowance,
+        // address: token,
+        // args: [erc20PortalAddress, amount],
+        query: {
+            enabled:
+                amount != undefined &&
+                l1Balance != undefined &&
+                allowance != undefined &&
+                amount <= l1Balance &&
+                amount <= allowance,
+        }
     });
-    const deposit = useErc20PortalDepositErc20Tokens(depositPrepare.config);
-    const depositWait = useWaitForTransaction(deposit.data);
+    // const deposit = useWriteErc20PortalDepositErc20Tokens(depositPrepare.data);
+    // const depositWait = useWaitForTransactionReceipt(deposit.data);
+    const deposit = useWriteErc20PortalDepositErc20Tokens();
+    const depositWait = useWaitForTransactionReceipt();
 
     // true if current allowance is less than the amount to deposit
     const needApproval =
