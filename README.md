@@ -54,7 +54,7 @@ The command below will build the C++ engine and the Node.js binding targeted to 
 
 ```shell
 cd micropolis
-yarn
+pnpm i
 yalc publish
 ```
 
@@ -77,8 +77,8 @@ The UI is a Next.js application, and can be built with the command below:
 
 ```shell
 cd web
-yarn
-yarn build
+pnpm i
+pnpm run build
 ```
 
 ## Running
