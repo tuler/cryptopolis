@@ -88,7 +88,7 @@ importers:
         version: 1.4.13(@types/react@18.3.3)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5)(zod@3.23.8))(zod@3.23.8)
     devDependencies:
       '@cartesi/rollups':
-        specifier: ^1.0
+        specifier: ^1.4.0
         version: 1.4.0
       '@graphql-codegen/add':
         specifier: ^5
