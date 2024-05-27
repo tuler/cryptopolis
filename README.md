@@ -83,7 +83,7 @@ yarn build
 
 ## Running
 
--   Running the dapp
+### Running the dapp
 
 Running on the host:
 
@@ -100,13 +100,22 @@ cartesi build
 cartesi run
 ```
 
--   Running the web UI
+### Running the web UI
 
 ```shell
 cd web
-yarn
-yarn dev
+pnpm i
+pnpm run dev
 ```
+
+### Create a game
+
+-   Go to http://localhost:3000/
+-   Connect to Metamask wallet
+-   Import foundry wallet to Metamask (private key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80)
+-   Approve and deposit 20000 tokens
+-   Go to http://localhost:3000/play/0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+-   Choose a map and create a game
 
 ## Future Improvements
 
