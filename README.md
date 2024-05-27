@@ -69,6 +69,8 @@ yarn
 yarn build
 ```
 
+Use Node 20.x. Node 22.x is not supported yet.
+
 -   Building the web UI
 
 The UI is a Next.js application, and can be built with the command below:
@@ -86,7 +88,7 @@ yarn build
 Running on the host:
 
 ```shell
-sunodo run --no-backend
+cartesi run --no-backend
 cd dapp
 ts-node src/index.ts
 ```
@@ -94,8 +96,8 @@ ts-node src/index.ts
 Running in the Cartesi Machine:
 
 ```shell
-sunodo build
-sunodo run
+cartesi build
+cartesi run
 ```
 
 -   Running the web UI

@@ -23,7 +23,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const [input, setInput] = useState<Hex>();
     const [tool, setTool] = useState(0);
 
-    const dapp = "0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C";
+    const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map

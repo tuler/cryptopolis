@@ -29,5 +29,8 @@
     "keywords": [
         "cartesi"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "volta": {
+        "node": "20.13.1"
+    }
 }
