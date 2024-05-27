@@ -35,7 +35,7 @@ const inspectAbi = parseAbi([
 const wallet = createWallet();
 app.addAdvanceHandler(wallet.handler);
 
-// Sunodo Token is what we'll use for testing, in real world use any ERC-20 token
+// TestToken is what we'll use for testing, in real world use any ERC-20 token
 const token = "0x92C6bcA388E99d6B304f1Af3c3Cd749Ff0b591e2";
 export const decimals = 18n;
 
@@ -214,7 +214,7 @@ app.addInspectHandler(async ({ payload }) => {
     switch (functionName) {
         case "balanceOf":
             const [address] = args;
-            const balance = wallet.balanceOf(token, address);
+            const balance = wallet.erc20BalanceOf(token, address);
             console.log(`balanceOf(${address}): ${balance}`);
             await app.createReport({
                 payload: numberToHex(balance, { size: 32 }),

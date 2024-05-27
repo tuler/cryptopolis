@@ -65,8 +65,8 @@ A RISC-V build can be done using Docker and its RISC-V emulation support through
 ```shell
 cd dapp
 yalc update
-yarn
-yarn build
+pnpm i
+pnpm run build
 ```
 
 Use Node 20.x. Node 22.x is not supported yet.

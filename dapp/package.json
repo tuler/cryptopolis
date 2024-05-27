@@ -3,22 +3,22 @@
     "version": "0.1.0",
     "description": "TypeScript DApp",
     "dependencies": {
-        "@deroll/app": "^0.4",
-        "@deroll/router": "^0.2",
-        "@deroll/wallet": "^0.3",
+        "@deroll/app": "^0.6.1",
+        "@deroll/router": "^0.4.1",
+        "@deroll/wallet": "^0.7.0",
         "micropolis": "file:.yalc/micropolis",
-        "openapi-fetch": "^0.7",
-        "viem": "^1"
+        "openapi-fetch": "^0.9.7",
+        "viem": "^2.12.4"
     },
     "devDependencies": {
-        "@types/node": "^20",
-        "canvas": "^2",
-        "esbuild": "^0.19",
-        "npm-run-all": "^4",
-        "openapi-typescript": "^6",
-        "ts-node": "^10",
-        "typescript": "^5",
-        "vitest": "^0.34"
+        "@types/node": "^20.12.12",
+        "canvas": "^2.11.2",
+        "esbuild": "^0.21.4",
+        "npm-run-all": "^4.1.5",
+        "openapi-typescript": "^6.7.6",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5",
+        "vitest": "^1.6.0"
     },
     "scripts": {
         "build": "run-s compile",
@@ -30,6 +30,7 @@
         "cartesi"
     ],
     "license": "MIT",
+    "packageManager": "pnpm@9.1.2",
     "volta": {
         "node": "20.13.1"
     }
