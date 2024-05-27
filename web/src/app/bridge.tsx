@@ -5,7 +5,6 @@ import {
     Center,
     Group,
     Paper,
-    Stack,
     Title,
 } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";

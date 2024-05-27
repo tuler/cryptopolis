@@ -1,16 +1,16 @@
 "use client";
-import { FC } from "react";
-import { Hex } from "viem";
-import { foundry, mainnet, sepolia } from "viem/chains";
-import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
-import { PrivateKeyConnector } from "./PrivateKeyConnector";
+import { useMantineColorScheme } from "@mantine/core";
 import {
     RainbowKitProvider,
     darkTheme,
     lightTheme,
 } from "@rainbow-me/rainbowkit";
-import { useMantineColorScheme } from "@mantine/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { FC } from "react";
+import { Hex, createWalletClient, http } from "viem";
+import { foundry, mainnet, sepolia } from "viem/chains";
+import { WagmiProvider, createConfig } from "wagmi";
+import { privateKeyConnector } from "./PrivateKeyConnector";
 import { CustomAvatar, appInfo } from "./WalletProvider";
 
 type PrivateKeyWalletProviderProps = {
@@ -23,45 +23,40 @@ const PrivateKeyWalletProvider: FC<PrivateKeyWalletProviderProps> = ({
     privateKey,
 }) => {
     const scheme = useMantineColorScheme();
-    const walletTheme =
-        scheme.colorScheme == "dark" ? darkTheme() : lightTheme();
+    const theme = scheme.colorScheme == "dark" ? darkTheme() : lightTheme();
 
     // select chain based on env var
     const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "31337");
     const chain =
         [foundry, mainnet, sepolia].find((c) => c.id == chainId) || foundry;
 
-    // only 1 chain is enabled, based on env var
-    const { chains, publicClient, webSocketPublicClient } = configureChains(
-        [chain],
-        [publicProvider()]
-    );
-
     // create connector from private key
-    const connectors = [
-        new PrivateKeyConnector({
-            options: { privateKey: privateKey as Hex }, // XXX: validate if it's really a private key
-            chains,
-        }),
-    ];
-    const wagmiConfig = createConfig({
-        autoConnect: true,
+    const connectors = [privateKeyConnector({ privateKey })];
+    const config = createConfig({
+        chains: [chain],
+        client: ({ chain }) => {
+            return createWalletClient({
+                transport: http(),
+                chain,
+            });
+        },
         connectors,
-        publicClient,
-        webSocketPublicClient,
     });
 
+    const queryClient = new QueryClient();
+
     return (
-        <WagmiConfig config={wagmiConfig}>
-            <RainbowKitProvider
-                appInfo={appInfo}
-                chains={chains}
-                theme={walletTheme}
-                avatar={CustomAvatar}
-            >
-                {children}
-            </RainbowKitProvider>
-        </WagmiConfig>
+        <WagmiProvider config={config}>
+            <QueryClientProvider client={queryClient}>
+                <RainbowKitProvider
+                    appInfo={appInfo}
+                    theme={theme}
+                    avatar={CustomAvatar}
+                >
+                    {children}
+                </RainbowKitProvider>
+            </QueryClientProvider>
+        </WagmiProvider>
     );
 };
 

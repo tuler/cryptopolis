@@ -1,12 +1,12 @@
 "use client";
 import {
     erc20PortalAddress,
-    useErc20Allowance,
-    useErc20Approve,
-    useErc20BalanceOf,
-    useErc20PortalDepositErc20Tokens,
-    usePrepareErc20Approve,
-    usePrepareErc20PortalDepositErc20Tokens,
+    useReadErc20Allowance,
+    useWriteErc20Approve,
+    useReadErc20BalanceOf,
+    useWriteErc20PortalDepositErc20Tokens,
+    useSimulateErc20Approve,
+    useSimulateErc20PortalDepositErc20Tokens,
 } from "@/hooks/contracts";
 import {
     Button,
@@ -22,15 +22,17 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { TbArrowDown } from "react-icons/tb";
 import { Address, formatUnits, parseUnits } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useBlockNumber, useWaitForTransactionReceipt } from "wagmi";
 import {
     TransactionProgress,
-    TransactionStageStatus,
+    TransactionReadStageStatus,
+    TransactionWriteStageStatus,
 } from "./TransactionProgress";
 import { useInspectBalance } from "@/hooks/game";
+import { useQueryClient } from "@tanstack/react-query";
 
 type DepositProps = {
     address: Address;
@@ -39,21 +41,21 @@ type DepositProps = {
 };
 
 export const transactionButtonState = (
-    prepare: TransactionStageStatus,
-    execute: TransactionStageStatus,
-    wait: TransactionStageStatus,
-    write?: () => void,
+    simulate: TransactionReadStageStatus,
+    execute: TransactionWriteStageStatus,
+    wait: TransactionReadStageStatus,
+    simulated: boolean,
     disableOnSuccess: boolean = true,
 ) => {
     const loading =
-        prepare.status === "loading" ||
-        execute.status === "loading" ||
-        wait.status === "loading";
+        simulate.status === "pending" ||
+        execute.status === "pending" ||
+        wait.status === "pending";
 
     const disabled =
-        prepare.error != null ||
+        simulate.error != null ||
         (disableOnSuccess && wait.status === "success") ||
-        !write;
+        !simulated;
 
     return { loading, disabled };
 };
@@ -88,6 +90,7 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     // form for the amount
     const form = useForm({
         initialValues: { amount: "0" },
+        validateInputOnChange: true,
         validate: {
             amount: (value) =>
                 isNaN(parseInt(value)) ? "Invalid amount" : null,
@@ -104,10 +107,15 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
     const { amount } = form.getTransformedValues();
 
     // query L1 balance from ERC-20
-    const { data: l1Balance, isLoading: l1BalanceLoading } = useErc20BalanceOf({
+    const queryClient = useQueryClient();
+    const { data: blockNumber } = useBlockNumber({ watch: true });
+    const {
+        data: l1Balance,
+        isLoading: l1BalanceLoading,
+        queryKey: l1BalanceQueryKey,
+    } = useReadErc20BalanceOf({
         address: token,
         args: [address],
-        watch: true,
     });
 
     // query L2 balance from dapp inspect server
@@ -115,34 +123,49 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
         useInspectBalance(address, { refreshInterval: 3000 });
 
     // query allowance from ERC-20
-    const { data: allowance, isLoading: allowanceLoading } = useErc20Allowance({
+    const {
+        data: allowance,
+        isLoading: allowanceLoading,
+        queryKey: allowanceQueryKey,
+    } = useReadErc20Allowance({
         address: token,
         args: [address, erc20PortalAddress],
-        watch: true,
     });
 
-    // prepare approve transaction
-    const approvePrepare = usePrepareErc20Approve({
+    useEffect(() => {
+        console.log("INVALIDATING");
+        queryClient.invalidateQueries({ queryKey: l1BalanceQueryKey });
+        queryClient.invalidateQueries({ queryKey: allowanceQueryKey });
+    }, [blockNumber, queryClient]);
+
+    // simulate approve transaction
+    const approveSimulate = useSimulateErc20Approve({
         address: token,
         args: [erc20PortalAddress, amount],
-        enabled:
-            amount != undefined && allowance != undefined && amount > allowance,
+        query: {
+            enabled:
+                amount != undefined &&
+                allowance != undefined &&
+                amount > allowance,
+        },
     });
-    const approve = useErc20Approve(approvePrepare.config);
-    const approveWait = useWaitForTransaction(approve.data);
+    const approve = useWriteErc20Approve();
+    const approveWait = useWaitForTransactionReceipt({ hash: approve.data });
 
-    // prepare deposit transaction
-    const depositPrepare = usePrepareErc20PortalDepositErc20Tokens({
+    // simulate deposit transaction
+    const depositSimulate = useSimulateErc20PortalDepositErc20Tokens({
         args: [token, dapp, amount, "0x"],
-        enabled:
-            amount != undefined &&
-            l1Balance != undefined &&
-            allowance != undefined &&
-            amount <= l1Balance &&
-            amount <= allowance,
+        query: {
+            enabled:
+                amount != undefined &&
+                l1Balance != undefined &&
+                allowance != undefined &&
+                amount <= l1Balance &&
+                amount <= allowance,
+        },
     });
-    const deposit = useErc20PortalDepositErc20Tokens(depositPrepare.config);
-    const depositWait = useWaitForTransaction(deposit.data);
+    const deposit = useWriteErc20PortalDepositErc20Tokens();
+    const depositWait = useWaitForTransactionReceipt({ hash: deposit.data });
 
     // true if current allowance is less than the amount to deposit
     const needApproval =
@@ -157,18 +180,18 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
 
     const { disabled: approveDisabled, loading: approveLoading } =
         transactionButtonState(
-            approvePrepare,
+            approveSimulate,
             approve,
             approveWait,
-            approve.write,
+            approveSimulate.isSuccess,
             false,
         );
     const { disabled: depositDisabled, loading: depositLoading } =
         transactionButtonState(
-            depositPrepare,
+            depositSimulate,
             deposit,
             depositWait,
-            deposit.write,
+            depositSimulate.isSuccess,
             true,
         );
 
@@ -223,12 +246,12 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
                 </Stack>
             </Paper>
             <TransactionProgress
-                prepare={approvePrepare}
+                simulate={approveSimulate}
                 execute={approve}
                 wait={approveWait}
             />
             <TransactionProgress
-                prepare={depositPrepare}
+                simulate={depositSimulate}
                 execute={deposit}
                 wait={depositWait}
             />
@@ -236,14 +259,20 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
                 <Button
                     size="lg"
                     disabled={!needApproval || approveDisabled}
-                    onClick={approve.write}
+                    onClick={() =>
+                        approveSimulate.data &&
+                        approve.writeContract(approveSimulate.data.request)
+                    }
                 >
                     Approve
                 </Button>
                 <Button
                     size="lg"
                     disabled={!canDeposit || depositDisabled}
-                    onClick={deposit.write}
+                    onClick={() =>
+                        depositSimulate.data &&
+                        deposit.writeContract(depositSimulate.data.request)
+                    }
                 >
                     Deposit
                 </Button>

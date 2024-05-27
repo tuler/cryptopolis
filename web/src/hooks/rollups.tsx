@@ -6,11 +6,11 @@ import {
     decodeEventLog,
     parseAbi,
 } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import {
-    inputBoxABI,
-    useInputBoxAddInput,
-    usePrepareInputBoxAddInput,
+    inputBoxAbi,
+    useWriteInputBoxAddInput,
+    useSimulateInputBoxAddInput,
 } from "./contracts";
 import { useQuery } from "@apollo/client";
 import { CompletionStatus, InputNoticesDocument } from "./graphql/graphql";
@@ -38,7 +38,7 @@ const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
                     try {
                         // decode the event
                         const decodedLog = decodeEventLog({
-                            abi: inputBoxABI,
+                            abi: inputBoxAbi,
                             eventName: "InputAdded",
                             topics: log.topics,
                             data: log.data,
@@ -60,16 +60,18 @@ const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
 
 export const useRollupsServer = (dapp: Address, input?: Hex) => {
     // prepare the transaction
-    const prepare = usePrepareInputBoxAddInput({
+    const prepare = useSimulateInputBoxAddInput({
         args: [dapp, input!],
-        enabled: !!input,
+        query: {
+            enabled: !!input,
+        },
     });
 
     // execute the transaction
-    const execute = useInputBoxAddInput(prepare.config);
+    const execute = useWriteInputBoxAddInput();
 
     // wait for the transaction to be mined
-    const wait = useWaitForTransaction(execute.data);
+    const wait = useWaitForTransactionReceipt({ hash: execute.data });
 
     // get id of the input sent
     const inputIndex = useInputIndex(wait.data);
@@ -107,8 +109,9 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
     );*/
 
     return {
-        write: execute.write,
+        writeContract: execute.writeContract,
+        request: prepare.data?.request,
         notices,
-        loading: execute.isLoading || wait.isLoading || queryLoading,
+        loading: execute.isPending || wait.isLoading || queryLoading,
     };
 };

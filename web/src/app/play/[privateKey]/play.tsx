@@ -24,7 +24,10 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const [tool, setTool] = useState(0);
 
     const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
-    const { write, notices, loading } = useRollupsServer(dapp, input);
+    const { writeContract, request, notices, loading } = useRollupsServer(
+        dapp,
+        input,
+    );
 
     // first notice is always the map
     const [map, population, totalFunds, cityTime] = notices;
@@ -64,7 +67,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
             <AppShell.Main>
                 <GameStage
                     setInput={setInput}
-                    write={write}
+                    write={() => request && writeContract(request)}
                     loading={loading}
                     map={map || initialMap}
                     tool={tool}

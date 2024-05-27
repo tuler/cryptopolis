@@ -58,7 +58,10 @@ export const Create: FC = () => {
         args: [form.values.seed],
     });
     const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
-    const { write, notices, loading } = useRollupsServer(dapp, input);
+    const { writeContract, request, notices, loading } = useRollupsServer(
+        dapp,
+        input,
+    );
 
     // this is the amount of funds for an easy game
     const requiredFunds = 20000n * 10n ** 18n;
@@ -92,7 +95,7 @@ export const Create: FC = () => {
                                                 }
                                             >{`${formatUnits(
                                                 balance,
-                                                decimals
+                                                decimals,
                                             )} ${symbol}`}</Text>
                                         )}
                                         {isLoading && <Loader size={16} />}
@@ -103,7 +106,7 @@ export const Create: FC = () => {
                                             <Alert color="red">
                                                 {`You need at least ${formatUnits(
                                                     requiredFunds,
-                                                    decimals
+                                                    decimals,
                                                 )} ${symbol} to create a city`}
                                             </Alert>
                                             <Button
@@ -120,7 +123,7 @@ export const Create: FC = () => {
                                             <Alert>
                                                 {`${formatUnits(
                                                     requiredFunds,
-                                                    decimals
+                                                    decimals,
                                                 )} ${symbol} will be debited from your account and deposited into the city safe`}
                                             </Alert>
                                             <NumberInput
@@ -140,8 +143,11 @@ export const Create: FC = () => {
                                             </Collapse>
                                             <Button
                                                 leftSection={<TbHomePlus />}
-                                                onClick={write}
-                                                disabled={!write}
+                                                onClick={() =>
+                                                    request &&
+                                                    writeContract(request)
+                                                }
+                                                disabled={!writeContract}
                                             >
                                                 Create City
                                             </Button>

@@ -19,15 +19,19 @@ import {
 } from "react-icons/tb";
 import { BaseError } from "viem";
 
-export type TransactionStageStatus = {
-    status: "error" | "loading" | "success" | "idle";
+export type TransactionWriteStageStatus = {
+    status: "error" | "pending" | "success" | "idle";
     error: Error | null;
 };
 
+export type TransactionReadStageStatus = TransactionWriteStageStatus & {
+    fetchStatus: "fetching" | "idle" | "paused";
+};
+
 export type TransactionProgressProps = {
-    prepare: TransactionStageStatus;
-    execute: TransactionStageStatus;
-    wait: TransactionStageStatus;
+    simulate: TransactionReadStageStatus;
+    execute: TransactionWriteStageStatus;
+    wait: TransactionReadStageStatus;
     confirmationMessage?: string;
     defaultErrorMessage?: string;
 };
@@ -54,7 +58,7 @@ const getErrorMessage = (error: Error | null): string | undefined => {
 };
 
 export const TransactionProgress: FC<TransactionProgressProps> = ({
-    prepare,
+    simulate,
     execute,
     wait,
     confirmationMessage,
@@ -72,17 +76,17 @@ export const TransactionProgress: FC<TransactionProgressProps> = ({
 
     const [showError, { toggle: toggleError }] = useDisclosure(false);
     const isSuccess = wait.status == "success";
-    const isError = !!prepare.error || !!execute.error || !!wait.error;
-    const isMining = wait.status == "loading";
+    const isError = !!simulate.error || !!execute.error || !!wait.error;
+    const isMining = wait.fetchStatus == "fetching";
     const shortErrorMessage =
-        getShortErrorMessage(prepare.error) ||
+        getShortErrorMessage(simulate.error) ||
         getShortErrorMessage(execute.error) ||
         getShortErrorMessage(wait.error);
     const errorMessage =
-        getErrorMessage(prepare.error) ||
+        getErrorMessage(simulate.error) ||
         getErrorMessage(execute.error) ||
         getErrorMessage(wait.error);
-    const isLoading = execute.status == "loading";
+    const isLoading = execute.status == "pending";
 
     return (
         <Stack gap={5}>

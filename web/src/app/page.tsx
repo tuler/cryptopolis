@@ -1,5 +1,5 @@
 "use client";
-import WalletProvider from "@/providers/WalletProvider";
+import WalletProvider from "../providers/WalletProvider";
 import { FC } from "react";
 import { BridgePage } from "./bridge";
 

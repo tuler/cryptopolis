@@ -11,7 +11,7 @@ const uri = process.env.NEXT_PUBLIC_GRAPHQL_URL;
 
 if (!uri)
     throw new Error(
-        "NEXT_PUBLIC_GRAPHQL_URL environment variable is not defined"
+        "NEXT_PUBLIC_GRAPHQL_URL environment variable is not defined",
     );
 
 const GraphQLProvider: FC<GraphQLProviderProps> = (props) => {
