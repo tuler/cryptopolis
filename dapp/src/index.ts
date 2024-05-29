@@ -77,6 +77,18 @@ const createEngineNotices = async (engine: Micropolis) => {
     await app.createNotice({ payload: cityTime });
 };
 
+// Function to serialize game state to JSON
+const serializeGameState = (game: Game) => {
+    const state = {
+        block: game.block,
+        map: game.engine.map,
+        population: game.engine.population,
+        totalFunds: game.engine.totalFunds,
+        cityTime: game.engine.cityTime,
+    };
+    return JSON.stringify(state);
+}
+
 app.addAdvanceHandler(async ({ metadata, payload }) => {
     // debug
     // console.log("input", payload);
@@ -143,6 +155,13 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(engine);
 
+            //Serialize game state to JSON and log it if the game state is defined
+            const newGame = games[from];
+            if (newGame) {
+                const gameStateJson = serializeGameState(newGame);
+                console.log(`Game state for ${from}: ${gameStateJson}`);
+            }
+            
             return "accept";
 
         case "doTool":
@@ -194,6 +213,10 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
 
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(game.engine);
+
+            //Serialize game state to JSON and log it
+            const updatedGameStateJson = serializeGameState(game);
+            console.log(`Updated game state for ${from}: ${updatedGameStateJson}`);
 
             return "accept";
     }
