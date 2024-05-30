@@ -13,6 +13,7 @@ const Home: FC = () => {
     return (
         <WalletProvider>
             <BridgePage dapp={dapp} token={token} />
+
         </WalletProvider>
     );
 };

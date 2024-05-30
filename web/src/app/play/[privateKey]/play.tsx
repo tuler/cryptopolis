@@ -30,7 +30,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const [map, population, totalFunds, cityTime] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
-
+    console.log(map);
     return (
         <AppShell
             header={{ height: 60 }}

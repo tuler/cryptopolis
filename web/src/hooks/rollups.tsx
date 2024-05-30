@@ -97,6 +97,7 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
             }
         }
     }, [inputIndex, query.data]);
+
     /*console.log(
         JSON.stringify({
             prepare: prepare.status,
@@ -112,3 +113,4 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
         loading: execute.isLoading || wait.isLoading || queryLoading,
     };
 };
+

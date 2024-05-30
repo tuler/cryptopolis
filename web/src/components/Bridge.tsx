@@ -3,7 +3,8 @@ import { SegmentedControl, Stack } from "@mantine/core";
 import { FC, useState } from "react";
 import { Address } from "viem";
 import { Deposit } from "./Deposit";
-import { Withdraw } from "./Withdraw";
+// import { Withdraw } from "./Withdraw";
+import { Load } from "./Load";
 
 type BridgeProps = {
     address: Address;
@@ -20,15 +21,15 @@ export const Bridge: FC<BridgeProps> = ({ address, dapp, token }) => {
                 value={operation}
                 onChange={setOperation}
                 data={[
-                    { label: "Deposit", value: "deposit" },
-                    { label: "Withdraw", value: "withdraw" },
+                    { label: "New City", value: "deposit" },
+                    { label: "Load City", value: "load" },
                 ]}
             />
             {operation === "deposit" && (
                 <Deposit address={address} token={token} dapp={dapp} />
             )}
-            {operation === "withdraw" && (
-                <Withdraw address={address} token={token} />
+            {operation === "load" && (
+                <Load address={address} token={token} dapp={dapp} />
             )}
         </Stack>
     );

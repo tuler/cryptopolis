@@ -29,6 +29,10 @@ import { TbExchange, TbHomePlus, TbMoneybag } from "react-icons/tb";
 import { encodeFunctionData, formatUnits } from "viem";
 import { useAccount } from "wagmi";
 
+
+
+
+
 export const Create: FC = () => {
     const width = 120;
     const height = 100;
@@ -51,6 +55,7 @@ export const Create: FC = () => {
     // query user L2 balance
     const { balance, isLoading } = useInspectBalance(address);
 
+
     // encode input
     const input = encodeFunctionData({
         abi,
@@ -64,6 +69,14 @@ export const Create: FC = () => {
     const requiredFunds = 20000n * 10n ** 18n;
     const haveFunds = balance != undefined && balance >= requiredFunds;
 
+    const dataFromLocalStorage = localStorage.getItem('output.txt');
+    function handleClick(){
+        if (dataFromLocalStorage) {
+            console.log('Data retrieved from localStorage:', dataFromLocalStorage);
+        } else {
+            console.log('No data found in localStorage with key "output.txt"');
+        }
+    }
     return (
         <AppShell header={{ height: 60 }} padding="md">
             <AppShell.Header>
@@ -107,12 +120,18 @@ export const Create: FC = () => {
                                                 )} ${symbol} to create a city`}
                                             </Alert>
                                             <Button
+                                                onClick={handleClick}
+                                            >
+                                                Test
+                                            </Button>
+                                            <Button
                                                 leftSection={<TbExchange />}
                                                 component={Link}
                                                 href="/"
                                             >
                                                 Bridge
                                             </Button>
+                        
                                         </>
                                     )}
                                     {!isLoading && haveFunds && (

@@ -53,11 +53,11 @@ export const Map: FC<MapProps> = ({
     onMouseClick,
 }) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
-
     // default value is a blank map
     value =
         value ||
         `0x${[...Array(width * height).keys()].map(() => "0000").join("")}`;
+
 
     // Split the hex string into pairs of characters
     const pairs = value.substring(2).match(/.{1,4}/g);

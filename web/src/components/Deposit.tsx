@@ -32,6 +32,8 @@ import {
 } from "./TransactionProgress";
 import { useInspectBalance } from "@/hooks/game";
 
+
+
 type DepositProps = {
     address: Address;
     dapp: Address;
@@ -172,6 +174,7 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
             true,
         );
 
+    
     return (
         <Stack align="stretch">
             <Paper bg="black" p={20}>
