@@ -1,0 +1,18 @@
+import { fromB64 } from "@mysten/bcs";
+import { SIGNATURE_FLAG_TO_SCHEME } from "../cryptography/index.js";
+import { publicKeyFromRawBytes } from "../verify/index.js";
+import { MultiSigSigner } from "./signer.js";
+export * from "./publickey.js";
+function publicKeyFromSuiBytes(publicKey) {
+  const bytes = typeof publicKey === "string" ? fromB64(publicKey) : publicKey;
+  const signatureScheme = SIGNATURE_FLAG_TO_SCHEME[bytes[0]];
+  if (signatureScheme === "ZkLogin") {
+    throw new Error("ZkLogin publicKey is not supported");
+  }
+  return publicKeyFromRawBytes(signatureScheme, bytes.slice(1));
+}
+export {
+  MultiSigSigner,
+  publicKeyFromSuiBytes
+};
+//# sourceMappingURL=index.js.map

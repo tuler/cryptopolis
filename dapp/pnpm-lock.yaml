@@ -23,6 +23,9 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.2(debug@4.3.4)
+      cargo:
+        specifier: ^0.8.0
+        version: 0.8.0
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -35,6 +38,9 @@ importers:
       openapi-fetch:
         specifier: ^0.9.7
         version: 0.9.7
+      sui:
+        specifier: ^1.0.0
+        version: 1.0.0
       viem:
         specifier: ^2.12.4
         version: 2.12.4(typescript@5.4.5)(zod@3.23.8)
@@ -689,6 +695,9 @@ packages:
   canvas@2.11.2:
     resolution: {integrity: sha512-ItanGBMrmRV7Py2Z+Xhs7cT+FNt5K0vPL4p9EZ/UX/Mu7hFbkxSjKF2KVtPwX7UYWp7dRKnrTvReflgrItJbdw==}
     engines: {node: '>=6'}
+
+  cargo@0.8.0:
+    resolution: {integrity: sha512-Fl49HZ8CAs4++TjtwcoZgwyq2ZQUiFVGQ3byyKKUilNk65iuBRDjpCGH/AUORvAODaVVbGbKyFCa67tlDG3p4g==}
 
   chai@4.4.1:
     resolution: {integrity: sha512-13sOfMv2+DWduEU+/xbun3LScLoqN17nBeTLUsmDfKdoiC1fr0n9PU4guu4AhRcOVFk/sW8LyZWHuhWtQZiF+g==}
@@ -1671,6 +1680,9 @@ packages:
   strip-literal@2.1.0:
     resolution: {integrity: sha512-Op+UycaUt/8FbN/Z2TWPBLge3jWrP3xj10f3fnYxf052bKuS3EKs1ZQcVGjnEMdsNVAM+plXRdmjrZ/KgG3Skw==}
 
+  sui@1.0.0:
+    resolution: {integrity: sha512-cdoLQ/AwLZL8mFm3VxWEL8SxaBJMesc+DW3nwbZg1OYp3wpqFTlcyhBuRZXZKwheGcMxKvSp88MLyMvFmNgEiw==}
+
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
     engines: {node: '>=4'}
@@ -2507,6 +2519,8 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+
+  cargo@0.8.0: {}
 
   chai@4.4.1:
     dependencies:
@@ -3646,6 +3660,8 @@ snapshots:
   strip-literal@2.1.0:
     dependencies:
       js-tokens: 9.0.0
+
+  sui@1.0.0: {}
 
   supports-color@5.5.0:
     dependencies:

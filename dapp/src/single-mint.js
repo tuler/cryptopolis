@@ -50,7 +50,8 @@ const klaosCollectionAddr = '0xFfFfffFFFFFfFfFfFFfffFFE0000000000000363';
 // You can use the ipfs-uploader.js script in these examples to
 // create a valid IPFS address.
 // The address must start with 'ipfs://....'
-const tokenURI = 'ipfs://QmQ964v3i2sqg9D7saRsjvspgPyJMDiJCf1hWXrWm17K2E';
+// const tokenURI = 'ipfs://QmQ964v3i2sqg9D7saRsjvspgPyJMDiJCf1hWXrWm17K2E';
+const tokenURI ='ipfs://QmPVv7npG77rsYDf7wc1UuHH1Lywv43qK9wJvWPAMPqpxt';
 
 // The URL of the interface ABI, loaded from the LAOS GitHub for convenience
 const contractABIUrl = 'https://github.com/freeverseio/laos/blob/main/precompile/evolution-collection/contracts/EvolutionCollection.json?raw=true';

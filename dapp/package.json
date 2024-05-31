@@ -8,10 +8,12 @@
         "@deroll/wallet": "^0.7.0",
         "@pinata/sdk": "^2.1.0",
         "axios": "^1.7.2",
+        "cargo": "^0.8.0",
         "dotenv": "^16.4.5",
         "form-data": "^4.0.0",
         "micropolis": "file:.yalc/micropolis",
         "openapi-fetch": "^0.9.7",
+        "sui": "^1.0.0",
         "viem": "^2.12.4",
         "web3": "^4.9.0"
     },
@@ -38,5 +40,10 @@
     "packageManager": "pnpm@9.1.2",
     "volta": {
         "node": "20.13.1"
-    }
+    },
+    "main": "index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "author": ""
 }
