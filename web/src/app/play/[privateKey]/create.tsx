@@ -49,36 +49,23 @@ export const Create: FC = () => {
     // form with seed number
     const form = useForm({ initialValues: { seed: 0 } });
 
+    const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
+
     // query map of seed
     const { map } = useInspectMap(form.values.seed);
 
     // query user L2 balance
     const { balance, isLoading } = useInspectBalance(address);
 
-    // function handleClick(){
-    //     if (dataFromLocalStorage) {
-    //         console.log('Data retrieved from localStorage:', dataFromLocalStorage);
-    //     } else {
-    //         console.log('No data found in localStorage with key "output.txt"');
-    //     }
-    // }
-    // encode input
-    const hexString = (localStorage.getItem('output.txt')) || "";
+    
 
-    console.log(hexString);
-    const pairs = hexString.substring(2).match(/.{1,16}/g) || [];
-
-    // const pairs: string[]  = []
-    // console.log(pairs.length);
-    // console.log(pairs);
     
     const input = encodeFunctionData({
         abi,
         functionName: "start",
-        args: [form.values.seed, pairs],
+        args: [form.values.seed],
     });
 
-    const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // this is the amount of funds for an easy game

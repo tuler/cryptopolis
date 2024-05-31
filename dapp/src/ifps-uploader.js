@@ -33,7 +33,7 @@ async function main() {
 
   if (imageHash) {
     console.log('\n-------------');
-    console.log(`Image uploaded to IPFS: ipfs://${imageHash}`);
+    // console.log(`Image uploaded to IPFS: ipfs://${imageHash}`);
 
     // Prepare metadata
     // const metadata = {

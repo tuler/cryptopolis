@@ -21,8 +21,9 @@ const app = createApp({ url });
 // define application API (or ABI so to say)
 const abi = parseAbi([
     "function transfer(address to, uint256 amount)",
-    "function start(uint32 seed, string[] pairs)",
+    "function start(uint32 seed)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
+    "function load(string actions)",
 ]);
 
 const inspectAbi = parseAbi([
@@ -103,35 +104,14 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                 return "reject";
             }
 
-            const [seed, pairs] = args;
+            const [seed] = args;
 
             const engine = new Micropolis();
 
+            // console.log(engine.map);
             console.log(`creating game for ${from} using seed ${seed}`);
             engine.generateSomeCity(seed);
-            // console.log(engine.map);
-
-            if(pairs.length != 0){
-                const splitPairs = pairs.map(pair => pair.match(/.{1,4}/g)).flat();
-                console.log(splitPairs.length);
-                console.log(splitPairs);
-                const load = new Uint16Array(splitPairs!.map((pair) => parseInt(pair!, 16)));
-                console.log('loading in game from save file');
-                engine.map = load;
-                console.log(engine.map);
-            }
-          
-            
-
-
-            // instantiate new game engine
-            // const engine = new Micropolis();
-
-            // generate city
-
-            
-    
-
+                
             // set speed to 3 because initial value is 0
             engine.speed = 3;
 
@@ -162,6 +142,9 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
 
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(engine);
+
+
+            
 
             return "accept";
 
@@ -216,6 +199,49 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             await createEngineNotices(game.engine);
 
             return "accept";
+        case "load":
+            if (!game) {
+                // game does not exist, reject input
+                return "reject";
+            }
+            
+            // save funds before we run the simulation below and apply the tool
+            const loadfundsBefore = game.engine.totalFunds;
+
+            // advance game simulation
+            const [actions] = args;
+            if(actions.length < 3){
+                console.log('not enough actions to recreate');
+            }
+            const gameState = actions.split(',');
+            for(let i = 0; i < gameState.length - 2; i+=3){
+                let tool = parseInt(gameState[i] ?? "0");
+                let x = parseInt(gameState[i + 1] ?? "0");
+                let y = parseInt(gameState[i + 2] ?? "0");
+                console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
+                const result = game.engine.doTool(tool, x, y);
+
+                const fundsAfter = game.engine.totalFunds;
+                if (fundsAfter > loadfundsBefore) {
+                    // earned funds (collected taxes > expenses)
+                    // transfer funds from people's wallet to in-game wallet
+                    const amount =
+                        BigInt(fundsAfter - loadfundsBefore) * 10n ** decimals;
+                    logTransfer(peopleWallet, inGameWallet, amount);
+                    wallet.transferERC20(token, peopleWallet, inGameWallet, amount);
+                } else if (loadfundsBefore > fundsAfter) {
+                    // spent funds (expenses > collected taxes)
+                    // transfer funds from in-game wallet to people's wallet
+                    const amount =
+                        BigInt(loadfundsBefore - fundsAfter) * 10n ** decimals;
+                    logTransfer(inGameWallet, peopleWallet, amount);
+                    wallet.transferERC20(token, inGameWallet, peopleWallet, amount);
+                }
+            }
+            await createEngineNotices(game.engine);
+
+
+            return "accept"
     }
     return "reject";
 });

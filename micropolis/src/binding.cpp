@@ -245,6 +245,7 @@ void MicropolisWrapper::simTick(const Napi::CallbackInfo &info)
 
 void MicropolisWrapper::setSpeed(const Napi::CallbackInfo &info, const Napi::Value &value)
 {
+  
   Napi::Env env = info.Env();
   if (!value.IsNumber())
   {
@@ -295,7 +296,8 @@ void MicropolisWrapper::setMap(const Napi::CallbackInfo &info, const Napi::Value
   Napi::ArrayBuffer mapBuffer = mapArray.ArrayBuffer();
 
   unsigned short *data = reinterpret_cast<unsigned short*>(mapBuffer.Data());
-  this->_micropolis->map[0] = 0;
+
+  this->_micropolis->map[0] = data;
 }
 
 Napi::Value MicropolisWrapper::getMap(const Napi::CallbackInfo &info)

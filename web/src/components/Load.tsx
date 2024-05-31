@@ -8,6 +8,7 @@ import { abi, useRollupsServer } from "@/hooks/rollups";
 import { Hex, encodeFunctionData, formatUnits } from "viem";
 import { TbHomePlus } from "react-icons/tb";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { write } from "fs";
 
 type LoadProps = {
     token: Address;
@@ -22,39 +23,50 @@ const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
 
 export const Load: FC<LoadProps> = () => {
 
-
-    const mapValue = useForm({ initialValues: { hexString: "" } });
-
-    // const input = encodeFunctionData({
-    //     abi,
-    //     functionName: "start",
-    //     args: [mapSeed.values.seed],
-    // });
-    
-
-    // const { write, notices, loading } = useRollupsServer(dapp,input);
-
-    const data = mapValue.values.hexString;
-
-
-
-    
-
     // File path
 
     // Write data to the file
-    function handleClick(){
-        // Save data to localStorage
-        localStorage.setItem('output.txt', data);
-        // const dataFromLocalStorage = localStorage.getItem('output.txt');
-        console.log(data);
-        // console.log('Data has been written to localStorage with key "output.txt"');
-        // console.log("HI");
-        // console.log(dataFromLocalStorage);
-    }   
+    // function handleClick(){
+    //     // Save data to localStorage
+    //     // localStorage.setItem('output.txt', data);
+    //     // // const dataFromLocalStorage = localStorage.getItem('output.txt');
+    //     console.log(data);
+    //     const actions = data.split(',');
+    //     // console.log(actions);
+    //     if(actions.length > 0){
+    //         for(let i = 0; i < actions.length-2; i+=3){
+    //             let tool = parseInt(actions[i]);
+    //             // console.log(tool);
+    //             let x = parseInt(actions[i + 1]);
+    //             // console.log(x);
+    //             let y = parseInt(actions[i + 2]);
+    //             // console.log(y);
+    //             const input = encodeFunctionData({
+    //                 abi,
+    //                 functionName: "doTool",
+    //                 args: [tool,x,y],
+    //             });
+    //             console.log(input);
+    //             const { write, notices, loading } = useRollupsServer(dapp, input);
+    //             if(write){
+    //                 write;
+    //             }
+    //             else{
+    //                 console.log('fail');
+    //             }
+    //         }
+    //     }
+    // }   
+    const save = useForm({ initialValues: { actions: "" } });
+    const data = save.values.actions;
 
+    const input = encodeFunctionData({
+        abi,
+        functionName: "load",
+        args: [data],
+    });
 
-    
+    const { write, notices, loading } = useRollupsServer(dapp, input);
 
 
     return (
@@ -64,14 +76,18 @@ export const Load: FC<LoadProps> = () => {
                         <Text>Load NFT From: </Text>
                         <ConnectButton showBalance={false} />
                     </Group>
-                        <Input placeholder="Hex String" {...mapValue.getInputProps("hexString")}/>
+                        <Input placeholder="Hex String" {...save.getInputProps("actions")}/>
 
             </Paper>
             <Stack>
                 <Button
                     leftSection={<TbHomePlus />}
-                    onClick={handleClick}
-                    // disabled={!write}
+                    onClick={() => {
+                        write && write();
+                        localStorage.setItem('output.txt', data);
+                        console.log(localStorage.getItem('output.txt'));
+                    }}
+                    disabled={!write}
                 >
                     Load City
                 </Button>

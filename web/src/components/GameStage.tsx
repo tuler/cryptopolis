@@ -4,6 +4,7 @@ import { useContext, FC, useState } from "react";
 import { Hex } from "viem";
 import { Map } from "./Map";
 import { ToolOverlay } from "./ToolOverlay";
+import { appendFile } from "fs";
 export type GameStageProps = {
     map?: Hex;
     tool: number;
@@ -23,7 +24,7 @@ export const GameStage: FC<GameStageProps> = ({
     const height = 100;
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
-    // // console.log(map)
+    // console.log(map)
     // const hexString = localStorage.getItem('output.txt');
     // if (hexString) {
     //     // Convert the hexadecimal string back to a number
@@ -34,6 +35,17 @@ export const GameStage: FC<GameStageProps> = ({
     // } else {
     //     console.log('No data found in localStorage with key "output.txt"');
     // }
+
+    // Function to append data to an existing localStorage entry
+    function appendToLocalStorage(newData: string): void {
+        // Step 1: Retrieve the current data from localStorage
+        const existingData = localStorage.getItem("output.txt") || "";
+        // Step 2: Append the new data to the existing data
+        const updatedData = existingData + "," + newData;
+        // Step 3: Save the updated data back to localStorage
+        localStorage.setItem("output.txt", updatedData);
+    }
+
 
     // map = GlobalVariable.value;
     return (
@@ -47,6 +59,11 @@ export const GameStage: FC<GameStageProps> = ({
                     setY(tile.y);
                 }}
                 onMouseClick={(tile) => {
+                    appendToLocalStorage(`${tool},${x},${y}`);
+                    // console.log(tool);
+                    // console.log(x);
+                    // console.log(y);
+                    console.log(localStorage.getItem("output.txt"));
                     write && write();
                 }}
             />
