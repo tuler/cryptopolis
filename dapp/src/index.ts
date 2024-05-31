@@ -21,7 +21,7 @@ const app = createApp({ url });
 // define application API (or ABI so to say)
 const abi = parseAbi([
     "function transfer(address to, uint256 amount)",
-    "function start(uint32 seed)",
+    "function start(uint32 seed, string[] pairs)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
 ]);
 
@@ -103,14 +103,34 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                 return "reject";
             }
 
-            const [seed] = args;
-            console.log(`creating game for ${from} using seed ${seed}`);
+            const [seed, pairs] = args;
 
-            // instantiate new game engine
             const engine = new Micropolis();
 
-            // generate city
+            console.log(`creating game for ${from} using seed ${seed}`);
             engine.generateSomeCity(seed);
+            // console.log(engine.map);
+
+            if(pairs.length != 0){
+                const splitPairs = pairs.map(pair => pair.match(/.{1,4}/g)).flat();
+                console.log(splitPairs.length);
+                console.log(splitPairs);
+                const load = new Uint16Array(splitPairs!.map((pair) => parseInt(pair!, 16)));
+                console.log('loading in game from save file');
+                engine.map = load;
+                console.log(engine.map);
+            }
+          
+            
+
+
+            // instantiate new game engine
+            // const engine = new Micropolis();
+
+            // generate city
+
+            
+    
 
             // set speed to 3 because initial value is 0
             engine.speed = 3;

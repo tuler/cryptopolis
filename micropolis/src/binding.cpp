@@ -16,6 +16,7 @@ private:
   void generateSomeCity(const Napi::CallbackInfo &info);
   void simTick(const Napi::CallbackInfo &info);
   void setSpeed(const Napi::CallbackInfo &info, const Napi::Value &value);
+  void setMap(const Napi::CallbackInfo &info, const Napi::Value &value);
   Napi::Value getSpeed(const Napi::CallbackInfo &info);
   Napi::Value doTool(const Napi::CallbackInfo &info);
   Napi::Value getMap(const Napi::CallbackInfo &info);
@@ -42,7 +43,7 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceMethod("doTool", &MicropolisWrapper::doTool),
                                                            InstanceAccessor<&MicropolisWrapper::getSpeed, &MicropolisWrapper::setSpeed>("speed"),
                                                            InstanceAccessor<&MicropolisWrapper::getMap>("version"),
-                                                           InstanceAccessor<&MicropolisWrapper::getMap>("map"),
+                                                           InstanceAccessor<&MicropolisWrapper::getMap, &MicropolisWrapper::setMap>("map"),
                                                            InstanceAccessor<&MicropolisWrapper::getTotalFunds>("totalFunds"),
                                                            InstanceAccessor<&MicropolisWrapper::getPopulation>("population"),
                                                            InstanceAccessor<&MicropolisWrapper::getCityTime>("cityTime"),
@@ -280,6 +281,21 @@ Napi::Value MicropolisWrapper::doTool(const Napi::CallbackInfo &info)
   EditingTool tool = static_cast<EditingTool>(toolId);
   ToolResult result = this->_micropolis->doTool(tool, tileX, tileY);
   return Napi::Number::New(env, result);
+}
+
+void MicropolisWrapper::setMap(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsArray())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+  
+  Napi::Uint16Array mapArray = value.As<Napi::Uint16Array>();
+  Napi::ArrayBuffer mapBuffer = mapArray.ArrayBuffer();
+
+  unsigned short *data = reinterpret_cast<unsigned short*>(mapBuffer.Data());
+  this->_micropolis->map[0] = 0;
 }
 
 Napi::Value MicropolisWrapper::getMap(const Napi::CallbackInfo &info)

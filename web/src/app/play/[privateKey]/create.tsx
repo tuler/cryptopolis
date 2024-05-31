@@ -55,13 +55,29 @@ export const Create: FC = () => {
     // query user L2 balance
     const { balance, isLoading } = useInspectBalance(address);
 
-
+    // function handleClick(){
+    //     if (dataFromLocalStorage) {
+    //         console.log('Data retrieved from localStorage:', dataFromLocalStorage);
+    //     } else {
+    //         console.log('No data found in localStorage with key "output.txt"');
+    //     }
+    // }
     // encode input
+    const hexString = (localStorage.getItem('output.txt')) || "";
+
+    console.log(hexString);
+    const pairs = hexString.substring(2).match(/.{1,16}/g) || [];
+
+    // const pairs: string[]  = []
+    // console.log(pairs.length);
+    // console.log(pairs);
+    
     const input = encodeFunctionData({
         abi,
         functionName: "start",
-        args: [form.values.seed],
+        args: [form.values.seed, pairs],
     });
+
     const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
@@ -69,14 +85,7 @@ export const Create: FC = () => {
     const requiredFunds = 20000n * 10n ** 18n;
     const haveFunds = balance != undefined && balance >= requiredFunds;
 
-    const dataFromLocalStorage = localStorage.getItem('output.txt');
-    function handleClick(){
-        if (dataFromLocalStorage) {
-            console.log('Data retrieved from localStorage:', dataFromLocalStorage);
-        } else {
-            console.log('No data found in localStorage with key "output.txt"');
-        }
-    }
+
     return (
         <AppShell header={{ height: 60 }} padding="md">
             <AppShell.Header>
@@ -119,11 +128,6 @@ export const Create: FC = () => {
                                                     decimals
                                                 )} ${symbol} to create a city`}
                                             </Alert>
-                                            <Button
-                                                onClick={handleClick}
-                                            >
-                                                Test
-                                            </Button>
                                             <Button
                                                 leftSection={<TbExchange />}
                                                 component={Link}

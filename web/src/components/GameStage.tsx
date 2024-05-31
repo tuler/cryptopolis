@@ -23,7 +23,17 @@ export const GameStage: FC<GameStageProps> = ({
     const height = 100;
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
-    // console.log(map)
+    // // console.log(map)
+    // const hexString = localStorage.getItem('output.txt');
+    // if (hexString) {
+    //     // Convert the hexadecimal string back to a number
+    //     const hexValue: Hex = `0x${hexString}`;
+    //     console.log('Hexadecimal value retrieved from localStorage:', hexValue);
+    //     map = hexValue;
+
+    // } else {
+    //     console.log('No data found in localStorage with key "output.txt"');
+    // }
 
     // map = GlobalVariable.value;
     return (

@@ -23,7 +23,7 @@ const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
 export const Load: FC<LoadProps> = () => {
 
 
-    const mapValue = useForm({ initialValues: { hex: "0x0" } });
+    const mapValue = useForm({ initialValues: { hexString: "" } });
 
     // const input = encodeFunctionData({
     //     abi,
@@ -34,10 +34,9 @@ export const Load: FC<LoadProps> = () => {
 
     // const { write, notices, loading } = useRollupsServer(dapp,input);
 
-    const data = mapValue.values.hex;
+    const data = mapValue.values.hexString;
 
 
-    const dataFromLocalStorage = localStorage.getItem('output.txt');
 
     
 
@@ -47,8 +46,11 @@ export const Load: FC<LoadProps> = () => {
     function handleClick(){
         // Save data to localStorage
         localStorage.setItem('output.txt', data);
-
-        console.log('Data has been written to localStorage with key "output.txt"');
+        // const dataFromLocalStorage = localStorage.getItem('output.txt');
+        console.log(data);
+        // console.log('Data has been written to localStorage with key "output.txt"');
+        // console.log("HI");
+        // console.log(dataFromLocalStorage);
     }   
 
 
@@ -62,7 +64,7 @@ export const Load: FC<LoadProps> = () => {
                         <Text>Load NFT From: </Text>
                         <ConnectButton showBalance={false} />
                     </Group>
-                        <Input placeholder="" {...mapValue.getInputProps("hex")}/>
+                        <Input placeholder="Hex String" {...mapValue.getInputProps("hexString")}/>
 
             </Paper>
             <Stack>

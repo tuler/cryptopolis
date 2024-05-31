@@ -18,7 +18,7 @@ import { CompletionStatus, InputNoticesDocument } from "./graphql/graphql";
 // define application API (or ABI so to say)
 export const abi = parseAbi([
     "function transfer(address to, uint256 amount)",
-    "function start(uint32 seed)",
+    "function start(uint32 seed, string[] pairs)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
 ]);
 

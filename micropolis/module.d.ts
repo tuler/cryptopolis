@@ -36,6 +36,7 @@ export class Micropolis {
     // generate a city from a seed number
     generateSomeCity(seed: number): void;
 
+
     // run the game simulation for a single tick
     simTick(): void;
 
@@ -46,7 +47,7 @@ export class Micropolis {
     readonly version: string;
 
     // city map (tiles and other information bit encoded)
-    readonly map: Uint16Array;
+    map: Uint16Array;
 
     // game simulation speed [0,3]
     speed: number;
