@@ -76,7 +76,7 @@ export const Load: FC<LoadProps> = () => {
                         <Text>Load NFT From: </Text>
                         <ConnectButton showBalance={false} />
                     </Group>
-                        <Input placeholder="Hex String" {...save.getInputProps("actions")}/>
+                        <Input placeholder="Save state" {...save.getInputProps("actions")}/>
 
             </Paper>
             <Stack>
