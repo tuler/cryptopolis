@@ -31,6 +31,7 @@ import {
     TransactionStageStatus,
 } from "./TransactionProgress";
 import { useInspectBalance } from "@/hooks/game";
+import Link from "next/link";
 
 type DepositProps = {
     address: Address;
@@ -203,24 +204,36 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
                 <TbArrowDown size={30} />
             </Center>
             <Paper bg="black" p={30}>
-                <Stack gap={0}>
-                    <Group gap={5}>
-                        <Text>To: </Text>
-                        <ConnectButton
-                            showBalance={false}
-                            chainStatus="full"
-                            accountStatus="address"
+                <SimpleGrid cols={2}>
+
+                    <Stack gap={0}>
+                        <Group gap={5}>
+                            <Text>To: </Text>
+                            <ConnectButton
+                                showBalance={false}
+                                chainStatus="full"
+                                accountStatus="address"
+                            />
+                            <Text fw={800}>@ 🏗️ Cryptopolis</Text>
+                        </Group>
+                        <Balance
+                            label="Balance: "
+                            decimals={decimals}
+                            symbol={symbol}
+                            value={l2Balance}
+                            loading={l2BalanceLoading}
                         />
-                        <Text fw={800}>@ 🏗️ Cryptopolis</Text>
-                    </Group>
-                    <Balance
-                        label="Balance: "
-                        decimals={decimals}
-                        symbol={symbol}
-                        value={l2Balance}
-                        loading={l2BalanceLoading}
-                    />
-                </Stack>
+                    </Stack>
+                    <Center>
+                        <Button 
+                            size="lg"
+                            component={Link}
+                            href="/"
+                            >
+                            Play
+                        </Button>
+                    </Center>
+                </SimpleGrid>
             </Paper>
             <TransactionProgress
                 prepare={approvePrepare}

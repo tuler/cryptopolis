@@ -69,7 +69,17 @@ export const Create: FC = () => {
             <AppShell.Header>
                 <Group h="100%" px="md">
                     <Group justify="space-between" style={{ flex: 1 }}>
-                        <Title>🏗️ Cryptopolis</Title>
+                        <Button
+                            component={Link}
+                            href="/"
+                            td={"none"}
+                            c={"inherit"}
+                            bg={"none"}
+                        >
+                            <Title>
+                                🏗️ Cryptopolis
+                            </Title>
+                        </Button>
                         <ConnectButton />
                     </Group>
                 </Group>
@@ -117,7 +127,7 @@ export const Create: FC = () => {
                                     )}
                                     {!isLoading && haveFunds && (
                                         <>
-                                            <Alert>
+                                            <Alert w={300}>
                                                 {`${formatUnits(
                                                     requiredFunds,
                                                     decimals

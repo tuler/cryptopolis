@@ -10,10 +10,13 @@ import {
     ScrollArea,
     Textarea,
     Title,
+    Button
 } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
 import { Hex, hexToNumber } from "viem";
+import Link from "next/link";
+import { Options } from "@/components/Options";
 
 type PlayProps = {
     initialMap: Hex;
@@ -44,7 +47,17 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
             <AppShell.Header>
                 <Group h="100%" px="md">
                     <Group justify="space-between" style={{ flex: 1 }}>
-                        <Title>🏗️ Cryptopolis</Title>
+                        <Button
+                            component={Link}
+                            href="/"
+                            td={"none"}
+                            c={"inherit"}
+                            bg={"none"}
+                        >
+                            <Title>
+                                🏗️ Cryptopolis
+                            </Title>
+                        </Button>
                         {loaded && (
                             <CityStats
                                 population={hexToNumber(population)}
@@ -61,6 +74,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                     <ToolBox value={tool} onChange={setTool} />
                 </AppShell.Section>
             </AppShell.Navbar>
+            <Options />
             <AppShell.Main>
                 <GameStage
                     setInput={setInput}
