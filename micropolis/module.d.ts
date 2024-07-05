@@ -59,4 +59,13 @@ export class Micropolis {
 
     // city clock, 1 year = 48
     readonly cityTime: number;
+
+    readonly roadFund: number;
+    readonly fireFund: number;
+    readonly policeFund: number;
+    roadPercent: number;
+    firePercent: number;
+    policePercent: number;
+    readonly taxFund: number;
+    cityTax: number;
 }

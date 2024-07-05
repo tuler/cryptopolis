@@ -22,6 +22,18 @@ private:
   Napi::Value getTotalFunds(const Napi::CallbackInfo &info);
   Napi::Value getPopulation(const Napi::CallbackInfo &info);
   Napi::Value getCityTime(const Napi::CallbackInfo &info);
+  Napi::Value getRoadFund(const Napi::CallbackInfo &info);
+  Napi::Value getFireFund(const Napi::CallbackInfo &info);
+  Napi::Value getPoliceFund(const Napi::CallbackInfo &info);
+  Napi::Value getRoadPercent(const Napi::CallbackInfo &info);
+  Napi::Value getFirePercent(const Napi::CallbackInfo &info);
+  Napi::Value getPolicePercent(const Napi::CallbackInfo &info);
+  Napi::Value getTaxFund(const Napi::CallbackInfo &info);
+  Napi::Value getCityTax(const Napi::CallbackInfo &info);
+  void setRoadPercent(const Napi::CallbackInfo &info, const Napi::Value &value);
+  void setFirePercent(const Napi::CallbackInfo &info, const Napi::Value &value);
+  void setPolicePercent(const Napi::CallbackInfo &info, const Napi::Value &value);
+  void setCityTax(const Napi::CallbackInfo &info, const Napi::Value &value);
 };
 
 MicropolisWrapper::MicropolisWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<MicropolisWrapper>(info)
@@ -46,6 +58,14 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceAccessor<&MicropolisWrapper::getTotalFunds>("totalFunds"),
                                                            InstanceAccessor<&MicropolisWrapper::getPopulation>("population"),
                                                            InstanceAccessor<&MicropolisWrapper::getCityTime>("cityTime"),
+                                                           InstanceAccessor<&MicropolisWrapper::getRoadFund>("roadFund"),
+                                                           InstanceAccessor<&MicropolisWrapper::getFireFund>("fireFund"),
+                                                           InstanceAccessor<&MicropolisWrapper::getPoliceFund>("policeFund"),
+                                                           InstanceAccessor<&MicropolisWrapper::getRoadPercent, &MicropolisWrapper::setRoadPercent>("roadPercent"),
+                                                           InstanceAccessor<&MicropolisWrapper::getFirePercent, &MicropolisWrapper::setFirePercent>("firePercent"),
+                                                           InstanceAccessor<&MicropolisWrapper::getPolicePercent, &MicropolisWrapper::setPolicePercent>("policePercent"),
+                                                           InstanceAccessor<&MicropolisWrapper::getTaxFund>("taxFund"),
+                                                           InstanceAccessor<&MicropolisWrapper::getCityTax, &MicropolisWrapper::setCityTax>("cityTax"),
                                                        });
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -307,6 +327,104 @@ Napi::Value MicropolisWrapper::getCityTime(const Napi::CallbackInfo &info)
 {
   Napi::Env env = info.Env();
   return Napi::Number::New(env, this->_micropolis->cityTime);
+}
+
+Napi::Value MicropolisWrapper::getRoadFund(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->roadFund);
+}
+
+Napi::Value MicropolisWrapper::getFireFund(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->fireFund);
+}
+
+Napi::Value MicropolisWrapper::getPoliceFund(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->policeFund);
+}
+
+Napi::Value MicropolisWrapper::getRoadPercent(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, static_cast<int>(this->_micropolis->roadPercent * 100));
+}
+
+Napi::Value MicropolisWrapper::getFirePercent(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, static_cast<int>(this->_micropolis->firePercent * 100));
+}
+
+Napi::Value MicropolisWrapper::getPolicePercent(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, static_cast<int>(this->_micropolis->policePercent * 100));
+}
+
+Napi::Value MicropolisWrapper::getTaxFund(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->taxFund);
+}
+
+Napi::Value MicropolisWrapper::getCityTax(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  return Napi::Number::New(env, this->_micropolis->cityTax);
+}
+
+void MicropolisWrapper::setCityTax(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+
+  Napi::Number tax = value.As<Napi::Number>();
+
+  this->_micropolis->cityTax = tax.Int32Value();
+}
+
+void MicropolisWrapper::setRoadPercent(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+
+  Napi::Number percent = value.As<Napi::Number>();
+
+  this->_micropolis->roadPercent = percent.FloatValue() / 100.0;
+}
+
+void MicropolisWrapper::setFirePercent(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+
+  Napi::Number percent = value.As<Napi::Number>();
+  this->_micropolis->firePercent = percent.FloatValue() / 100.0;
+}
+
+void MicropolisWrapper::setPolicePercent(const Napi::CallbackInfo &info, const Napi::Value &value)
+{
+  Napi::Env env = info.Env();
+  if (!value.IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong value").ThrowAsJavaScriptException();
+  }
+
+  Napi::Number percent = value.As<Napi::Number>();
+  this->_micropolis->policePercent = percent.FloatValue() / 100.0;
 }
 
 static Napi::Object Init(Napi::Env env, Napi::Object exports)

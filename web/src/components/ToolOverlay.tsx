@@ -16,6 +16,7 @@ export type ToolOverlayProps = {
 export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
+
     useEffect(() => {
         if (setInput && x && y && tool >= 0) {
             // encode the input
@@ -28,6 +29,8 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
             );
         }
     }, [setInput, tool, x, y]);
+
+    
 
     // create optimized spritesheet
     useEffect(() => {

@@ -30,7 +30,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map
-    const [map, population, totalFunds, cityTime] = notices;
+    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
 
@@ -74,7 +74,22 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                     <ToolBox value={tool} onChange={setTool} />
                 </AppShell.Section>
             </AppShell.Navbar>
-            <Options />
+            {loaded && (
+                <Options 
+                previousFunds={hexToNumber(totalFunds)}
+                cityTax={hexToNumber(cityTax)}
+                taxFund={hexToNumber(taxFund)}
+                roadPercent={hexToNumber(roadPercent)}
+                roadFund={hexToNumber(roadFund)}
+                firePercent={hexToNumber(firePercent)}
+                fireFund={hexToNumber(fireFund)}
+                policePercent={hexToNumber(policePercent)}
+                policeFund={hexToNumber(policeFund)}
+                setInput={setInput}
+                write={write}
+                loading={loading}
+                />
+            )}
             <AppShell.Main>
                 <GameStage
                     setInput={setInput}

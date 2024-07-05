@@ -16,7 +16,15 @@ export const createEnginePayloads = (engine: Micropolis) => {
     const population = numberToHex(engine.population, { size: 4 });
     const totalFunds = numberToHex(engine.totalFunds, { size: 4 });
     const cityTime = numberToHex(engine.cityTime, { size: 4 });
-    return { map, population, totalFunds, cityTime };
+    const cityTax = numberToHex(engine.cityTax, { size: 4 });
+    const taxFund = numberToHex(engine.taxFund, { size: 4 });
+    const roadPercent = numberToHex(engine.roadPercent, { size: 4 });
+    const roadFund = numberToHex(engine.roadFund, { size: 4 });
+    const firePercent = numberToHex(engine.firePercent, { size: 4 });
+    const fireFund = numberToHex(engine.fireFund, { size: 4 });
+    const policePercent = numberToHex(engine.policePercent, { size: 4 });
+    const policeFund = numberToHex(engine.policeFund, { size: 4 });
+    return { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund };
 };
 
 // just log a transfer between accounts

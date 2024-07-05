@@ -10,15 +10,72 @@ import {
     Title,
     Slider,
 } from "@mantine/core";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
+import { abi } from "@/hooks/rollups";
+import { Hex, encodeFunctionData } from "viem";
 
-export const Budget: FC = () => {
+export type BudgetProps = {
+    previousFunds: number,
+    cityTax: number,
+    taxFund: number,
+    roadPercent: number,
+    roadFund: number,
+    firePercent: number,
+    fireFund: number,
+    policePercent: number,
+    policeFund: number, 
+    loading?: boolean;
+    setInput?: (input: Hex) => void;
+    write?: () => void;
+}
+
+export const Budget: FC<BudgetProps> = ({
+    previousFunds,
+    cityTax,
+    taxFund,
+    roadPercent,
+    roadFund,
+    firePercent,
+    fireFund,
+    policePercent,
+    policeFund,
+    loading,
+    setInput,
+    write,
+}) => {
     const [visible, setVisible] = useState(false);
+    const [tax, setTax] = useState(cityTax);
+    const [rp, setRP] = useState(roadPercent);
+    const [fp, setFP] = useState(firePercent);
+    const [pp, setPP] = useState(policePercent);
+
+    function handleClick(){
+        setVisible(!visible);
+        setTax(cityTax);
+        setRP(roadPercent);
+        setFP(firePercent);
+        setPP(policePercent);
+    }
+
+    if(visible){
+        if (setInput) {
+            // encode the input
+            setInput(
+                encodeFunctionData({
+                    abi,
+                    functionName: "doBudget",
+                    args: [tax, rp,fp, pp],
+                })
+            );
+        }
+    }
+
     return(
         <Group>
             <Button
             bg={"blue"}
-            onClick={() => { setVisible(!visible) }}
+            onClick={handleClick}
+            disabled={loading}
             >
                 Budget
             </Button>
@@ -26,21 +83,21 @@ export const Budget: FC = () => {
                 <> 
                 <Paper pos={"fixed"} top={"30%"} left={"50%"} p={5} w={300}>
                     <Stack>
-                        <Text ta={"center"} bg={"blue"} fw={"bold"}>
+                        <Text ta={"center"} bg={"blue"} fw={"bold"} c={"white"}>
                             Budget
                         </Text>
                         <SimpleGrid cols={2}>
-                            <Text>Tax Collected: $0</Text>
-                            <Text>Cashflow: $0</Text>
-                            <Text>Previous Funds: $0</Text>
-                            <Text>Collected Funds: $0</Text>
+                            <Text>Tax Collected: ${taxFund}</Text>
+                            <Text>Cashflow: ${taxFund}</Text>
+                            <Text>Previous Funds: ${previousFunds}</Text>
+                            <Text>Collected Funds: ${previousFunds + taxFund}</Text>
                             <Paper bg={"black"} p={5}>
                                 <Stack>
                                     <Text>
                                         Roads
                                     </Text>
-                                    <Slider />
-                                    <Text>100% of $0 = $0</Text>
+                                    <Slider value={rp} onChange={setRP}/>
+                                    <Text>{rp}% of ${roadFund} = ${(roadPercent / 100) * roadFund}</Text>
                                 </Stack>                        
                             </Paper>
                             <Paper bg={"black"} p={5}>
@@ -48,33 +105,37 @@ export const Budget: FC = () => {
                                     <Text>
                                         Fire
                                     </Text>
-                                    <Slider />
-                                    <Text>100% of $0 = $0</Text>
+                                    <Slider value={fp} onChange={setFP}/>
+                                    <Text>{fp}% of ${fireFund} = ${(firePercent / 100) * fireFund}</Text>
                                 </Stack>   
                             </Paper>
                             <Paper bg={"black"} p={5}>
                                 <Stack>
                                     <Text>
-                                        Roads
+                                        Police
                                     </Text>
-                                    <Slider />
-                                    <Text>100% of $0 = $0</Text>
+                                    <Slider value={pp} onChange={setPP}/>
+                                    <Text>{pp}% of ${policeFund} = ${(policePercent / 100) * policeFund}</Text>
                                 </Stack>                        
                             </Paper>
                             <Paper bg={"black"} p={5}>
                                 <Stack>
                                     <Text>
-                                        Fire
+                                        Tax
                                     </Text>
-                                    <Slider />
-                                    <Text>100% of $0 = $0</Text>
+                                    <Slider value={tax} onChange={setTax}/>
+                                    <Text>Tax rate: {tax}%</Text>
                                 </Stack>   
                             </Paper>
-                            <Button>
+                            <Button
+                                onClick={write}
+                                loading={loading}
+                            >
                                 Confirm
                             </Button>
                             <Button
-                            onClick={() => { setVisible(!visible) }}
+                                onClick={handleClick}
+                                disabled={loading}
                             >
                                 Okay
                             </Button>

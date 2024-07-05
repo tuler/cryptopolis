@@ -23,6 +23,7 @@ const abi = parseAbi([
     "function transfer(address to, uint256 amount)",
     "function start(uint32 seed)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
+    "function doBudget(uint8 tax, uint8 rp, uint8 fp, uint8 pp)",
 ]);
 
 const inspectAbi = parseAbi([
@@ -59,22 +60,38 @@ const TICKS_PER_BLOCK = 16;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime } =
+    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund } =
         createEnginePayloads(engine);
     await app.createReport({ payload: map });
     await app.createReport({ payload: population });
     await app.createReport({ payload: totalFunds });
     await app.createReport({ payload: cityTime });
+    await app.createReport({ payload: cityTax });
+    await app.createReport({ payload: taxFund });
+    await app.createReport({ payload: roadPercent });
+    await app.createReport({ payload: roadFund });
+    await app.createReport({ payload: firePercent });
+    await app.createReport({ payload: fireFund });
+    await app.createReport({ payload: policePercent });
+    await app.createReport({ payload: policeFund });
 };
 
 // create notices with the engine state
 const createEngineNotices = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime } =
+    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund } =
         createEnginePayloads(engine);
     await app.createNotice({ payload: map });
     await app.createNotice({ payload: population });
     await app.createNotice({ payload: totalFunds });
     await app.createNotice({ payload: cityTime });
+    await app.createNotice({ payload: cityTax});
+    await app.createNotice({ payload: taxFund});
+    await app.createNotice({ payload: roadPercent});
+    await app.createNotice({ payload: roadFund });
+    await app.createNotice({ payload: firePercent });
+    await app.createNotice({ payload: fireFund });
+    await app.createNotice({ payload: policePercent });
+    await app.createNotice({ payload: policeFund });
 };
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {
@@ -195,6 +212,21 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(game.engine);
 
+            return "accept";
+        case "doBudget":
+            if (!game) {
+                // game does not exist, reject input
+                return "reject";
+            }
+            const [tax, rp, fp, pp] = args;
+            console.log(`budgeting ${tax} ${rp} ${fp} ${pp}`)
+            game.engine.cityTax = tax;
+            game.engine.roadPercent = rp;
+            game.engine.firePercent = fp;
+            game.engine.policePercent = pp;
+            console.log(`budgeting ${game.engine.cityTax} ${game.engine.roadPercent} ${game.engine.firePercent} ${game.engine.policePercent}`)
+
+            await createEngineNotices(game.engine);
             return "accept";
     }
     return "reject";
