@@ -68,4 +68,15 @@ export class Micropolis {
     policePercent: number;
     readonly taxFund: number;
     cityTax: number;
+
+    makeFire(): void;
+    makeFlood(): void;
+    makeMeltdown(): void;
+
+    readonly score: number;
+    readonly value: number;
+    readonly category: number;
+    readonly scoreDelta: number;
+    readonly populationDelta: number;
+    
 }

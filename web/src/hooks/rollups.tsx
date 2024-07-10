@@ -21,6 +21,7 @@ export const abi = parseAbi([
     "function start(uint32 seed)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
     "function doBudget(uint8 tax, uint8 rp, uint8 fp, uint8 pp)",
+    "function makeDisaster(uint8 disaster)"
 ]);
 
 /**

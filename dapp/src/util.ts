@@ -1,5 +1,5 @@
 import { Micropolis } from "micropolis";
-import { Address, Hex, formatUnits, numberToHex } from "viem";
+import { Address, Hex, formatUnits, numberToHex, stringToHex } from "viem";
 import { decimals } from ".";
 
 // convert Uint16Array to hex string (i.e. used for map)
@@ -24,7 +24,13 @@ export const createEnginePayloads = (engine: Micropolis) => {
     const fireFund = numberToHex(engine.fireFund, { size: 4 });
     const policePercent = numberToHex(engine.policePercent, { size: 4 });
     const policeFund = numberToHex(engine.policeFund, { size: 4 });
-    return { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund };
+    const score = numberToHex(engine.score, { size: 4 });
+    const value = numberToHex(engine.value, { size: 4 });
+    const scoreDelta = stringToHex(engine.scoreDelta.toString());
+    const populationDelta = stringToHex(engine.populationDelta.toString());
+    const category = numberToHex(engine.category, { size: 4 });
+    // const level = numberToHex(engine.level, { size: 4 });
+    return { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category };
 };
 
 // just log a transfer between accounts

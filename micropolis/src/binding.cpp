@@ -34,6 +34,15 @@ private:
   void setFirePercent(const Napi::CallbackInfo &info, const Napi::Value &value);
   void setPolicePercent(const Napi::CallbackInfo &info, const Napi::Value &value);
   void setCityTax(const Napi::CallbackInfo &info, const Napi::Value &value);
+  void makeFire(const Napi::CallbackInfo &info);
+  void makeFlood(const Napi::CallbackInfo &info);
+  void makeMeltdown(const Napi::CallbackInfo &info);
+  Napi::Value getScore(const Napi::CallbackInfo &info);
+  Napi::Value getValue(const Napi::CallbackInfo &info);
+  Napi::Value getCatergory(const Napi::CallbackInfo &info);
+  Napi::Value getLevel(const Napi::CallbackInfo &info);
+  Napi::Value getScoreDelta(const Napi::CallbackInfo &info);
+  Napi::Value getPopulationDelta(const Napi::CallbackInfo &info);
 };
 
 MicropolisWrapper::MicropolisWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<MicropolisWrapper>(info)
@@ -52,6 +61,9 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceMethod("registerCallback", &MicropolisWrapper::registerCallback),
                                                            InstanceMethod("simTick", &MicropolisWrapper::simTick),
                                                            InstanceMethod("doTool", &MicropolisWrapper::doTool),
+                                                           InstanceMethod("makeFire", &MicropolisWrapper::makeFire),
+                                                           InstanceMethod("makeFlood", &MicropolisWrapper::makeFlood),
+                                                           InstanceMethod("makeMeltdown", &MicropolisWrapper::makeMeltdown),
                                                            InstanceAccessor<&MicropolisWrapper::getSpeed, &MicropolisWrapper::setSpeed>("speed"),
                                                            InstanceAccessor<&MicropolisWrapper::getMap>("version"),
                                                            InstanceAccessor<&MicropolisWrapper::getMap>("map"),
@@ -66,6 +78,13 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceAccessor<&MicropolisWrapper::getPolicePercent, &MicropolisWrapper::setPolicePercent>("policePercent"),
                                                            InstanceAccessor<&MicropolisWrapper::getTaxFund>("taxFund"),
                                                            InstanceAccessor<&MicropolisWrapper::getCityTax, &MicropolisWrapper::setCityTax>("cityTax"),
+                                                           InstanceAccessor<&MicropolisWrapper::getScore>("score"),
+                                                           InstanceAccessor<&MicropolisWrapper::getValue>("value"),
+                                                           InstanceAccessor<&MicropolisWrapper::getCatergory>("category"),
+                                                           InstanceAccessor<&MicropolisWrapper::getLevel>("level"),
+                                                           InstanceAccessor<&MicropolisWrapper::getScoreDelta>("scoreDelta"),
+                                                           InstanceAccessor<&MicropolisWrapper::getPopulationDelta>("populationDelta"),
+
                                                        });
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -425,6 +444,46 @@ void MicropolisWrapper::setPolicePercent(const Napi::CallbackInfo &info, const N
 
   Napi::Number percent = value.As<Napi::Number>();
   this->_micropolis->policePercent = percent.FloatValue() / 100.0;
+}
+
+void MicropolisWrapper::makeFire(const Napi::CallbackInfo &info)
+{
+  this->_micropolis->makeFire();
+}
+
+void MicropolisWrapper::makeFlood(const Napi::CallbackInfo &info)
+{
+  this->_micropolis->makeFlood();
+}
+
+void MicropolisWrapper::makeMeltdown(const Napi::CallbackInfo &info)
+{
+  this->_micropolis->makeMeltdown();
+}
+
+Napi::Value MicropolisWrapper::getScore(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->cityScore);
+}
+Napi::Value MicropolisWrapper::getValue(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->cityAssessedValue);
+}
+Napi::Value MicropolisWrapper::getCatergory(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->categoryLast);
+}
+Napi::Value MicropolisWrapper::getLevel(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->gameLevel);
+}
+Napi::Value MicropolisWrapper::getScoreDelta(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->cityScoreDelta);
+}
+Napi::Value MicropolisWrapper::getPopulationDelta(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();
+    return Napi::Number::New(env, this->_micropolis->cityPopDelta);
 }
 
 static Napi::Object Init(Napi::Env env, Napi::Object exports)

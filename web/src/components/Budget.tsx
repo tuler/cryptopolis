@@ -1,16 +1,13 @@
 import {
     Button,
-    Center,
     Group,
-    Input,
     Paper,
     SimpleGrid,
     Stack,
     Text,
-    Title,
     Slider,
 } from "@mantine/core";
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { abi } from "@/hooks/rollups";
 import { Hex, encodeFunctionData } from "viem";
 
@@ -76,6 +73,7 @@ export const Budget: FC<BudgetProps> = ({
             bg={"blue"}
             onClick={handleClick}
             disabled={loading}
+            w={"100%"}
             >
                 Budget
             </Button>
@@ -88,7 +86,7 @@ export const Budget: FC<BudgetProps> = ({
                         </Text>
                         <SimpleGrid cols={2}>
                             <Text>Tax Collected: ${taxFund}</Text>
-                            <Text>Cashflow: ${taxFund}</Text>
+                            <Text>Cashflow: ${taxFund - roadFund - fireFund - policeFund}</Text>
                             <Text>Previous Funds: ${previousFunds}</Text>
                             <Text>Collected Funds: ${previousFunds + taxFund}</Text>
                             <Paper bg={"black"} p={5}>

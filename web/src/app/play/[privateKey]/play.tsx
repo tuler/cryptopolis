@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
-import { Hex, hexToNumber } from "viem";
+import { Hex, hexToNumber, hexToString } from "viem";
 import Link from "next/link";
 import { Options } from "@/components/Options";
 
@@ -30,7 +30,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map
-    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund] = notices;
+    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
 
@@ -85,6 +85,12 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                 fireFund={hexToNumber(fireFund)}
                 policePercent={hexToNumber(policePercent)}
                 policeFund={hexToNumber(policeFund)}
+                population={hexToNumber(population)}
+                score={hexToNumber(score)}
+                value={hexToNumber(value)}
+                scoreDelta={hexToString(scoreDelta)}
+                populationDelta={hexToString(populationDelta)}
+                category={hexToNumber(category)}
                 setInput={setInput}
                 write={write}
                 loading={loading}
