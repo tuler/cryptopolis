@@ -28,9 +28,9 @@ export const createEnginePayloads = (engine: Micropolis) => {
     const value = numberToHex(engine.value, { size: 4 });
     const scoreDelta = stringToHex(engine.scoreDelta.toString());
     const populationDelta = stringToHex(engine.populationDelta.toString());
-    const category = numberToHex(engine.category, { size: 4 });
+    // const category = numberToHex(engine.category, { size: 4 });
     // const level = numberToHex(engine.level, { size: 4 });
-    return { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category };
+    return { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta };
 };
 
 // just log a transfer between accounts

@@ -30,7 +30,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map
-    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category] = notices;
+    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
 
@@ -90,7 +90,6 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                 value={hexToNumber(value)}
                 scoreDelta={hexToString(scoreDelta)}
                 populationDelta={hexToString(populationDelta)}
-                category={hexToNumber(category)}
                 setInput={setInput}
                 write={write}
                 loading={loading}

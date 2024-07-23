@@ -23,7 +23,6 @@ export type OptionsProps = {
     value: number,
     scoreDelta: string,
     populationDelta: string,
-    category: number,
     loading?: boolean;
     setInput?: (input: Hex) => void;
     write?: () => void;
@@ -44,7 +43,6 @@ export const Options: FC<OptionsProps> = ({
     value,
     scoreDelta,
     populationDelta,
-    category,
     loading,
     setInput,
     write,
@@ -77,7 +75,6 @@ export const Options: FC<OptionsProps> = ({
                 value={value}
                 scoreDelta={scoreDelta}
                 populationDelta={populationDelta}
-                category={category}
                 />
                 <Disasters
                 loading={loading}

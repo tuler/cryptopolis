@@ -67,7 +67,7 @@ export const Map: FC<MapProps> = ({
 
     // create optimized spritesheet
     useEffect(() => {
-        const texture = Texture.from("/img/micropolis_tiles.png");
+        const texture = Texture.from("/img/earth.png");
         const frames = [...Array(1024).keys()].map((i) => ({
             frame: {
                 x: (i % 32) * 16,

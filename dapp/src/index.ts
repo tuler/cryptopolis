@@ -12,6 +12,7 @@ import {
 } from "viem";
 import { Micropolis } from "micropolis";
 import { createEnginePayloads, logTransfer } from "./util";
+import { call } from "viem/_types/actions/public/call";
 
 // instantiate deroll application
 const url =
@@ -61,7 +62,7 @@ const TICKS_PER_BLOCK = 16;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category } =
+    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta } =
         createEnginePayloads(engine);
     await app.createReport({ payload: map });
     await app.createReport({ payload: population });
@@ -79,12 +80,11 @@ const createEngineReports = async (engine: Micropolis) => {
     await app.createReport({ payload: value });
     await app.createReport({ payload: scoreDelta });
     await app.createReport({ payload: populationDelta });
-    await app.createReport({ payload: category });
 };
 
 // create notices with the engine state
 const createEngineNotices = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, category } =
+    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta } =
         createEnginePayloads(engine);
     await app.createNotice({ payload: map });
     await app.createNotice({ payload: population });
@@ -102,7 +102,6 @@ const createEngineNotices = async (engine: Micropolis) => {
     await app.createNotice({ payload: value });
     await app.createNotice({ payload: scoreDelta });
     await app.createNotice({ payload: populationDelta });
-    await app.createNotice({ payload: category });
 };
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {
@@ -199,6 +198,28 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
             const result = game.engine.doTool(tool, x, y);
             // XXX: reject input if result is not successuful?
+
+            if(tool == 5){
+            
+                // Register the callback
+                game.engine.registerCallback((
+                    message: string,
+                    format: string,
+                    tileCategory: number,
+                    s0: number,
+                    s1: number,
+                    s2: number,
+                    s3: number,
+                    s4: number,
+                    x: number,
+                    y: number
+                    ) => {
+                    if(format=="showZoneStatus") console.log(`${format} ${tileCategory} ${s0} ${s1} ${s2} ${s3} ${s4} ${x} ${y}`);
+                });
+
+            }
+            
+
 
             // do accounting
             const fundsAfter = game.engine.totalFunds;

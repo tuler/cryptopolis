@@ -20,7 +20,6 @@ export type DisastersProps = {
     value: number,
     scoreDelta: string,
     populationDelta: string,
-    category: number,
 }
 
 export const Evaluation: FC<DisastersProps> = ({
@@ -30,7 +29,6 @@ export const Evaluation: FC<DisastersProps> = ({
     value,
     scoreDelta,
     populationDelta,
-    category,
 }) => {
     const [visible, setVisible] = useState(false);
 
@@ -90,7 +88,7 @@ export const Evaluation: FC<DisastersProps> = ({
                                 <Text ta={"right"}>{value}</Text>
 
                                 <Text>Category:</Text>
-                                <Text ta={"right"}>{category}</Text>
+                                <Text ta={"right"}>{0}</Text>
 
                                 <Text>Game Level:</Text>
                                 <Text ta={"right"}>{0}</Text>

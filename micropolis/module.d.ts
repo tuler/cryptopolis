@@ -33,6 +33,17 @@ export enum ToolResult {
 export class Micropolis {
     constructor();
 
+    registerCallback(callback: (message: string, 
+        format: string,
+        tileCategory: number,
+        s0: number,
+        s1: number,
+        s2: number,
+        s3: number,
+        s4: number,
+        x: number,
+        y: number) => void): void;
+    
     // generate a city from a seed number
     generateSomeCity(seed: number): void;
 
