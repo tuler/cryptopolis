@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
-import { Sprite } from "@pixi/react";
+import { AnimatedSprite, Sprite } from "@pixi/react";
 import { Spritesheet, Texture } from "pixi.js";
 
 export type Tile = {
@@ -76,11 +76,18 @@ export const Map: FC<MapProps> = ({
                 h: 16,
             },
         }));
+        const animations: Record<string, string[]> = {
+            // Example: animation definitions (should match your spritesheet JSON)
+            "fire": ["57",  "58",  "59",  "60",  "61",  "62",  "63",  "56"], // Animation frames for type 0
+            // "1": [4, 5, 6, 7], // Animation frames for type 1
+            // Add more animations as needed
+        };
         const sheet = new Spritesheet(texture, {
             frames: frames.reduce(
                 (acc, frame, index) => ({ ...acc, [index]: frame }),
                 {}
             ),
+            animations,
             meta: {
                 scale: "1",
             },
@@ -90,27 +97,57 @@ export const Map: FC<MapProps> = ({
         });
     }, []);
 
+    function animationType(type: number): string{
+        if(type >= 56 && type <= 63) return "fire"
+
+        return "";
+    }
+
     const TileImage = (x: number, y: number) => {
         const t = map[x * 100 + y];
         const tile = decodeTile(x, y, t);
         const coord = `(${x},${y})`;
+        const frames = animationType(tile.type);
+
         return spritesheet ? (
-            <Sprite
-                key={coord}
-                eventMode="static"
-                cursor={loading ? "wait" : "cell"}
-                texture={spritesheet.textures[tile.type]}
-                onpointerdown={(_event) => {
-                    onMouseClick && onMouseClick(tile);
-                }}
-                onpointermove={(_event) => {
-                    onMouseMove && onMouseMove(tile);
-                }}
-                width={16 * scale}
-                height={16 * scale}
-                x={x * 16 * scale}
-                y={y * 16 * scale}
-            />
+            (tile.animated && tile.type >= 56 && tile.type <=63) ? (    
+                <AnimatedSprite
+                    key={coord}
+                    eventMode="static"
+                    cursor={loading ? "wait" : "cell"}
+                    textures={spritesheet.animations[frames]}
+                    isPlaying={true} // Animation not playing yet
+                    animationSpeed={0.1} // Adjust animation speed if needed
+                    loop={true} // Ensure animation loops
+                    onpointerdown={() => {
+                        onMouseClick && onMouseClick(tile);
+                    }}
+                    onpointermove={() => {
+                        onMouseMove && onMouseMove(tile);
+                    }}
+                    width={16 * scale}
+                    height={16 * scale}
+                    x={x * 16 * scale}
+                    y={y * 16 * scale}
+                />
+            ) : (
+                <Sprite
+                    key={coord}
+                    eventMode="static"
+                    cursor={loading ? "wait" : "cell"}
+                    texture={spritesheet.textures[tile.type]}
+                    onpointerdown={() => {
+                        onMouseClick && onMouseClick(tile);
+                    }}
+                    onpointermove={() => {
+                        onMouseMove && onMouseMove(tile);
+                    }}
+                    width={16 * scale}
+                    height={16 * scale}
+                    x={x * 16 * scale}
+                    y={y * 16 * scale}
+                />
+            )
         ) : (
             <React.Fragment key={coord}></React.Fragment>
         );

@@ -32,6 +32,7 @@ const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
     "function getUserMap(address)",
     "function balanceOf(address)",
+    "function queryTool(address)",
 ]);
 
 // create wallet for global economy and hook it up to application
@@ -62,24 +63,23 @@ const TICKS_PER_BLOCK = 16;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta } =
+    const { map, population, totalFunds, cityTime } =
         createEnginePayloads(engine);
     await app.createReport({ payload: map });
     await app.createReport({ payload: population });
     await app.createReport({ payload: totalFunds });
     await app.createReport({ payload: cityTime });
-    await app.createReport({ payload: cityTax });
-    await app.createReport({ payload: taxFund });
-    await app.createReport({ payload: roadPercent });
-    await app.createReport({ payload: roadFund });
-    await app.createReport({ payload: firePercent });
-    await app.createReport({ payload: fireFund });
-    await app.createReport({ payload: policePercent });
-    await app.createReport({ payload: policeFund });
-    await app.createReport({ payload: score });
-    await app.createReport({ payload: value });
-    await app.createReport({ payload: scoreDelta });
-    await app.createReport({ payload: populationDelta });
+    // await app.createReport({ payload: taxFund});
+    // await app.createReport({ payload: roadPercent});
+    // await app.createReport({ payload: roadFund });
+    // await app.createReport({ payload: firePercent });
+    // await app.createReport({ payload: fireFund });
+    // await app.createReport({ payload: policePercent });
+    // await app.createReport({ payload: policeFund });
+    // await app.createReport({ payload: score });
+    // await app.createReport({ payload: value });
+    // await app.createReport({ payload: scoreDelta });
+    // await app.createReport({ payload: populationDelta });
 };
 
 // create notices with the engine state
@@ -214,9 +214,9 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                     x: number,
                     y: number
                     ) => {
-                    if(format=="showZoneStatus") console.log(`${format} ${tileCategory} ${s0} ${s1} ${s2} ${s3} ${s4} ${x} ${y}`);
+                    
+                    console.log(`${format} ${tileCategory} ${s0} ${s1} ${s2} ${s3} ${s4} ${x} ${y}`);
                 });
-
             }
             
 
@@ -317,6 +317,7 @@ app.addInspectHandler(async ({ payload }) => {
                 // just respond with no reports
             }
             break;
+
     }
 });
 

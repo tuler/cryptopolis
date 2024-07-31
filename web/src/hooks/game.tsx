@@ -4,6 +4,7 @@ import {
     encodeFunctionData,
     hexToBigInt,
     hexToNumber,
+    hexToString,
     parseAbi,
 } from "viem";
 import { UseInspect, useInspect } from "./inspect";
@@ -20,6 +21,7 @@ export type GameInspect = {
     population?: number;
     totalFunds?: number;
     cityTime?: number;
+    query?: string;
 };
 
 export const useInspectGame = (address: Address): UseInspect & GameInspect => {
@@ -79,3 +81,4 @@ export const useInspectBalance = (
         balance: balance ? hexToBigInt(balance) : undefined,
     };
 };
+
