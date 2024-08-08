@@ -15,7 +15,8 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "noImplicitAny": false
   },
   "include": ["."],
   "exclude": ["dist", "node_modules"]

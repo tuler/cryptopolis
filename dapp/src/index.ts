@@ -63,23 +63,23 @@ const TICKS_PER_BLOCK = 16;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime } =
+    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta } =
         createEnginePayloads(engine);
     await app.createReport({ payload: map });
     await app.createReport({ payload: population });
     await app.createReport({ payload: totalFunds });
     await app.createReport({ payload: cityTime });
-    // await app.createReport({ payload: taxFund});
-    // await app.createReport({ payload: roadPercent});
-    // await app.createReport({ payload: roadFund });
-    // await app.createReport({ payload: firePercent });
-    // await app.createReport({ payload: fireFund });
-    // await app.createReport({ payload: policePercent });
-    // await app.createReport({ payload: policeFund });
-    // await app.createReport({ payload: score });
-    // await app.createReport({ payload: value });
-    // await app.createReport({ payload: scoreDelta });
-    // await app.createReport({ payload: populationDelta });
+    await app.createReport({ payload: taxFund});
+    await app.createReport({ payload: roadPercent});
+    await app.createReport({ payload: roadFund });
+    await app.createReport({ payload: firePercent });
+    await app.createReport({ payload: fireFund });
+    await app.createReport({ payload: policePercent });
+    await app.createReport({ payload: policeFund });
+    await app.createReport({ payload: score });
+    await app.createReport({ payload: value });
+    await app.createReport({ payload: scoreDelta });
+    await app.createReport({ payload: populationDelta });
 };
 
 // create notices with the engine state
@@ -186,6 +186,12 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             // save funds before we run the simulation below and apply the tool
             const fundsBefore = game.engine.totalFunds;
 
+
+            const [tool, x, y] = args;
+            console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
+            const result = game.engine.doTool(tool, x, y);
+            // XXX: reject input if result is not successuful?
+            game.engine.simTick();
             // advance game simulation
             while (game.block < blockNumber) {
                 for (let i = 0; i < TICKS_PER_BLOCK; i++) {
@@ -194,11 +200,7 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
                 game.block++;
             }
 
-            const [tool, x, y] = args;
-            console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
-            const result = game.engine.doTool(tool, x, y);
-            // XXX: reject input if result is not successuful?
-
+           
             if(tool == 5){
             
                 // Register the callback

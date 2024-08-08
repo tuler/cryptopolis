@@ -67,7 +67,7 @@ export const Map: FC<MapProps> = ({
 
     // create optimized spritesheet
     useEffect(() => {
-        const texture = Texture.from("/img/earth.png");
+        const texture = Texture.from("/img/micropolis_tiles.png");
         const frames = [...Array(1024).keys()].map((i) => ({
             frame: {
                 x: (i % 32) * 16,
@@ -79,8 +79,14 @@ export const Map: FC<MapProps> = ({
         const animations: Record<string, string[]> = {
             // Example: animation definitions (should match your spritesheet JSON)
             "fire": ["57",  "58",  "59",  "60",  "61",  "62",  "63",  "56"], // Animation frames for type 0
-            // "1": [4, 5, 6, 7], // Animation frames for type 1
+            "rpower": ["244", "244", "244", "827", "827", "827"],
+            "cpower": ["427", "427", "427", "827", "827", "827"],
+            "ipower": ["616", "616", "616", "827", "827", "827"],
             // Add more animations as needed
+            //827 is the power tile
+            // 244 is r 
+            //427 is C
+            // 616 is i 
         };
         const sheet = new Spritesheet(texture, {
             frames: frames.reduce(
@@ -98,7 +104,10 @@ export const Map: FC<MapProps> = ({
     }, []);
 
     function animationType(type: number): string{
-        if(type >= 56 && type <= 63) return "fire"
+        if(type >= 56 && type <= 63) return "fire";
+        else if(type==244) return "rpower";
+        else if(type==427) return "cpower";
+        else if(type==616) return "ipower";
 
         return "";
     }
@@ -108,9 +117,12 @@ export const Map: FC<MapProps> = ({
         const tile = decodeTile(x, y, t);
         const coord = `(${x},${y})`;
         const frames = animationType(tile.type);
-
+        const corner = (x > 0 && y > 0) ? decodeTile(x - 1, y - 1, map[(x-1) * 100 + (y-1)]) : null;
+        const powered = corner ? corner.powered : false;
+        const animate = (tile.type >= 56 && tile.type <= 63) || (!powered && (tile.type==244 || tile.type==427 || tile.type==616));
+        
         return spritesheet ? (
-            (tile.animated && tile.type >= 56 && tile.type <=63) ? (    
+            (animate) ? (    
                 <AnimatedSprite
                     key={coord}
                     eventMode="static"
