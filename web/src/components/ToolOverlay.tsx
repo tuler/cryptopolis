@@ -34,7 +34,7 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
 
     // create optimized spritesheet
     useEffect(() => {
-        const texture = Texture.from("/img/tools.png");
+        const texture = Texture.from("/img/tools2.png");
         const frames = [
             { x: 0, y: 0, w: 3, h: 3 }, // residential
             { x: 3, y: 0, w: 3, h: 3 }, // commercial

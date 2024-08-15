@@ -43,6 +43,7 @@ private:
   Napi::Value getLevel(const Napi::CallbackInfo &info);
   Napi::Value getScoreDelta(const Napi::CallbackInfo &info);
   Napi::Value getPopulationDelta(const Napi::CallbackInfo &info);
+  Napi::Value getPopulationDensity(const Napi::CallbackInfo &info);
 };
 
 MicropolisWrapper::MicropolisWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<MicropolisWrapper>(info)
@@ -84,7 +85,7 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceAccessor<&MicropolisWrapper::getLevel>("level"),
                                                            InstanceAccessor<&MicropolisWrapper::getScoreDelta>("scoreDelta"),
                                                            InstanceAccessor<&MicropolisWrapper::getPopulationDelta>("populationDelta"),
-
+                                                           InstanceAccessor<&MicropolisWrapper::getPopulationDensity>("populationDensity"),
                                                        });
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -328,7 +329,7 @@ Napi::Value MicropolisWrapper::getMap(const Napi::CallbackInfo &info)
   Napi::ArrayBuffer mapBuffer =
       Napi::ArrayBuffer::New(env, data, sizeof(unsigned short) * WORLD_W * WORLD_H);
   return Napi::Uint16Array::New(env, WORLD_W * WORLD_H, mapBuffer, 0);
-}
+} 
 
 Napi::Value MicropolisWrapper::getTotalFunds(const Napi::CallbackInfo &info)
 {
@@ -484,6 +485,16 @@ Napi::Value MicropolisWrapper::getScoreDelta(const Napi::CallbackInfo &info){
 Napi::Value MicropolisWrapper::getPopulationDelta(const Napi::CallbackInfo &info){
   Napi::Env env = info.Env();
     return Napi::Number::New(env, this->_micropolis->cityPopDelta);
+}
+
+Napi::Value MicropolisWrapper::getPopulationDensity(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();  
+  // Call the function to get the pointer to the population density map buffer
+  unsigned short *data = static_cast<unsigned short*>(this->_micropolis->getPopulationDensityMapBuffer());
+  // Create an ArrayBuffer from the base address
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, sizeof(unsigned short) * WORLD_W * WORLD_H);  
+  // Return it as a Uint16Array since you're using `unsigned short`
+  return Napi::Uint16Array::New(env, WORLD_W * WORLD_H, mapBuffer, 0);
 }
 
 static Napi::Object Init(Napi::Env env, Napi::Object exports)

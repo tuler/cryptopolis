@@ -89,5 +89,7 @@ export class Micropolis {
     readonly category: number;
     readonly scoreDelta: number;
     readonly populationDelta: number;
+
+    readonly populationDensity: Uint16Array;
     
 }

@@ -30,9 +30,18 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const { write, notices, loading } = useRollupsServer(dapp, input);
 
     // first notice is always the map
-    const [map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta] = notices;
+    const [map, population, totalFunds, cityTime, cityTax, taxFund, 
+        roadPercent, roadFund, firePercent, fireFund, policePercent, 
+        policeFund, score, value, scoreDelta, populationDelta, populationDensity] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
+
+    // console.log(populationDensity);
+    if(populationDensity) {
+        const values = populationDensity.substring(2).match(/.{1,4}/g);
+        const map = new Uint16Array(values!.map((pair) => parseInt(pair, 16)));
+        console.log(map);
+    }
 
     return (
         <AppShell
