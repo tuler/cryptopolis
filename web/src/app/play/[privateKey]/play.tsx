@@ -32,16 +32,21 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     // first notice is always the map
     const [map, population, totalFunds, cityTime, cityTax, taxFund, 
         roadPercent, roadFund, firePercent, fireFund, policePercent, 
-        policeFund, score, value, scoreDelta, populationDelta, populationDensity] = notices;
+        policeFund, score, value, scoreDelta, populationDelta, populationDensity,
+        landValue, crimeRate, pollutionDensity, growthRate] = notices;
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
 
     // console.log(populationDensity);
-    if(populationDensity) {
-        const values = populationDensity.substring(2).match(/.{1,4}/g);
-        const map = new Uint16Array(values!.map((pair) => parseInt(pair, 16)));
-        console.log(map);
-    }
+    // if (populationDensity) {
+    //     const values = populationDensity.substring(2).match(/.{1,2}/g);
+    //     if (values) {
+    //         // Convert each hex pair to an integer and then into a Uint8Array
+    //         const byteArray = new Uint8Array(values.map(hex => parseInt(hex, 16)));
+
+    //         console.log(byteArray); // Now map is a Uint16Array
+    //     }
+    // }
 
     return (
         <AppShell

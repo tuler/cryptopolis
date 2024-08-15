@@ -44,6 +44,10 @@ private:
   Napi::Value getScoreDelta(const Napi::CallbackInfo &info);
   Napi::Value getPopulationDelta(const Napi::CallbackInfo &info);
   Napi::Value getPopulationDensity(const Napi::CallbackInfo &info);
+  Napi::Value getLandValue(const Napi::CallbackInfo &info);
+  Napi::Value getCrimeRate(const Napi::CallbackInfo &info);
+  Napi::Value getPollutionDensity(const Napi::CallbackInfo &info);
+  Napi::Value getRateOfGrowth(const Napi::CallbackInfo &info);
 };
 
 MicropolisWrapper::MicropolisWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<MicropolisWrapper>(info)
@@ -86,6 +90,10 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceAccessor<&MicropolisWrapper::getScoreDelta>("scoreDelta"),
                                                            InstanceAccessor<&MicropolisWrapper::getPopulationDelta>("populationDelta"),
                                                            InstanceAccessor<&MicropolisWrapper::getPopulationDensity>("populationDensity"),
+                                                           InstanceAccessor<&MicropolisWrapper::getLandValue>("landValue"),
+                                                           InstanceAccessor<&MicropolisWrapper::getCrimeRate>("crimeRate"),
+                                                           InstanceAccessor<&MicropolisWrapper::getPollutionDensity>("pollutionDensity"),
+                                                           InstanceAccessor<&MicropolisWrapper::getRateOfGrowth>("growthRate"),
                                                        });
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -490,11 +498,71 @@ Napi::Value MicropolisWrapper::getPopulationDelta(const Napi::CallbackInfo &info
 Napi::Value MicropolisWrapper::getPopulationDensity(const Napi::CallbackInfo &info){
   Napi::Env env = info.Env();  
   // Call the function to get the pointer to the population density map buffer
-  unsigned short *data = static_cast<unsigned short*>(this->_micropolis->getPopulationDensityMapBuffer());
-  // Create an ArrayBuffer from the base address
-  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, sizeof(unsigned short) * WORLD_W * WORLD_H);  
-  // Return it as a Uint16Array since you're using `unsigned short`
-  return Napi::Uint16Array::New(env, WORLD_W * WORLD_H, mapBuffer, 0);
+  Byte *data = static_cast<Byte*>(this->_micropolis->getPopulationDensityMapBuffer());
+  
+  // Calculate the buffer size based on the type and map dimensions
+  size_t bufferSize = sizeof(Byte) * this->_micropolis->populationDensityMap.MAP_W * this->_micropolis->populationDensityMap.MAP_H;
+  
+  // Create an ArrayBuffer from the base address with the correct size
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, bufferSize);
+  // Return it as a Uint8Array since you're working with Byte data
+  return Napi::Uint8Array::New(env, this->_micropolis->populationDensityMap.MAP_W * this->_micropolis->populationDensityMap.MAP_H, mapBuffer, 0);
+}
+
+Napi::Value MicropolisWrapper::getLandValue(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();  
+  // Call the function to get the pointer to the population density map buffer
+  Byte *data = static_cast<Byte*>(this->_micropolis->getLandValueMapBuffer());
+  
+  // Calculate the buffer size based on the type and map dimensions
+  size_t bufferSize = sizeof(Byte) * this->_micropolis->landValueMap.MAP_W * this->_micropolis->landValueMap.MAP_H;
+  
+  // Create an ArrayBuffer from the base address with the correct size
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, bufferSize);
+  // Return it as a Uint8Array since you're working with Byte data
+  return Napi::Uint8Array::New(env, this->_micropolis->landValueMap.MAP_W * this->_micropolis->landValueMap.MAP_H, mapBuffer, 0);
+}
+
+Napi::Value MicropolisWrapper::getCrimeRate(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();  
+  // Call the function to get the pointer to the population density map buffer
+  Byte *data = static_cast<Byte*>(this->_micropolis->getCrimeRateMapBuffer());
+  
+  // Calculate the buffer size based on the type and map dimensions
+  size_t bufferSize = sizeof(Byte) * this->_micropolis->crimeRateMap.MAP_W * this->_micropolis->crimeRateMap.MAP_H;
+  
+  // Create an ArrayBuffer from the base address with the correct size
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, bufferSize);
+  // Return it as a Uint8Array since you're working with Byte data
+  return Napi::Uint8Array::New(env, this->_micropolis->crimeRateMap.MAP_W * this->_micropolis->crimeRateMap.MAP_H, mapBuffer, 0);
+}
+
+Napi::Value MicropolisWrapper::getPollutionDensity(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();  
+  // Call the function to get the pointer to the population density map buffer
+  Byte *data = static_cast<Byte*>(this->_micropolis->getPollutionDensityMapBuffer());
+  
+  // Calculate the buffer size based on the type and map dimensions
+  size_t bufferSize = sizeof(Byte) * this->_micropolis->pollutionDensityMap.MAP_W * this->_micropolis->pollutionDensityMap.MAP_H;
+  
+  // Create an ArrayBuffer from the base address with the correct size
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, bufferSize);
+  // Return it as a Uint8Array since you're working with Byte data
+  return Napi::Uint8Array::New(env, this->_micropolis->pollutionDensityMap.MAP_W * this->_micropolis->pollutionDensityMap.MAP_H, mapBuffer, 0);
+}
+
+Napi::Value MicropolisWrapper::getRateOfGrowth(const Napi::CallbackInfo &info){
+  Napi::Env env = info.Env();  
+  // Call the function to get the pointer to the population density map buffer
+  Byte *data = static_cast<Byte*>(this->_micropolis->getRateOfGrowthMapBuffer());
+  
+  // Calculate the buffer size based on the type and map dimensions
+  size_t bufferSize = sizeof(Byte) * this->_micropolis->rateOfGrowthMap.MAP_W * this->_micropolis->rateOfGrowthMap.MAP_H;
+  
+  // Create an ArrayBuffer from the base address with the correct size
+  Napi::ArrayBuffer mapBuffer = Napi::ArrayBuffer::New(env, data, bufferSize);
+  // Return it as a Uint8Array since you're working with Byte data
+  return Napi::Uint8Array::New(env, this->_micropolis->rateOfGrowthMap.MAP_W * this->_micropolis->rateOfGrowthMap.MAP_H, mapBuffer, 0);
 }
 
 static Napi::Object Init(Napi::Env env, Napi::Object exports)

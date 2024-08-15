@@ -63,7 +63,10 @@ const TICKS_PER_BLOCK = 16;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, populationDensity } =
+    const { map, population, totalFunds, cityTime, cityTax, 
+        taxFund, roadPercent, roadFund, firePercent, fireFund, 
+        policePercent, policeFund, score, value, scoreDelta, populationDelta, 
+        populationDensity, landValue, crimeRate, pollutionDensity, growthRate } =
         createEnginePayloads(engine);
     await app.createReport({ payload: map });
     await app.createReport({ payload: population });
@@ -80,12 +83,19 @@ const createEngineReports = async (engine: Micropolis) => {
     await app.createReport({ payload: value });
     await app.createReport({ payload: scoreDelta });
     await app.createReport({ payload: populationDelta });
-    await app.createReport({payload: populationDensity})
+    await app.createReport({payload: populationDensity});
+    await app.createReport({payload: landValue});
+    await app.createReport({payload: crimeRate});
+    await app.createReport({payload: pollutionDensity});
+    await app.createReport({payload: growthRate});
 };
 
 // create notices with the engine state
 const createEngineNotices = async (engine: Micropolis) => {
-    const { map, population, totalFunds, cityTime, cityTax, taxFund, roadPercent, roadFund, firePercent, fireFund, policePercent, policeFund, score, value, scoreDelta, populationDelta, populationDensity } =
+    const { map, population, totalFunds, cityTime, cityTax, 
+        taxFund, roadPercent, roadFund, firePercent, fireFund, 
+        policePercent, policeFund, score, value, scoreDelta, populationDelta, 
+        populationDensity, landValue, crimeRate, pollutionDensity, growthRate } =
         createEnginePayloads(engine);
     await app.createNotice({ payload: map });
     await app.createNotice({ payload: population });
@@ -103,7 +113,11 @@ const createEngineNotices = async (engine: Micropolis) => {
     await app.createNotice({ payload: value });
     await app.createNotice({ payload: scoreDelta });
     await app.createNotice({ payload: populationDelta });
-    await app.createNotice({payload: populationDensity})
+    await app.createNotice({payload: populationDensity});
+    await app.createNotice({payload: landValue});
+    await app.createNotice({payload: crimeRate});
+    await app.createNotice({payload: pollutionDensity});
+    await app.createNotice({payload: growthRate});
 };
 
 app.addAdvanceHandler(async ({ metadata, payload }) => {

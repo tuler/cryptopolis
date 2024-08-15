@@ -90,6 +90,10 @@ export class Micropolis {
     readonly scoreDelta: number;
     readonly populationDelta: number;
 
-    readonly populationDensity: Uint16Array;
+    readonly populationDensity: Uint8Array;
+    readonly landValue: Uint8Array;
+    readonly crimeRate: Uint8Array;
+    readonly pollutionDensity: Uint8Array;
+    readonly growthRate: Uint8Array;
     
 }
