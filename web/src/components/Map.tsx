@@ -53,8 +53,7 @@ export const Map: FC<MapProps> = ({
     onMouseClick,
 }) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
-
-    // default value is a blank map
+    // Default value is a blank map
     value =
         value ||
         `0x${[...Array(width * height).keys()].map(() => "0000").join("")}`;
@@ -65,7 +64,7 @@ export const Map: FC<MapProps> = ({
     // Convert each pair to a decimal number and create a Uint16Array
     const map = new Uint16Array(pairs!.map((pair) => parseInt(pair, 16)));
 
-    // create optimized spritesheet
+    // Create optimized spritesheet
     useEffect(() => {
         const texture = Texture.from("/img/micropolis_tiles.png");
         const frames = [...Array(1024).keys()].map((i) => ({
@@ -77,16 +76,10 @@ export const Map: FC<MapProps> = ({
             },
         }));
         const animations: Record<string, string[]> = {
-            // Example: animation definitions (should match your spritesheet JSON)
-            "fire": ["57",  "58",  "59",  "60",  "61",  "62",  "63",  "56"], // Animation frames for type 0
-            "rpower": ["244", "244", "244", "827", "827", "827"],
-            "cpower": ["427", "427", "427", "827", "827", "827"],
-            "ipower": ["616", "616", "616", "827", "827", "827"],
-            // Add more animations as needed
-            //827 is the power tile
-            // 244 is r 
-            //427 is C
-            // 616 is i 
+            fire: ["57", "58", "59", "60", "61", "62", "63", "56"],
+            rpower: ["244", "244", "244", "827", "827", "827"],
+            cpower: ["427", "427", "427", "827", "827", "827"],
+            ipower: ["616", "616", "616", "827", "827", "827"],
         };
         const sheet = new Spritesheet(texture, {
             frames: frames.reduce(
@@ -103,12 +96,11 @@ export const Map: FC<MapProps> = ({
         });
     }, []);
 
-    function animationType(type: number): string{
-        if(type >= 56 && type <= 63) return "fire";
-        else if(type==244) return "rpower";
-        else if(type==427) return "cpower";
-        else if(type==616) return "ipower";
-
+    function animationType(type: number): string {
+        if (type >= 56 && type <= 63) return "fire";
+        else if (type == 244) return "rpower";
+        else if (type == 427) return "cpower";
+        else if (type == 616) return "ipower";
         return "";
     }
 
@@ -117,24 +109,29 @@ export const Map: FC<MapProps> = ({
         const tile = decodeTile(x, y, t);
         const coord = `(${x},${y})`;
         const frames = animationType(tile.type);
-        const corner = (x > 0 && y > 0) ? decodeTile(x - 1, y - 1, map[(x-1) * 100 + (y-1)]) : null;
+        const corner =
+            x > 0 && y > 0
+                ? decodeTile(x - 1, y - 1, map[(x - 1) * 100 + (y - 1)])
+                : null;
         const powered = corner ? corner.powered : false;
-        const animate = (tile.type >= 56 && tile.type <= 63) || (!powered && (tile.type==244 || tile.type==427 || tile.type==616));
-        
+        const animate =
+            (tile.type >= 56 && tile.type <= 63) ||
+            (!powered && (tile.type == 244 || tile.type == 427 || tile.type == 616));
+
         return spritesheet ? (
-            (animate) ? (    
+            animate ? (
                 <AnimatedSprite
                     key={coord}
                     eventMode="static"
                     cursor={loading ? "wait" : "cell"}
                     textures={spritesheet.animations[frames]}
-                    isPlaying={true} // Animation not playing yet
-                    animationSpeed={0.1} // Adjust animation speed if needed
-                    loop={true} // Ensure animation loops
-                    onpointerdown={() => {
+                    isPlaying={true}
+                    animationSpeed={0.1}
+                    loop={true}
+                    pointerdown={() => {
                         onMouseClick && onMouseClick(tile);
                     }}
-                    onpointermove={() => {
+                    pointermove={() => {
                         onMouseMove && onMouseMove(tile);
                     }}
                     width={16 * scale}
@@ -148,10 +145,11 @@ export const Map: FC<MapProps> = ({
                     eventMode="static"
                     cursor={loading ? "wait" : "cell"}
                     texture={spritesheet.textures[tile.type]}
-                    onpointerdown={() => {
+                    interactive
+                    pointerdown={() => {
                         onMouseClick && onMouseClick(tile);
                     }}
-                    onpointermove={() => {
+                    pointermove={() => {
                         onMouseMove && onMouseMove(tile);
                     }}
                     width={16 * scale}
@@ -164,5 +162,6 @@ export const Map: FC<MapProps> = ({
             <React.Fragment key={coord}></React.Fragment>
         );
     };
+
     return <>{coordinates.map(({ x, y }) => TileImage(x, y))}</>;
 };

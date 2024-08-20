@@ -207,34 +207,15 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             console.log(`applying tool ${tool} at (${x},${y}) to game ${from}`);
             const result = game.engine.doTool(tool, x, y);
             // XXX: reject input if result is not successuful?
-            game.engine.simTick();
+            for(let i = 0; i < 100; i++){
+                game.engine.simTick();
+            }
             // advance game simulation
             while (game.block < blockNumber) {
                 for (let i = 0; i < TICKS_PER_BLOCK; i++) {
                     game.engine.simTick();
                 }
                 game.block++;
-            }
-
-           
-            if(tool == 5){
-            
-                // Register the callback
-                game.engine.registerCallback((
-                    message: string,
-                    format: string,
-                    tileCategory: number,
-                    s0: number,
-                    s1: number,
-                    s2: number,
-                    s3: number,
-                    s4: number,
-                    x: number,
-                    y: number
-                    ) => {
-                    
-                    console.log(`${format} ${tileCategory} ${s0} ${s1} ${s2} ${s3} ${s4} ${x} ${y}`);
-                });
             }
             
 

@@ -95,5 +95,5 @@ export class Micropolis {
     readonly crimeRate: Uint8Array;
     readonly pollutionDensity: Uint8Array;
     readonly growthRate: Uint8Array;
-    
+
 }

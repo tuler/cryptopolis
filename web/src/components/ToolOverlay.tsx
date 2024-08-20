@@ -13,7 +13,7 @@ export type ToolOverlayProps = {
     setInput?: (input: Hex) => void;
 };
 
-export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
+export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput}) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
 
@@ -31,7 +31,6 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
     }, [setInput, tool, x, y]);
 
     
-
     // create optimized spritesheet
     useEffect(() => {
         const texture = Texture.from("/img/tools2.png");

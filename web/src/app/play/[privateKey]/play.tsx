@@ -17,6 +17,7 @@ import { FC, useState } from "react";
 import { Hex, hexToNumber, hexToString } from "viem";
 import Link from "next/link";
 import { Options } from "@/components/Options";
+import { Query } from "@/components/Query";
 
 type PlayProps = {
     initialMap: Hex;
@@ -37,16 +38,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
     const loaded = !!population && !!totalFunds && !!cityTime;
     const debug = false;
 
-    // console.log(populationDensity);
-    // if (populationDensity) {
-    //     const values = populationDensity.substring(2).match(/.{1,2}/g);
-    //     if (values) {
-    //         // Convert each hex pair to an integer and then into a Uint8Array
-    //         const byteArray = new Uint8Array(values.map(hex => parseInt(hex, 16)));
-
-    //         console.log(byteArray); // Now map is a Uint16Array
-    //     }
-    // }
+    
 
     return (
         <AppShell
@@ -116,6 +108,12 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                     loading={loading}
                     map={map || initialMap}
                     tool={tool}
+                    populationDensity={populationDensity}
+                    landValue={landValue}
+                    crimeRate={crimeRate}
+                    pollutionDensity={pollutionDensity}
+                    growthRate={growthRate}
+
                 />
             </AppShell.Main>
             {debug && (
