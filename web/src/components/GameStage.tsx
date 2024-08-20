@@ -57,7 +57,7 @@ export const GameStage: FC<GameStageProps> = ({
                         setY(tile.y);
                     }}
                     onMouseClick={(tile) => {
-                        write && write();
+                        if(tool != 5) write && write();
                         if(tool == 5 && !query){
                             setClickedX(tile.x);
                             setClickedY(tile.y);
