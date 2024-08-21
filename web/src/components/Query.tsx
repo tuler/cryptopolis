@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { FC, useState } from "react";
 import { abi } from "@/hooks/rollups";
-import { Hex, encodeFunctionData, fromHex } from "viem";
+import { Hex, fromHex } from "viem";
 
 
 export type QueryProps = {

@@ -53,6 +53,8 @@ export class Micropolis {
     // apply a tool to a location
     doTool(tool: EditingTool, x: number, y: number): ToolResult;
 
+    dragTool(tool: EditingTool, x: number, y: number, deltaX: number, deltaY: number): void;
+
     // engine version
     readonly version: string;
 

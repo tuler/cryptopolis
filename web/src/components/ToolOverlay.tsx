@@ -10,25 +10,32 @@ export type ToolOverlayProps = {
     tool: number;
     x?: number;
     y?: number;
+    clickedX?: number;
+    clickedY?: number;
+    deltaX?: number;
+    deltaY?: number;
     setInput?: (input: Hex) => void;
+
 };
 
-export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput}) => {
+export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, clickedX, clickedY, deltaX, deltaY, setInput}) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
 
 
     useEffect(() => {
-        if (setInput && x && y && tool >= 0) {
+        if (setInput && clickedX && clickedY && deltaX && deltaY && tool >= 0) {
             // encode the input
-            setInput(
-                encodeFunctionData({
-                    abi,
-                    functionName: "doTool",
-                    args: [tool, x, y],
-                })
-            );
+
+                setInput(
+                    encodeFunctionData({
+                        abi,
+                        functionName: "dragTool",
+                        args: [tool, clickedX, clickedY, deltaX, deltaY],
+                    })
+                );
+            
         }
-    }, [setInput, tool, x, y]);
+    }, [setInput, tool, clickedX, clickedY, deltaX, deltaY]);
 
     
     // create optimized spritesheet

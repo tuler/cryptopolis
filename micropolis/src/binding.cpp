@@ -18,6 +18,7 @@ private:
   void setSpeed(const Napi::CallbackInfo &info, const Napi::Value &value);
   Napi::Value getSpeed(const Napi::CallbackInfo &info);
   Napi::Value doTool(const Napi::CallbackInfo &info);
+  void dragTool(const Napi::CallbackInfo &info);
   Napi::Value getMap(const Napi::CallbackInfo &info);
   Napi::Value getTotalFunds(const Napi::CallbackInfo &info);
   Napi::Value getPopulation(const Napi::CallbackInfo &info);
@@ -66,6 +67,7 @@ Napi::Object MicropolisWrapper::Init(Napi::Env env, Napi::Object exports)
                                                            InstanceMethod("registerCallback", &MicropolisWrapper::registerCallback),
                                                            InstanceMethod("simTick", &MicropolisWrapper::simTick),
                                                            InstanceMethod("doTool", &MicropolisWrapper::doTool),
+                                                           InstanceMethod("dragTool", &MicropolisWrapper::dragTool),
                                                            InstanceMethod("makeFire", &MicropolisWrapper::makeFire),
                                                            InstanceMethod("makeFlood", &MicropolisWrapper::makeFlood),
                                                            InstanceMethod("makeMeltdown", &MicropolisWrapper::makeMeltdown),
@@ -329,6 +331,30 @@ Napi::Value MicropolisWrapper::doTool(const Napi::CallbackInfo &info)
   ToolResult result = this->_micropolis->doTool(tool, tileX, tileY);
   return Napi::Number::New(env, result);
 }
+
+void MicropolisWrapper::dragTool(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  if (info.Length() < 5)
+  {
+    Napi::TypeError::New(env, "Wrong number of arguments")
+        .ThrowAsJavaScriptException();
+  }
+
+  if (!info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsNumber() || !info[3].IsNumber() || !info[4].IsNumber())
+  {
+    Napi::TypeError::New(env, "Wrong argument").ThrowAsJavaScriptException();
+  }
+
+  int toolId = info[0].As<Napi::Number>();
+  int tileX = info[1].As<Napi::Number>();
+  int tileY = info[2].As<Napi::Number>();
+  int deltaX = info[3].As<Napi::Number>();
+  int deltaY = info[4].As<Napi::Number>();
+  EditingTool tool = static_cast<EditingTool>(toolId);
+  this->_micropolis->toolDrag(tool, tileX, tileY, deltaX, deltaY);
+}
+
 
 Napi::Value MicropolisWrapper::getMap(const Napi::CallbackInfo &info)
 {

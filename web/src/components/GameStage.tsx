@@ -1,10 +1,13 @@
 "use client";
 import { Stage } from "@pixi/react";
-import { FC, useState } from "react";
-import { Hex, fromHex } from "viem";
+import { FC, useState, useEffect } from "react";
+import { Hex, encodeFunctionData } from "viem";
 import { Map } from "./Map";
 import { ToolOverlay } from "./ToolOverlay";
 import { Query } from "./Query";
+import { abi } from "@/hooks/rollups";
+import { drag } from "d3";
+
 
 export type GameStageProps = {
     map?: Hex;
@@ -38,12 +41,15 @@ export const GameStage: FC<GameStageProps> = ({
 
     const [clickedX, setClickedX] = useState(0);
     const [clickedY, setClickedY] = useState(0);
+    const [dragged, setDragged] = useState(false);
     const [query, doQuery] = useState(false);
 
-    // if(populationDensity){
-    //     const byteArray = fromHex(populationDensity, 'bytes');
-    //     console.log(byteArray);
-    // }
+    const [deltaX, setDeltaX] = useState(0);
+    const [deltaY, setDeltaY] = useState(0);
+
+
+
+    
 
     return (
         <div>
@@ -55,19 +61,37 @@ export const GameStage: FC<GameStageProps> = ({
                     onMouseMove={(tile) => {
                         setX(tile.x);
                         setY(tile.y);
+                        setDeltaX(tile.x);
+                        setDeltaY(tile.y);    
                     }}
-                    onMouseClick={(tile) => {
-                        if(tool != 5) write && write();
+                    onMouseDown={(tile) => {
+                        setClickedX(tile.x);
+                        setClickedY(tile.y);
+
+                        if(tool != 8 && tool != 9){ 
+                            write && write();
+                        }
                         if(tool == 5 && !query){
-                            setClickedX(tile.x);
-                            setClickedY(tile.y);
                             doQuery(!query);
                         } 
+                    }}
+                    onMouseUp={(tile) => {
+                        setDeltaX(tile.x);
+                        setDeltaY(tile.y);    
+                        if(tool == 9 || tool == 8){
+                            write && write();
+
+                        }
+                        
                     }}
                 />
                 {tool >= 0 && (
                     <ToolOverlay 
                     tool={tool} x={x} y={y} 
+                    clickedX={clickedX}
+                    clickedY={clickedY}
+                    deltaX={deltaX}
+                    deltaY={deltaY}
                     setInput={setInput}
                     />
                 )}

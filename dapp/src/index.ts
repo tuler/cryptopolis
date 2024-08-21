@@ -24,6 +24,7 @@ const abi = parseAbi([
     "function transfer(address to, uint256 amount)",
     "function start(uint32 seed)",
     "function doTool(uint8 tool, uint16 x, uint16 y)",
+    "function dragTool(uint8 tool, uint16 x, uint16 y, uint16 deltaX, uint16 deltaY)",
     "function doBudget(uint8 tax, uint8 rp, uint8 fp, uint8 pp)",
     "function makeDisaster(uint8 disaster)",
 ]);
@@ -243,6 +244,19 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
             // create notices with map, population, totalFunds, cityTime
             await createEngineNotices(game.engine);
 
+            return "accept";
+        case "dragTool":
+            if (!game) {
+                // game does not exist, reject input
+                return "reject";
+            }
+
+            const [small, X, Y, deltaX, deltaY] = args;
+
+            console.log(`applying drag ${small} at (${X},${Y}) to (${deltaX},${deltaY}) to game ${from}`);
+            game.engine.dragTool(small, X, Y, deltaX, deltaY);
+            
+            await createEngineNotices(game.engine);
             return "accept";
         case "doBudget":
             if (!game) {

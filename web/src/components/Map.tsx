@@ -21,7 +21,8 @@ export type MapProps = {
     scale: number;
     loading?: boolean;
     onMouseMove?: (tile: Tile) => void;
-    onMouseClick?: (tile: Tile) => void;
+    onMouseDown?: (tile: Tile) => void;
+    onMouseUp?: (tile: Tile) => void;
 };
 
 const decodeTile = (x: number, y: number, tile: number): Tile => ({
@@ -50,7 +51,8 @@ export const Map: FC<MapProps> = ({
     value,
     scale,
     onMouseMove,
-    onMouseClick,
+    onMouseDown,
+    onMouseUp,
 }) => {
     const [spritesheet, setSpritesheet] = useState<Spritesheet>();
     // Default value is a blank map
@@ -129,10 +131,13 @@ export const Map: FC<MapProps> = ({
                     animationSpeed={0.1}
                     loop={true}
                     pointerdown={() => {
-                        onMouseClick && onMouseClick(tile);
+                        onMouseDown && onMouseDown(tile);
                     }}
                     pointermove={() => {
                         onMouseMove && onMouseMove(tile);
+                    }}
+                    pointerup={() => {
+                        onMouseUp && onMouseUp(tile);
                     }}
                     width={16 * scale}
                     height={16 * scale}
@@ -147,10 +152,13 @@ export const Map: FC<MapProps> = ({
                     texture={spritesheet.textures[tile.type]}
                     interactive
                     pointerdown={() => {
-                        onMouseClick && onMouseClick(tile);
+                        onMouseDown && onMouseDown(tile);
                     }}
                     pointermove={() => {
                         onMouseMove && onMouseMove(tile);
+                    }}
+                    pointerup={() => {
+                        onMouseUp && onMouseUp(tile);
                     }}
                     width={16 * scale}
                     height={16 * scale}
