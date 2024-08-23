@@ -68,7 +68,7 @@ export const GameStage: FC<GameStageProps> = ({
                         setClickedX(tile.x);
                         setClickedY(tile.y);
 
-                        if(tool != 8 && tool != 9){ 
+                        if(tool != 8 && tool != 9 && tool != 5){ 
                             write && write();
                         }
                         if(tool == 5 && !query){

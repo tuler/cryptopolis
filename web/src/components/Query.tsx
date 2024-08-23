@@ -82,14 +82,14 @@ export const Query: FC<QueryProps> = ({
         }
     }
 
-    if (growthRate) {
-        const byteArray = fromHex(growthRate, 'bytes');
-        if (index >= 0 && index < byteArray.length) {
-            growth = byteArray[index];
-        } else {
-            console.warn(`Index out of bounds for growthRate: ${index}`);
-        }
-    }
+    // if (growthRate) {
+    //     const byteArray = fromHex(growthRate, 'bytes');
+    //     if (index >= 0 && index < byteArray.length) {
+    //         growth = byteArray[index];
+    //     } else {
+    //         console.warn(`Index out of bounds for growthRate: ${index}`);
+    //     }
+    // }
 
     return(
         <Group>

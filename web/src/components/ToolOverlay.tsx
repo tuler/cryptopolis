@@ -25,7 +25,7 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, clickedX, clicke
     useEffect(() => {
         if (setInput && clickedX && clickedY && deltaX && deltaY && tool >= 0) {
             // encode the input
-
+            if(tool == 8 || tool ==9){
                 setInput(
                     encodeFunctionData({
                         abi,
@@ -33,6 +33,18 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, clickedX, clicke
                         args: [tool, clickedX, clickedY, deltaX, deltaY],
                     })
                 );
+            }
+            else{
+                setInput(
+                    encodeFunctionData({
+                        abi,
+                        functionName: "doTool",
+                        args: [tool, clickedX, clickedY],
+                    })
+                );
+            }
+
+                
             
         }
     }, [setInput, tool, clickedX, clickedY, deltaX, deltaY]);
