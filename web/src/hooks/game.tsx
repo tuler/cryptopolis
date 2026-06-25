@@ -8,6 +8,7 @@ import {
 } from "viem";
 import { UseInspect, useInspect } from "./inspect";
 import { SWRConfiguration } from "swr";
+import { dappName } from "@/config";
 
 const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
@@ -22,13 +23,18 @@ export type GameInspect = {
     cityTime?: number;
 };
 
-export const useInspectGame = (address: Address): UseInspect & GameInspect => {
+export const useInspectGame = (
+    address: Address,
+    options?: SWRConfiguration
+): UseInspect & GameInspect => {
     const swr = useInspect(
+        dappName,
         encodeFunctionData({
             abi: inspectAbi,
             functionName: "getUserMap",
             args: [address],
-        })
+        }),
+        options
     );
     const { reports } = swr;
     const [map, population, totalFunds, cityTime] = reports;
@@ -43,6 +49,7 @@ export const useInspectGame = (address: Address): UseInspect & GameInspect => {
 
 export const useInspectMap = (seed: number): UseInspect & GameInspect => {
     const swr = useInspect(
+        dappName,
         encodeFunctionData({
             abi: inspectAbi,
             functionName: "getMap",
@@ -65,6 +72,7 @@ export const useInspectBalance = (
     options?: SWRConfiguration
 ): UseInspect & { balance?: bigint } => {
     const swr = useInspect(
+        dappName,
         encodeFunctionData({
             abi: inspectAbi,
             functionName: "balanceOf",

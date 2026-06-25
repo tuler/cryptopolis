@@ -3,6 +3,7 @@ import { CityStats } from "@/components/CityStats";
 import { GameStage } from "@/components/GameStage";
 import { ToolBox } from "@/components/ToolBox";
 import { useRollupsServer } from "@/hooks/rollups";
+import { useInspectGame } from "@/hooks/game";
 import {
     AppShell,
     Group,
@@ -13,25 +14,28 @@ import {
 } from "@mantine/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FC, useState } from "react";
-import { Hex, hexToNumber } from "viem";
+import { Address, Hex } from "viem";
 
 type PlayProps = {
-    initialMap: Hex;
+    address: Address;
 };
 
-export const Play: FC<PlayProps> = ({ initialMap }) => {
+export const Play: FC<PlayProps> = ({ address }) => {
     const [input, setInput] = useState<Hex>();
     const [tool, setTool] = useState(0);
 
-    const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
-    const { writeContract, request, notices, loading } = useRollupsServer(
-        dapp,
-        input,
-    );
+    // input submission (doTool)
+    const { writeContract, request, loading } = useRollupsServer(input);
 
-    // first notice is always the map
-    const [map, population, totalFunds, cityTime] = notices;
-    const loaded = !!population && !!totalFunds && !!cityTime;
+    // the node inspect is the single source of truth for the game state
+    // (budget, population, clock, map); poll it so it stays current after inputs
+    const { map, population, totalFunds, cityTime } = useInspectGame(address, {
+        refreshInterval: 2000,
+    });
+    const loaded =
+        population != undefined &&
+        totalFunds != undefined &&
+        cityTime != undefined;
     const debug = false;
 
     return (
@@ -50,9 +54,9 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                         <Title>🏗️ Cryptopolis</Title>
                         {loaded && (
                             <CityStats
-                                population={hexToNumber(population)}
-                                totalFunds={hexToNumber(totalFunds)}
-                                cityTime={hexToNumber(cityTime)}
+                                population={population}
+                                totalFunds={totalFunds}
+                                cityTime={cityTime}
                             />
                         )}
                         <ConnectButton />
@@ -69,7 +73,7 @@ export const Play: FC<PlayProps> = ({ initialMap }) => {
                     setInput={setInput}
                     write={() => request && writeContract(request)}
                     loading={loading}
-                    map={map || initialMap}
+                    map={map}
                     tool={tool}
                 />
             </AppShell.Main>

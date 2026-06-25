@@ -20,7 +20,7 @@ The first step was to build the engine to the RISC-V target architecture, so it 
 
 The second step was to developed a Node.js application that uses the engine to run the game simulation as a [Cartesi Rollups](https://docs.cartesi.io/cartesi-rollups/) application. That also includes implementing an integration of the game economy with a ERC-20 token bridged from Ethereum.
 
-The third step was to implement a new Web UI for the game, using a myriad of libraries, like [React](https://reactjs.org/), [Next.js](https://nextjs.org), [viem](https://viem.sh), [wagmi](https://wagmi.sh), [urql](https://github.com/urql-graphql/urql), [PixiJS](https://pixijs.com), [D3](https://d3js.org), [Mantine](https://mantine.dev), and others. The UI includes screens for bridging ERC-20 from Ethereum to power the game economy.
+The third step was to implement a new Web UI for the game, using a myriad of libraries, like [React](https://reactjs.org/), [Next.js](https://nextjs.org), [viem](https://viem.sh), [wagmi](https://wagmi.sh), [Apollo Client](https://www.apollographql.com/docs/react/), [PixiJS](https://pixijs.com), [D3](https://d3js.org), [Mantine](https://mantine.dev), and others. The UI includes screens for bridging ERC-20 from Ethereum to power the game economy.
 
 ## Game Economy
 
@@ -48,71 +48,49 @@ If the `people` wallet runs out of funds, the global economy is in trouble. The 
 
 ## Building
 
--   Building the game engine
-
-The command below will build the C++ engine and the Node.js binding targeted to the host machine where it's executed.
+This is a [Bun](https://bun.sh) monorepo with three workspaces — `micropolis`, `dapp` and `web`. A single install at the repository root links them together (the `dapp` consumes the local `micropolis` engine directly through the workspace — there is no publishing/linking step) and compiles the native C++ engine and its Node.js binding for the host machine:
 
 ```shell
-cd micropolis
-pnpm i
-yalc publish
+bun install
 ```
 
-A RISC-V build can be done using Docker and its RISC-V emulation support through QEMU.
-
--   Building the dapp
+To build all three workspaces explicitly:
 
 ```shell
-cd dapp
-yalc update
-pnpm i
-pnpm run build
+bun run build
 ```
 
-Use Node 20.x. Node 22.x is not supported yet.
-
--   Building the web UI
-
-The UI is a Next.js application, and can be built with the command below:
-
-```shell
-cd web
-pnpm i
-pnpm run build
-```
+You can also build a single workspace, e.g. `bun run --filter web build`. A RISC-V build of the engine + dapp is produced by the Cartesi image build (see [Running the dapp](#running-the-dapp)), which cross-compiles through Docker and its RISC-V emulation via QEMU.
 
 ## Running
 
 ### Running the dapp
 
-Running on the host:
-
-```shell
-cartesi run --no-backend
-cd dapp
-ts-node src/index.ts
-```
-
-Running in the Cartesi Machine:
+The dapp talks to the rollup through [`@tuler/node-libcmt`](https://tuler.github.io/libcmt-node/), the Node.js bindings for the Cartesi Machine guest rollup library. It communicates directly with the machine, so there is no separate host-side HTTP backend to run — the backend runs inside the Cartesi Machine:
 
 ```shell
 cartesi build
 cartesi run
 ```
 
+On non-RISC-V hosts the same code links libcmt's *mock* IO driver, which feeds inputs from files via the `CMT_INPUTS` environment variable (reason `0` is an EVM-ABI encoded advance, `1` is an inspect query) and writes outputs next to those files. This is how the dapp is exercised on the host:
+
+```shell
+cd dapp
+CMT_INPUTS="0:advance.bin,1:inspect.bin" bun run start
+```
+
 ### Running the web UI
 
 ```shell
-cd web
-pnpm i
-pnpm run dev
+bun run dev
 ```
 
 ### Create a game
 
 -   Go to http://localhost:3000/
 -   Connect to Metamask wallet
--   Import foundry wallet to Metamask (private key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80)
+-   Import anvil wallet to Metamask (private key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80)
 -   Approve and deposit 20000 tokens
 -   Go to http://localhost:3000/play/0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 -   Choose a map and create a game

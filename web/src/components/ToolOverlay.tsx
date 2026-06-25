@@ -1,7 +1,7 @@
 "use client";
-import { Spritesheet, Texture } from "pixi.js";
+import { Assets, Spritesheet } from "pixi.js";
 import React, { FC, useEffect, useState } from "react";
-import { Sprite } from "@pixi/react";
+import "./pixi";
 import { Hex, encodeFunctionData } from "viem";
 import { tools } from "../models/Tool";
 import { abi } from "@/hooks/rollups";
@@ -31,7 +31,6 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
 
     // create optimized spritesheet
     useEffect(() => {
-        const texture = Texture.from("/img/tools.png");
         const frames = [
             { x: 0, y: 0, w: 3, h: 3 }, // residential
             { x: 3, y: 0, w: 3, h: 3 }, // commercial
@@ -57,18 +56,24 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
             frame: { x: 16 * x, y: 16 * y, w: 16 * w, h: 16 * h },
         }));
 
-        const sheet = new Spritesheet(texture, {
-            frames: frames.reduce(
-                (acc, frame, index) => ({ ...acc, [index]: frame }),
-                {}
-            ),
-            meta: {
-                scale: "1",
-            },
-        });
-        sheet.parse().then((_texture) => {
-            setSpritesheet(sheet);
-        });
+        let cancelled = false;
+        (async () => {
+            const texture = await Assets.load("/img/tools.png");
+            const sheet = new Spritesheet(texture, {
+                frames: frames.reduce(
+                    (acc, frame, index) => ({ ...acc, [index]: frame }),
+                    {}
+                ),
+                meta: {
+                    scale: 1,
+                },
+            });
+            await sheet.parse();
+            if (!cancelled) setSpritesheet(sheet);
+        })();
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const t = tools[tool];
@@ -77,7 +82,7 @@ export const ToolOverlay: FC<ToolOverlayProps> = ({ tool, x, y, setInput }) => {
     const px = 16 * (x - Math.floor((t.size - 1) / 2));
     const py = 16 * (y - Math.floor((t.size - 1) / 2));
     return spritesheet ? (
-        <Sprite
+        <pixiSprite
             texture={spritesheet.textures[tool]}
             x={px}
             y={py}

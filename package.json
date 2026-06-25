@@ -1,0 +1,32 @@
+{
+    "name": "cryptopolis",
+    "version": "0.1.0",
+    "description": "SimCity Classic (Micropolis) as a Cartesi Rollups application",
+    "private": true,
+    "license": "GPL-3.0-or-later",
+    "workspaces": [
+        "micropolis",
+        "dapp",
+        "web"
+    ],
+    "scripts": {
+        "build": "bun run --filter='*' build",
+        "dev": "bun run --filter web dev",
+        "test": "bun run --filter='*' test",
+        "lint": "bun run --filter web lint",
+        "codegen": "bun run --filter web codegen"
+    },
+    "trustedDependencies": [
+        "@tuler/node-libcmt",
+        "canvas",
+        "esbuild",
+        "micropolis"
+    ],
+    "packageManager": "bun@1.3.12",
+    "engines": {
+        "node": ">= 20"
+    },
+    "volta": {
+        "node": "24.17.0"
+    }
+}

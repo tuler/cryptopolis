@@ -122,7 +122,7 @@ export const TransactionProgress: FC<TransactionProgressProps> = ({
                     </Group>
                 )}
             </Center>
-            <Collapse in={showError}>
+            <Collapse expanded={showError}>
                 <Code block variant="transparent" c={errorColor}>
                     {errorMessage}
                 </Code>

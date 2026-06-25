@@ -1,4 +1,5 @@
 "use client";
+import { cartesi } from "@cartesi/viem/chains";
 import { useMantineColorScheme } from "@mantine/core";
 import {
     AvatarComponent,
@@ -10,7 +11,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { foundry, mainnet, sepolia } from "wagmi/chains";
+import { mainnet, sepolia } from "wagmi/chains";
+import { http } from "viem";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import Image from "next/image";
 
@@ -22,9 +24,16 @@ export const appInfo = {
 
 const config = getDefaultConfig({
     appName: "Cryptopolis",
-    chains: [foundry, mainnet, sepolia],
+    chains: [cartesi, mainnet, sepolia],
     projectId,
     ssr: true,
+    transports: {
+        // the local devnet (anvil) is proxied by `cartesi run` (Traefik) at
+        // /anvil, not the default cartesi RPC at :8545
+        [cartesi.id]: http(),
+        [mainnet.id]: http(),
+        [sepolia.id]: http(),
+    },
 });
 
 const queryClient = new QueryClient();

@@ -2,6 +2,8 @@
 import { Map } from "@/components/Map";
 import { useInspectBalance, useInspectMap } from "@/hooks/game";
 import { abi, useRollupsServer } from "@/hooks/rollups";
+import { useReadErc20Decimals, useReadErc20Symbol } from "@/hooks/contracts";
+import { tokenAddress } from "@/config";
 import {
     Alert,
     AppShell,
@@ -20,7 +22,7 @@ import {
     Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Stage } from "@pixi/react";
+import { Application } from "@pixi/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -33,9 +35,13 @@ export const Create: FC = () => {
     const width = 120;
     const height = 100;
 
-    // XXX: remove this from here
-    const decimals = 18;
-    const symbol = "SIM";
+    // token metadata from the ERC-20 contract
+    const { data: tokenSymbol } = useReadErc20Symbol({ address: tokenAddress });
+    const { data: tokenDecimals } = useReadErc20Decimals({
+        address: tokenAddress,
+    });
+    const symbol = tokenSymbol ?? "";
+    const decimals = tokenDecimals ?? 18;
 
     const { address } = useAccount();
     if (!address) {
@@ -57,11 +63,8 @@ export const Create: FC = () => {
         functionName: "start",
         args: [form.values.seed],
     });
-    const dapp = "0xab7528bb862fb57e8a2bcd567a2e929a0be56a5e";
-    const { writeContract, request, notices, loading } = useRollupsServer(
-        dapp,
-        input,
-    );
+    const { writeContract, request, notices, loading } =
+        useRollupsServer(input);
 
     // this is the amount of funds for an easy game
     const requiredFunds = 20000n * 10n ** 18n;
@@ -133,7 +136,7 @@ export const Create: FC = () => {
                                                 allowNegative={false}
                                                 allowDecimal={false}
                                             />
-                                            <Collapse in={loading}>
+                                            <Collapse expanded={loading}>
                                                 <Progress
                                                     value={100}
                                                     striped
@@ -157,9 +160,12 @@ export const Create: FC = () => {
                             </Paper>
                         </Center>
                     </Stack>
-                    <Stage width={(width * 16) / 2} height={(height * 16) / 2}>
+                    <Application
+                        width={(width * 16) / 2}
+                        height={(height * 16) / 2}
+                    >
                         <Map value={map} scale={0.5} />
-                    </Stage>
+                    </Application>
                 </Group>
             </AppShell.Main>
         </AppShell>

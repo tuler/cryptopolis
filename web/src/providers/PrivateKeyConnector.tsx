@@ -1,6 +1,6 @@
 "use client";
 import { createConnector } from "@wagmi/core";
-import { Hex } from "viem";
+import { Address, Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 export type PrivateKeyParameters = {
@@ -18,21 +18,34 @@ export function privateKeyConnector(parameters: PrivateKeyParameters) {
             name: "Private Key Wallet",
             supportsSimulation: true,
             type: "wallet",
-            connect: async (parameters) => {
-                console.log("connect", parameters);
+            connect: async <withCapabilities extends boolean = false>(parameters?: {
+                chainId?: number;
+                isReconnecting?: boolean;
+                withCapabilities?: withCapabilities | boolean;
+            }) => {
                 if (parameters?.chainId) {
                     // switch chain
                     const chain = chains.find(
-                        (c) => c.id === parameters?.chainId,
+                        (c) => c.id === parameters.chainId,
                     );
                     if (chain) {
                         selectedChain = chain;
                     }
                 }
-                const id = selectedChain.id;
+                const addresses: readonly Address[] = [account.address];
+                // wagmi v2 `connect` is generic over `withCapabilities`: return
+                // either bare addresses or { address, capabilities } objects
+                const accounts = parameters?.withCapabilities
+                    ? addresses.map((address) => ({ address, capabilities: {} }))
+                    : addresses;
                 return {
-                    accounts: [account.address],
-                    chainId: id,
+                    accounts: accounts as withCapabilities extends true
+                        ? readonly {
+                              address: Address;
+                              capabilities: Record<string, unknown>;
+                          }[]
+                        : readonly Address[],
+                    chainId: selectedChain.id,
                 };
             },
             getProvider: async (parameters) => {

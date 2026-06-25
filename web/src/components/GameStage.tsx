@@ -1,5 +1,5 @@
 "use client";
-import { Stage } from "@pixi/react";
+import { Application } from "@pixi/react";
 import { FC, useState } from "react";
 import { Hex } from "viem";
 import { Map } from "./Map";
@@ -26,7 +26,7 @@ export const GameStage: FC<GameStageProps> = ({
     const [y, setY] = useState(0);
 
     return (
-        <Stage width={width * 16} height={height * 16}>
+        <Application width={width * 16} height={height * 16}>
             <Map
                 loading={loading}
                 value={map}
@@ -42,6 +42,6 @@ export const GameStage: FC<GameStageProps> = ({
             {tool >= 0 && (
                 <ToolOverlay tool={tool} x={x} y={y} setInput={setInput} />
             )}
-        </Stage>
+        </Application>
     );
 };

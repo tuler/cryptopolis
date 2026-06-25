@@ -1,5 +1,5 @@
-import useSWR, { Key, SWRResponse, SWRConfiguration } from "swr";
-import { Hex } from "viem";
+import useSWR, { SWRResponse, SWRConfiguration } from "swr";
+import { Hex, hexToBytes } from "viem";
 
 const url = process.env.NEXT_PUBLIC_INSPECT_URL;
 if (!url)
@@ -26,10 +26,10 @@ export interface InspectMetadata {
 }
 
 export interface InspectResponse {
-    status: InspectStatus;
-    exception_payload: string;
+    status?: InspectStatus;
+    exception_payload?: string;
     reports: InspectReport[];
-    metadata: InspectMetadata;
+    metadata?: InspectMetadata;
 }
 
 type ReportResponse = {
@@ -38,18 +38,40 @@ type ReportResponse = {
 
 export type UseInspect = SWRResponse<InspectResponse> & ReportResponse;
 
+// Cartesi Rollups v2 inspect: POST <node>/inspect/<application> with the raw
+// payload bytes as the request body (the node forwards them verbatim to the
+// machine — it does not unwrap a JSON envelope or hex-decode a string).
+const inspectFetcher = async ([endpoint, payload]: [
+    string,
+    Hex,
+]): Promise<InspectResponse> => {
+    const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/octet-stream" },
+        // send the raw bytes (the ArrayBuffer, a clean BodyInit)
+        body: hexToBytes(payload).buffer as ArrayBuffer,
+    });
+    return response.json();
+};
+
 export const useInspect = (
-    key: Key,
+    application: string,
+    payload?: Hex,
     options?: SWRConfiguration
 ): UseInspect => {
     const swr = useSWR<InspectResponse>(
-        () => (key ? `${url}${key}` : false),
+        () => (payload ? [`${url}/${application}`, payload] : null),
+        inspectFetcher,
         options
     );
 
     const response = swr.data;
     let reports: InspectReport[] = [];
-    if (response && response.status == InspectStatus.Accepted) {
+    // accept reports when the inspect succeeded (status absent => tolerate)
+    if (
+        response?.reports &&
+        (!response.status || response.status === InspectStatus.Accepted)
+    ) {
         reports = response.reports;
     }
 

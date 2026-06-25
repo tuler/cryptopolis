@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import {
-    Address,
-    Hex,
-    TransactionReceipt,
-    decodeEventLog,
-    parseAbi,
-} from "viem";
+import { Hex, parseAbi } from "viem";
 import { useWaitForTransactionReceipt } from "wagmi";
+import { useQuery } from "@tanstack/react-query";
+import { getInputsAdded } from "@cartesi/viem";
 import {
-    inputBoxAbi,
     useWriteInputBoxAddInput,
     useSimulateInputBoxAddInput,
 } from "./contracts";
-import { useQuery } from "@apollo/client";
-import { CompletionStatus, InputNoticesDocument } from "./graphql/graphql";
+import { cartesiClient, useDappAddress } from "./cartesi";
+import { dappName } from "@/config";
 
 // define application API (or ABI so to say)
 export const abi = parseAbi([
@@ -22,48 +16,15 @@ export const abi = parseAbi([
     "function doTool(uint8 tool, uint16 x, uint16 y)",
 ]);
 
-/**
- * Hook to get the inputIndex from a transaction receipt
- * @param receipt transaction receipt
- * @returns inputIndex inside the transaction receipt
- */
-const useInputIndex = (receipt?: TransactionReceipt): bigint | undefined => {
-    const [inputIndex, setInputIndex] = useState<bigint | undefined>();
-    useEffect(() => {
-        // runs when receipt changes
-        if (receipt) {
-            // search for InputAdded event in receipt logs
-            const inputIndex = receipt.logs
-                .map((log) => {
-                    try {
-                        // decode the event
-                        const decodedLog = decodeEventLog({
-                            abi: inputBoxAbi,
-                            eventName: "InputAdded",
-                            topics: log.topics,
-                            data: log.data,
-                        });
-                        return decodedLog.args.inputIndex;
-                    } catch (e: any) {
-                        return undefined;
-                    }
-                })
-                .filter((id): id is bigint => !!id)
-                .at(0);
+export const useRollupsServer = (input?: Hex) => {
+    // the on-chain application address, resolved from the application name
+    const dapp = useDappAddress();
 
-            // set inputIndex state variable
-            setInputIndex(inputIndex);
-        }
-    }, [receipt]);
-    return inputIndex;
-};
-
-export const useRollupsServer = (dapp: Address, input?: Hex) => {
     // prepare the transaction
     const prepare = useSimulateInputBoxAddInput({
-        args: [dapp, input!],
+        args: [dapp!, input!],
         query: {
-            enabled: !!input,
+            enabled: !!input && !!dapp,
         },
     });
 
@@ -73,45 +34,44 @@ export const useRollupsServer = (dapp: Address, input?: Hex) => {
     // wait for the transaction to be mined
     const wait = useWaitForTransactionReceipt({ hash: execute.data });
 
-    // get id of the input sent
-    const inputIndex = useInputIndex(wait.data);
+    // get the index of the input sent, from the InputAdded event in the receipt
+    const inputIndex = wait.data
+        ? getInputsAdded(wait.data).at(0)?.index
+        : undefined;
 
-    // query for the input outputs (after transaction is mined)
-    const query = useQuery(InputNoticesDocument, {
-        variables: { inputIndex: Number(inputIndex) },
-        skip: !inputIndex,
-        pollInterval: 1000,
+    // wait for the node to process the input (v2 JSON-RPC) and read back the
+    // notices it produced (the game state payloads). Replaces the v1 GraphQL query.
+    const query = useQuery({
+        queryKey: ["notices", inputIndex?.toString()],
+        enabled: inputIndex !== undefined,
+        queryFn: async (): Promise<Hex[]> => {
+            const processed = await cartesiClient.waitForInput({
+                application: dappName,
+                inputIndex: inputIndex!,
+            });
+            if (processed.status !== "ACCEPTED") {
+                return [];
+            }
+            const { data: outputs } = await cartesiClient.listOutputs({
+                application: dappName,
+                inputIndex: inputIndex!,
+            });
+            return outputs
+                .filter((output) => output.decodedData?.type === "Notice")
+                .sort((a, b) => Number(a.index - b.index))
+                .map((output) => (output.decodedData as { payload: Hex }).payload);
+        },
     });
 
-    // state with notices, change when graphql query result change
-    const [notices, setNotices] = useState<Hex[]>([]);
-    const [queryLoading, setQueryLoading] = useState(false);
-    useEffect(() => {
-        if (inputIndex && query.data) {
-            setQueryLoading(true);
-            if (query.data.input.status == CompletionStatus.Accepted) {
-                const payloads = query.data.input.notices.edges
-                    .map((notice) => notice.node)
-                    .sort((notice) => notice.index)
-                    .map((notice) => notice.payload as Hex);
-                setNotices(payloads);
-                setQueryLoading(false);
-            }
-        }
-    }, [inputIndex, query.data]);
-    /*console.log(
-        JSON.stringify({
-            prepare: prepare.status,
-            execute: execute.status,
-            wait: wait.status,
-            query: query.loading,
-        })
-    );*/
+    const notices = query.data ?? [];
 
     return {
         writeContract: execute.writeContract,
         request: prepare.data?.request,
         notices,
-        loading: execute.isPending || wait.isLoading || queryLoading,
+        loading:
+            execute.isPending ||
+            wait.isLoading ||
+            (inputIndex !== undefined && query.isPending),
     };
 };

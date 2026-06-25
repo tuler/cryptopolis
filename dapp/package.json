@@ -3,35 +3,29 @@
     "version": "0.1.0",
     "description": "TypeScript DApp",
     "dependencies": {
-        "@deroll/app": "^0.6.1",
-        "@deroll/router": "^0.4.1",
-        "@deroll/wallet": "^0.7.0",
-        "micropolis": "file:.yalc/micropolis",
-        "openapi-fetch": "^0.9.7",
-        "viem": "^2.12.4"
+        "@deroll/app": "^2.0.0-alpha.5",
+        "@deroll/core": "^2.0.0-alpha.4",
+        "@deroll/wallet": "^2.0.0-alpha.6",
+        "micropolis": "file:../micropolis",
+        "viem": "^2.52.2"
     },
     "devDependencies": {
-        "@types/node": "^20.12.12",
+        "@types/node": "^26",
         "canvas": "^2.11.2",
-        "esbuild": "^0.21.4",
+        "esbuild": "^0.28.1",
         "npm-run-all": "^4.1.5",
-        "openapi-typescript": "^6.7.6",
         "ts-node": "^10.9.2",
-        "typescript": "^5.4.5",
-        "vitest": "^1.6.0"
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.9"
     },
     "scripts": {
         "build": "run-s compile",
-        "compile": "tsc && esbuild ./src/index.ts --bundle --outfile=dist/index.js --platform=node --target=node20",
-        "start": "ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:8080/host-runner\" ts-node src/index.ts",
+        "compile": "tsc && esbuild ./src/index.ts --bundle --outfile=dist/index.js --platform=node --target=node20 --external:@tuler/node-libcmt --external:micropolis",
+        "start": "ts-node src/index.ts",
         "test": "vitest"
     },
     "keywords": [
         "cartesi"
     ],
-    "license": "MIT",
-    "packageManager": "pnpm@9.1.2",
-    "volta": {
-        "node": "20.13.1"
-    }
+    "license": "MIT"
 }

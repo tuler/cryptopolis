@@ -1,4 +1,5 @@
 "use client";
+import { cartesi } from "@cartesi/viem/chains";
 import { useMantineColorScheme } from "@mantine/core";
 import {
     RainbowKitProvider,
@@ -7,8 +8,8 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FC } from "react";
-import { Hex, createWalletClient, http } from "viem";
-import { foundry, mainnet, sepolia } from "viem/chains";
+import { Hex, http } from "viem";
+import { mainnet, sepolia } from "viem/chains";
 import { WagmiProvider, createConfig } from "wagmi";
 import { privateKeyConnector } from "./PrivateKeyConnector";
 import { CustomAvatar, appInfo } from "./WalletProvider";
@@ -28,17 +29,19 @@ const PrivateKeyWalletProvider: FC<PrivateKeyWalletProviderProps> = ({
     // select chain based on env var
     const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "31337");
     const chain =
-        [foundry, mainnet, sepolia].find((c) => c.id == chainId) || foundry;
+        [cartesi, mainnet, sepolia].find((c) => c.id == chainId) || cartesi;
 
     // create connector from private key
     const connectors = [privateKeyConnector({ privateKey })];
     const config = createConfig({
         chains: [chain],
-        client: ({ chain }) => {
-            return createWalletClient({
-                transport: http(),
-                chain,
-            });
+        // public client over each chain's default RPC (the Cartesi devnet anvil
+        // for chain 31337), so contract reads like the token's symbol()/decimals()
+        // work here too
+        transports: {
+            [cartesi.id]: http(),
+            [mainnet.id]: http(),
+            [sepolia.id]: http(),
         },
         connectors,
     });

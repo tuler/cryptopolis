@@ -1,5 +1,4 @@
 .cartesi
-.yalc
 /dist
 /node_modules
 src/schema.d.ts

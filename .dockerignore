@@ -1,0 +1,10 @@
+# keep stale host artifacts out of the riscv64 build context;
+# the image reinstalls deps and cross-compiles the native addons itself
+**/node_modules
+**/dist
+**/build
+**/.next
+**/.cartesi
+.git
+**/*.log
+**/.DS_Store

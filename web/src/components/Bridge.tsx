@@ -7,11 +7,10 @@ import { Withdraw } from "./Withdraw";
 
 type BridgeProps = {
     address: Address;
-    dapp: Address;
     token: Address;
 };
 
-export const Bridge: FC<BridgeProps> = ({ address, dapp, token }) => {
+export const Bridge: FC<BridgeProps> = ({ address, token }) => {
     const [operation, setOperation] = useState("deposit");
 
     return (
@@ -25,7 +24,7 @@ export const Bridge: FC<BridgeProps> = ({ address, dapp, token }) => {
                 ]}
             />
             {operation === "deposit" && (
-                <Deposit address={address} token={token} dapp={dapp} />
+                <Deposit address={address} token={token} />
             )}
             {operation === "withdraw" && (
                 <Withdraw address={address} token={token} />

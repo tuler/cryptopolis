@@ -13,11 +13,10 @@ import { Address } from "viem";
 import { useAccount } from "wagmi";
 
 type BridgeProps = {
-    dapp: Address;
     token: Address;
 };
 
-export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
+export const BridgePage: FC<BridgeProps> = ({ token }) => {
     const { address, isConnected } = useAccount();
     return (
         <AppShell header={{ height: 60 }} padding="md">
@@ -34,11 +33,7 @@ export const BridgePage: FC<BridgeProps> = ({ dapp, token }) => {
                     <Center>
                         <Paper opacity={0.9} p={40}>
                             {isConnected && address && (
-                                <Bridge
-                                    address={address}
-                                    dapp={dapp}
-                                    token={token}
-                                />
+                                <Bridge address={address} token={token} />
                             )}
                             {!isConnected && <ConnectButton />}
                         </Paper>

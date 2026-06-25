@@ -1,22 +1,19 @@
 import { createApp } from "@deroll/app";
 import { createWallet } from "@deroll/wallet";
 import {
-    Address,
-    Hex,
+    type Address,
     decodeFunctionData,
     formatUnits,
     getAddress,
-    hexToString,
     numberToHex,
     parseAbi,
+    toHex,
 } from "viem";
 import { Micropolis } from "micropolis";
-import { createEnginePayloads, logTransfer } from "./util";
+import { createEnginePayloads, logTransfer } from "./util.js";
 
 // instantiate deroll application
-const url =
-    process.env.ROLLUP_HTTP_SERVER_URL || "http://127.0.0.1:8080/host-runner";
-const app = createApp({ url });
+const app = createApp();
 
 // define application API (or ABI so to say)
 const abi = parseAbi([
@@ -28,6 +25,7 @@ const abi = parseAbi([
 const inspectAbi = parseAbi([
     "function getMap(uint32 seed)",
     "function getUserMap(address)",
+    "function queryTool(address)",
     "function balanceOf(address)",
 ]);
 
@@ -36,8 +34,8 @@ const wallet = createWallet();
 app.addAdvanceHandler(wallet.handler);
 
 // TestToken is what we'll use for testing, in real world use any ERC-20 token
-const token = "0x92C6bcA388E99d6B304f1Af3c3Cd749Ff0b591e2";
 export const decimals = 18n;
+const token = "0x88A2120B7068E78692C8fd12E751d610B6377E4d";
 
 // this is the address of the in-game locked tokens
 const inGameWallet = "0x0000000000000000000000000000000000000001";
@@ -48,14 +46,14 @@ const peopleWallet = "0x0000000000000000000000000000000000000002";
 // game state. keep track of block number for real-time clock simulation
 type Game = {
     engine: Micropolis;
-    block: number; // block number of last input related to this game
+    block: bigint; // block number of last input related to this game
 };
 
 // store all games in memory, just one for each player (address)
 const games: Record<Address, Game> = {};
 
 // how many ticks the simulation runs per blockchain block
-const TICKS_PER_BLOCK = 16;
+const TICKS_PER_BLOCK = 16n;
 
 // create reports with the engine state
 const createEngineReports = async (engine: Micropolis) => {
@@ -81,11 +79,11 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
     // debug
     // console.log("input", payload);
 
-    const from = getAddress(metadata.msg_sender);
-    const blockNumber = metadata.block_number;
+    const from = getAddress(metadata.msgSender);
+    const blockNumber = metadata.blockNumber;
 
     const game = games[from]; // may be undefined
-    const { functionName, args } = decodeFunctionData({ abi, data: payload });
+    const { functionName, args } = decodeFunctionData({ abi, data: toHex(payload) });
     switch (functionName) {
         case "transfer":
             const [to, amount] = args;
@@ -201,14 +199,12 @@ app.addAdvanceHandler(async ({ metadata, payload }) => {
 });
 
 app.addInspectHandler(async ({ payload }) => {
-    const url = hexToString(payload);
-
     // debug
-    // console.log("inspect", payload, url);
+    // console.log("inspect", payload);
 
     const { functionName, args } = decodeFunctionData({
         abi: inspectAbi,
-        data: url as Hex,
+        data: toHex(payload),
     });
 
     switch (functionName) {
@@ -216,9 +212,7 @@ app.addInspectHandler(async ({ payload }) => {
             const [address] = args;
             const balance = wallet.erc20BalanceOf(token, address);
             console.log(`balanceOf(${address}): ${balance}`);
-            await app.createReport({
-                payload: numberToHex(balance, { size: 32 }),
-            });
+            await app.createReport({ payload: numberToHex(balance, { size: 32 }) });
             break;
 
         case "getMap":
@@ -243,7 +237,7 @@ app.addInspectHandler(async ({ payload }) => {
     }
 });
 
-console.log(`Game server listening for inputs from ${url}`);
+console.log("Game server listening for inputs");
 app.start().catch((e) => {
     console.log(e);
     process.exit(1);

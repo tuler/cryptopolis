@@ -2,13 +2,18 @@
 import {
     erc20PortalAddress,
     useReadErc20Allowance,
+    useReadErc20Decimals,
+    useReadErc20Symbol,
     useWriteErc20Approve,
     useReadErc20BalanceOf,
     useWriteErc20PortalDepositErc20Tokens,
     useSimulateErc20Approve,
     useSimulateErc20PortalDepositErc20Tokens,
+    useSimulateTestTokenMint,
+    useWriteTestTokenMint,
 } from "@/hooks/contracts";
 import {
+    Anchor,
     Button,
     Center,
     Group,
@@ -22,21 +27,20 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { TbArrowDown } from "react-icons/tb";
 import { Address, formatUnits, parseUnits } from "viem";
-import { useBlockNumber, useWaitForTransactionReceipt } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import {
     TransactionProgress,
     TransactionReadStageStatus,
     TransactionWriteStageStatus,
 } from "./TransactionProgress";
 import { useInspectBalance } from "@/hooks/game";
-import { useQueryClient } from "@tanstack/react-query";
+import { useDappAddress } from "@/hooks/cartesi";
 
 type DepositProps = {
     address: Address;
-    dapp: Address;
     token: Address;
 };
 
@@ -83,9 +87,15 @@ const Balance: FC<BalanceProps> = ({
     </Group>
 );
 
-export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
-    const symbol = "SIM"; // XXX: should actually come from querying token metadata
-    const decimals = 18; // XXX: should actually come from querying token metadata
+export const Deposit: FC<DepositProps> = ({ address, token }) => {
+    // on-chain application address, resolved from the application name
+    const dapp = useDappAddress();
+
+    // token metadata from the ERC-20 contract
+    const { data: tokenSymbol } = useReadErc20Symbol({ address: token });
+    const { data: tokenDecimals } = useReadErc20Decimals({ address: token });
+    const symbol = tokenSymbol ?? "";
+    const decimals = tokenDecimals ?? 18;
 
     // form for the amount
     const form = useForm({
@@ -106,37 +116,37 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
 
     const { amount } = form.getTransformedValues();
 
-    // query L1 balance from ERC-20
-    const queryClient = useQueryClient();
-    const { data: blockNumber } = useBlockNumber({ watch: true });
-    const {
-        data: l1Balance,
-        isLoading: l1BalanceLoading,
-        queryKey: l1BalanceQueryKey,
-    } = useReadErc20BalanceOf({
-        address: token,
-        args: [address],
-    });
+    // query L1 balance from ERC-20 (poll every 3s)
+    const { data: l1Balance, isLoading: l1BalanceLoading } =
+        useReadErc20BalanceOf({
+            address: token,
+            args: [address],
+            query: { refetchInterval: 3000 },
+        });
 
     // query L2 balance from dapp inspect server
     const { balance: l2Balance, isLoading: l2BalanceLoading } =
         useInspectBalance(address, { refreshInterval: 3000 });
 
-    // query allowance from ERC-20
-    const {
-        data: allowance,
-        isLoading: allowanceLoading,
-        queryKey: allowanceQueryKey,
-    } = useReadErc20Allowance({
-        address: token,
-        args: [address, erc20PortalAddress],
-    });
+    // query allowance from ERC-20 (poll every 3s)
+    const { data: allowance, isLoading: allowanceLoading } =
+        useReadErc20Allowance({
+            address: token,
+            args: [address, erc20PortalAddress],
+            query: { refetchInterval: 3000 },
+        });
 
-    useEffect(() => {
-        console.log("INVALIDATING");
-        queryClient.invalidateQueries({ queryKey: l1BalanceQueryKey });
-        queryClient.invalidateQueries({ queryKey: allowanceQueryKey });
-    }, [blockNumber, queryClient]);
+    // faucet: the TestToken's public mint(value) mints to msg.sender (the
+    // connected user); 20000 tokens is enough to create one city
+    const mintAmount = 20000n * 10n ** 18n;
+    const mintSimulate = useSimulateTestTokenMint({
+        address: token,
+        args: [mintAmount],
+        query: { enabled: address != undefined },
+    });
+    const mint = useWriteTestTokenMint();
+    const mintWait = useWaitForTransactionReceipt({ hash: mint.data });
+    const mintLoading = mint.isPending || mintWait.isLoading;
 
     // simulate approve transaction
     const approveSimulate = useSimulateErc20Approve({
@@ -154,9 +164,10 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
 
     // simulate deposit transaction
     const depositSimulate = useSimulateErc20PortalDepositErc20Tokens({
-        args: [token, dapp, amount, "0x"],
+        args: [token, dapp!, amount, "0x"],
         query: {
             enabled:
+                dapp != undefined &&
                 amount != undefined &&
                 l1Balance != undefined &&
                 allowance != undefined &&
@@ -199,9 +210,26 @@ export const Deposit: FC<DepositProps> = ({ address, dapp, token }) => {
         <Stack align="stretch">
             <Paper bg="black" p={20}>
                 <Stack gap={5}>
-                    <Group gap={5}>
-                        <Text>From: </Text>
-                        <ConnectButton showBalance={false} />
+                    <Group gap={5} justify="space-between">
+                        <Group gap={5}>
+                            <Text>From: </Text>
+                            <ConnectButton showBalance={false} />
+                        </Group>
+                        <Anchor
+                            component="button"
+                            type="button"
+                            onClick={() =>
+                                mintSimulate.data &&
+                                mint.writeContract(mintSimulate.data.request)
+                            }
+                            c={
+                                mintSimulate.data && !mintLoading
+                                    ? undefined
+                                    : "dimmed"
+                            }
+                        >
+                            {mintLoading ? <Loader size={14} /> : "Get tokens"}
+                        </Anchor>
                     </Group>
                     <Input placeholder="0" {...form.getInputProps("amount")} />
                     <Group justify="space-between">

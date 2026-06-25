@@ -1,8 +1,8 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import { Hex } from "viem";
-import { Sprite } from "@pixi/react";
-import { Spritesheet, Texture } from "pixi.js";
+import { Assets, Spritesheet } from "pixi.js";
+import "./pixi";
 
 export type Tile = {
     x: number;
@@ -67,27 +67,32 @@ export const Map: FC<MapProps> = ({
 
     // create optimized spritesheet
     useEffect(() => {
-        const texture = Texture.from("/img/micropolis_tiles.png");
-        const frames = [...Array(1024).keys()].map((i) => ({
-            frame: {
-                x: (i % 32) * 16,
-                y: Math.floor(i / 32) * 16,
-                w: 16,
-                h: 16,
-            },
-        }));
-        const sheet = new Spritesheet(texture, {
-            frames: frames.reduce(
-                (acc, frame, index) => ({ ...acc, [index]: frame }),
-                {}
-            ),
-            meta: {
-                scale: "1",
-            },
-        });
-        sheet.parse().then((_texture) => {
-            setSpritesheet(sheet);
-        });
+        let cancelled = false;
+        (async () => {
+            const texture = await Assets.load("/img/micropolis_tiles.png");
+            const frames = [...Array(1024).keys()].map((i) => ({
+                frame: {
+                    x: (i % 32) * 16,
+                    y: Math.floor(i / 32) * 16,
+                    w: 16,
+                    h: 16,
+                },
+            }));
+            const sheet = new Spritesheet(texture, {
+                frames: frames.reduce(
+                    (acc, frame, index) => ({ ...acc, [index]: frame }),
+                    {}
+                ),
+                meta: {
+                    scale: 1,
+                },
+            });
+            await sheet.parse();
+            if (!cancelled) setSpritesheet(sheet);
+        })();
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const TileImage = (x: number, y: number) => {
@@ -95,15 +100,15 @@ export const Map: FC<MapProps> = ({
         const tile = decodeTile(x, y, t);
         const coord = `(${x},${y})`;
         return spritesheet ? (
-            <Sprite
+            <pixiSprite
                 key={coord}
                 eventMode="static"
                 cursor={loading ? "wait" : "cell"}
                 texture={spritesheet.textures[tile.type]}
-                onpointerdown={(_event) => {
+                onPointerDown={() => {
                     onMouseClick && onMouseClick(tile);
                 }}
-                onpointermove={(_event) => {
+                onPointerMove={() => {
                     onMouseMove && onMouseMove(tile);
                 }}
                 width={16 * scale}
