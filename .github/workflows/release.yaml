@@ -1,0 +1,42 @@
+name: release
+
+on:
+    push:
+        tags:
+            - "*"
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            # riscv64 emulation for the Cartesi Machine image build
+            - uses: docker/setup-qemu-action@v3
+              with:
+                  platforms: riscv64
+
+            - uses: docker/setup-buildx-action@v3
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Install Cartesi CLI
+              run: npm install -g @cartesi/cli@2.0.0-alpha.35
+
+            - name: Build application snapshot
+              run: cartesi build
+
+            - name: Package snapshot
+              run: tar -czf cryptopolis-snapshot-${{ github.ref_name }}.tar.gz -C .cartesi/image .
+
+            - name: Attach snapshot to GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: cryptopolis-snapshot-${{ github.ref_name }}.tar.gz
+                  fail_on_unmatched_files: true
+                  generate_release_notes: true
