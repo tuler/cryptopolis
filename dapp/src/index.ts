@@ -10,7 +10,7 @@ import {
     toHex,
 } from "viem";
 import { Micropolis } from "micropolis";
-import { createEnginePayloads, logTransfer } from "./util.js";
+import { createEnginePayloads, decimals, logTransfer } from "./util.js";
 
 // instantiate deroll application
 const app = createApp();
@@ -34,7 +34,6 @@ const wallet = createWallet();
 app.addAdvanceHandler(wallet.handler);
 
 // TestToken is what we'll use for testing, in real world use any ERC-20 token
-export const decimals = 18n;
 const token = "0x88A2120B7068E78692C8fd12E751d610B6377E4d";
 
 // this is the address of the in-game locked tokens

@@ -1,6 +1,8 @@
 import { Micropolis } from "micropolis";
 import { Address, Hex, formatUnits, numberToHex } from "viem";
-import { decimals } from "./index.js";
+
+// TestToken is what we'll use for testing, in real world use any ERC-20 token
+export const decimals = 18n;
 
 // convert Uint16Array to hex string (i.e. used for map)
 export const Uint16ArrayToHex = (array: Uint16Array): Hex => {

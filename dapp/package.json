@@ -1,7 +1,7 @@
 {
-    "name": "my-dapp",
+    "name": "dapp",
     "version": "0.1.0",
-    "description": "TypeScript DApp",
+    "description": "Cryptopolis DApp",
     "dependencies": {
         "@deroll/app": "^2.0.0-alpha.9",
         "@deroll/core": "^2.0.0-alpha.4",

@@ -1,9 +1,9 @@
 import { Image, createCanvas, loadImage } from "canvas";
-import fs from "fs";
+import fs from "node:fs";
 import { Micropolis } from "micropolis";
 import { Hex, slice } from "viem";
 import { describe, expect, test } from "vitest";
-import { Uint16ArrayToHex } from "../src/util";
+import { Uint16ArrayToHex } from "../src/util.js";
 
 const hexToShort = (hex: Hex) => parseInt(hex);
 
